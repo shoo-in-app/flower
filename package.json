@@ -8,6 +8,8 @@
   "license": "MIT",
   "scripts": {
     "start": "node server",
+    "migrate": "knex migrate:latest --knexfile db/knexfile.js",
+    "rollback": "knex migrate:rollback --knexfile db/knexfile.js ",
     "lint": "eslint --fix --ext .js --ext .jsx .",
     "precommit": "pretty-quick --staged"
   },
