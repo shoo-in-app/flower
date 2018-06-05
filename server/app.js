@@ -29,12 +29,12 @@ app.get("/user/:userId", async (req, res) => {
   }
 });
 
-app.post("/user/:userId", async (req, res) => {
+app.post("/user/", async (req, res) => {
   try {
-    const user = await addUser(req.params.userId);
-    res.send(user);
+    const users = await addUser(req.body.username);
+    res.send(user[0]);
   } catch (err) {
-    console.error("Error posting user!", err);
+    console.error("Error adding user!", err);
     res.send(500, "Internal server error");
   }
 });

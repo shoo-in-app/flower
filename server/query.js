@@ -2,7 +2,7 @@ const db = require("../db");
 
 const getUser = (userId) => db("users").where("id", userId);
 
-const addUser = (userId) => db("users").insert({ id: userId });
+const addUser = (username) => db("users").insert({ username });
 const getRallies = () => db("rallies");
 const getRalliesOfUser = (userId) =>
   db("rallies")
