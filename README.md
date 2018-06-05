@@ -21,7 +21,7 @@ Get user data.
 }
 ```
 
-### post /user/
+### post /user
 
 Add user.
 post body
