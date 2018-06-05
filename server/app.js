@@ -62,7 +62,7 @@ app.get("/rallies/:userId", async (req, res) => {
 app.get("/locations/:userId/:rallyId", async (req, res) => {
   try {
     const locations = await getLocations(req.params.userId, req.params.rallyId);
-    res.send(ralliesOfUser);
+    res.send(locations);
   } catch (err) {
     console.error("Error loading user history!", err);
     res.send(500, "Internal server error");
