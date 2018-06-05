@@ -2,7 +2,7 @@
   "name": "flower",
   "version": "0.1.0",
   "description": "Server for butterfly",
-  "main": "index.js",
+  "main": "server/index.js",
   "repository": "https://github.com/cc4-butterfly/flower.git",
   "author": "Alex Ogilvie, Takahiro Morita, Yusuke Hayashi",
   "license": "MIT",
