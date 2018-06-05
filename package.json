@@ -1,0 +1,30 @@
+{
+  "name": "flower",
+  "version": "0.1.0",
+  "description": "Server for butterfly",
+  "main": "index.js",
+  "repository": "https://github.com/cc4-butterfly/flower.git",
+  "author": "Alex Ogilvie, Takahiro Morita, Yusuke Hayashi",
+  "license": "MIT",
+  "scripts": {
+    "start": "node server",
+    "lint": "eslint --fix --ext .js --ext .jsx .",
+    "precommit": "pretty-quick --staged"
+  },
+  "dependencies": {
+    "express": "^4.16.3",
+    "knex": "^0.14.6",
+    "pg": "^7.4.2"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "eslint": "^4.19.1",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-config-problems": "^0.1.1",
+    "husky": "^0.14.3",
+    "mocha": "^5.1.1",
+    "prettier": "^1.12.1",
+    "pretty-quick": "^1.4.1",
+    "sinon": "^5.0.3"
+  }
+}
