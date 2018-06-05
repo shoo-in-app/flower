@@ -14,18 +14,23 @@ Server for butterfly app. This serve CRUD API Server. And data are from PostgreS
 Get user data.
 
 ```
-[
 {
-"id": 1,
-"username": "alex",
-"social_id": null
+  "id": 1,
+  "username": "alex",
+  "social_id": null
 }
-]
 ```
 
-### post /user/:userId
+### post /user/
 
 Add user.
+post body
+
+```
+{
+  username: "Yusuke"
+}
+```
 
 ### get /rallies
 
@@ -33,21 +38,21 @@ Get all rallies.
 
 ```
 [
-{
-"id": 1,
-"title": "Tokyo FamilyMarts",
-"description": "Go 3 famima!"
-},
-{
-"id": 2,
-"title": "Wakayama around",
-"description": "Wakayama famous spots"
-},
-{
-"id": 3,
-"title": "Yamanote Line",
-"description": "Go 3 stations"
-}
+  {
+    "id": 1,
+    "title": "Tokyo FamilyMarts",
+    "description": "Go 3 famima!"
+  },
+  {
+    "id": 2,
+    "title": "Wakayama around",
+    "description": "Wakayama famous spots"
+  },
+  {
+    "id": 3,
+    "title": "Yamanote Line",
+    "description": "Go 3 stations"
+  }
 ]
 ```
 
@@ -57,16 +62,16 @@ Get rallies which a user join.
 
 ```
 [
-{
-"id": 1,
-"title": "Tokyo FamilyMarts",
-"description": "Go 3 famima!"
-},
-{
-"id": 2,
-"title": "Wakayama around",
-"description": "Wakayama famous spots"
-}
+  {
+    "id": 1,
+    "title": "Tokyo FamilyMarts",
+    "description": "Go 3 famima!"
+  },
+  {
+    "id": 2,
+    "title": "Wakayama around",
+    "description": "Wakayama famous spots"
+  }
 ]
 ```
 
@@ -76,39 +81,39 @@ Get locations history which user visited in one rally.
 
 ```
 [
-{
-"id": 1,
-"name": "Motoazabu Sanchoume",
-"lat": 35.659,
-"lng": 139.722,
-"description": "nearest famima to cc",
-"rally_id": 1,
-"user_id": 1,
-"location_id": 1,
-"visited": true
-},
-{
-"id": 2,
-"name": "Motoazabu Sanchoume",
-"lat": 35.659,
-"lng": 139.722,
-"description": "nearest famima to cc",
-"rally_id": 1,
-"user_id": 1,
-"location_id": 2,
-"visited": true
-},
-{
-"id": 3,
-"name": "Motoazabu Sanchoume",
-"lat": 35.659,
-"lng": 139.722,
-"description": "nearest famima to cc",
-"rally_id": 1,
-"user_id": 1,
-"location_id": 3,
-"visited": false
-}
+  {
+    "id": 1,
+    "name": "Motoazabu Sanchoume",
+    "lat": 35.659,
+    "lng": 139.722,
+    "description": "nearest famima to cc",
+    "rally_id": 1,
+    "user_id": 1,
+    "location_id": 1,
+    "visited": true
+  },
+  {
+    "id": 2,
+    "name": "Motoazabu Sanchoume",
+    "lat": 35.659,
+    "lng": 139.722,
+    "description": "nearest famima to cc",
+    "rally_id": 1,
+    "user_id": 1,
+    "location_id": 2,
+    "visited": true
+  },
+  {
+    "id": 3,
+    "name": "Motoazabu Sanchoume",
+    "lat": 35.659,
+    "lng": 139.722,
+    "description": "nearest famima to cc",
+    "rally_id": 1,
+    "user_id": 1,
+    "location_id": 3,
+    "visited": false
+  }
 ]
 ```
 
