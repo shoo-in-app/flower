@@ -1,7 +1,14 @@
 // server/app.js
 const express = require("express");
 const morgan = require("morgan");
-const path = require("path");
+const {
+  getUser,
+  addUser,
+  getRallies,
+  getRalliesOfUser,
+  getLocations,
+  doneLocation,
+} = require("./query.js");
 
 const app = express();
 
@@ -12,18 +19,20 @@ app.use(
   )
 );
 
-app.get("/user/:user_id", async (req, res) => {
+app.get("/user/:userId", async (req, res) => {
   try {
-    res.send(req.params.user_id);
+    const user = await getUser(req.params.userId);
+    res.send(user);
   } catch (err) {
     console.error("Error loading user!", err);
     res.send(500, "Internal server error");
   }
 });
 
-app.post("/user/:user_id", async (req, res) => {
+app.post("/user/:userId", async (req, res) => {
   try {
-    res.send(req.params.user_id);
+    const user = await addUser(req.params.userId);
+    res.send(user);
   } catch (err) {
     console.error("Error posting user!", err);
     res.send(500, "Internal server error");
@@ -32,34 +41,38 @@ app.post("/user/:user_id", async (req, res) => {
 
 app.get("/rallies", async (req, res) => {
   try {
-    res.send("");
+    const rallies = await getRallies();
+    res.send(rallies);
   } catch (err) {
     console.error("Error loading rallies!", err);
     res.send(500, "Internal server error");
   }
 });
 
-app.get("/rallies/:user_id", async (req, res) => {
+app.get("/rallies/:userId", async (req, res) => {
   try {
-    res.send(req.params.user_id);
+    const ralliesOfUser = await getRalliesOfUser(req.params.userId);
+    res.send(ralliesOfUser);
   } catch (err) {
     console.error("Error loading highways!", err);
     res.send(500, "Internal server error");
   }
 });
 
-app.get("/user_history/:user_id/:rally_id", async (req, res) => {
+app.get("/locations/:userId/:rallyId", async (req, res) => {
   try {
-    res.send(req.params.user_id);
+    const locations = await getLocations(req.params.userId, req.params.rallyId);
+    res.send(locations);
   } catch (err) {
     console.error("Error loading user history!", err);
     res.send(500, "Internal server error");
   }
 });
 
-app.patch("/user_history/:user_id/:rally_id", async (req, res) => {
+app.patch("/location/:userId/:locationId", async (req, res) => {
   try {
-    res.send(req.params.user_id);
+    await doneLocation(req.params.userId, req.params.locationId);
+    res.send("The location is done correctly.");
   } catch (err) {
     console.error("Error updating user history!", err);
     res.send(500, "Internal server error");
