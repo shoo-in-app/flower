@@ -121,6 +121,14 @@ Get locations history which user visited in one rally.
 
 Update location history as visited.
 
+body example
+
+```
+{
+  "visited":true
+}
+```
+
 ## Getting Started
 
 ```
