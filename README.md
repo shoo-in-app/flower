@@ -21,7 +21,7 @@ Get user data.
 }
 ```
 
-### post /user/
+### post /user
 
 Add user.
 post body
@@ -120,6 +120,14 @@ Get locations history which user visited in one rally.
 ### patch /location/:userId/:locationId
 
 Update location history as visited.
+
+body example
+
+```
+{
+  "visited":true
+}
+```
 
 ## Getting Started
 

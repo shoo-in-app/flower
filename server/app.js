@@ -1,6 +1,7 @@
 // server/app.js
 const express = require("express");
 const morgan = require("morgan");
+const bodyParser = require("body-parser");
 const {
   getUser,
   addUser,
@@ -11,6 +12,8 @@ const {
 } = require("./query.js");
 
 const app = express();
+
+app.use("/", [bodyParser.json(), bodyParser.urlencoded({ extended: true })]);
 
 // Setup logger
 app.use(
@@ -71,8 +74,13 @@ app.get("/locations/:userId/:rallyId", async (req, res) => {
 
 app.patch("/location/:userId/:locationId", async (req, res) => {
   try {
-    await doneLocation(req.params.userId, req.params.locationId);
-    res.send("The location is done correctly.");
+    const visited = req.body.visited;
+    await doneLocation(req.params.userId, req.params.locationId, visited);
+    if (visited) {
+      res.send("The location is now visited.");
+    } else {
+      res.send("The location is now unvisited.");
+    }
   } catch (err) {
     console.error("Error updating user history!", err);
     res.send(500, "Internal server error");
