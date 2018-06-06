@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 const {
   getUser,
   addUser,
-  getRallies,
+  getLocationsWithRallyInfo,
   getRalliesOfUser,
   getLocations,
   doneLocation,
@@ -28,7 +28,7 @@ app.get("/user/:userId", async (req, res) => {
     res.send(user);
   } catch (err) {
     console.error("Error loading user!", err);
-    res.send(500, "Internal server error");
+    res.status(500).send("Internal server error");
   }
 });
 
@@ -38,17 +38,35 @@ app.post("/user/", async (req, res) => {
     res.send(user[0]);
   } catch (err) {
     console.error("Error adding user!", err);
-    res.send(500, "Internal server error");
+    res.status(500).send("Internal server error");
   }
 });
 
 app.get("/rallies", async (req, res) => {
   try {
-    const rallies = await getRallies();
-    res.send(rallies);
+    const locations = await getLocationsWithRallyInfo();
+    const rallies = {};
+    locations.forEach((location) => {
+      if (!rallies.hasOwnProperty(location.rally_id)) {
+        rallies[location.rally_id] = {
+          id: location.rally_id,
+          title: location.title,
+          description: location.description,
+          locations: [],
+        };
+      }
+      rallies[location.rally_id].locations.push({
+        id: location.id,
+        name: location.name,
+        description: location.ldescription,
+        lat: location.lat,
+        lng: location.lng,
+      });
+    });
+    res.send(Object.values(rallies));
   } catch (err) {
     console.error("Error loading rallies!", err);
-    res.send(500, "Internal server error");
+    res.status(500).send("Internal server error");
   }
 });
 
@@ -58,7 +76,7 @@ app.get("/rallies/:userId", async (req, res) => {
     res.send(ralliesOfUser);
   } catch (err) {
     console.error("Error loading highways!", err);
-    res.send(500, "Internal server error");
+    res.status(500).send("Internal server error");
   }
 });
 
@@ -68,7 +86,7 @@ app.get("/locations/:userId/:rallyId", async (req, res) => {
     res.send(locations);
   } catch (err) {
     console.error("Error loading user history!", err);
-    res.send(500, "Internal server error");
+    res.status(500).send("Internal server error");
   }
 });
 
@@ -83,7 +101,7 @@ app.patch("/location/:userId/:locationId", async (req, res) => {
     }
   } catch (err) {
     console.error("Error updating user history!", err);
-    res.send(500, "Internal server error");
+    res.status(500).send("Internal server error");
   }
 });
 
