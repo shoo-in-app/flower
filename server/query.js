@@ -4,7 +4,19 @@ const getUser = (userId) => db("users").where("id", userId);
 
 const addUser = (username) => db("users").insert({ username });
 
-const getRallies = () => db("rallies");
+const getLocationsWithRallyInfo = () =>
+  db("rallies")
+    .select(
+      "locations.rally_id",
+      "rallies.title",
+      "rallies.description",
+      "locations.id",
+      "locations.name",
+      "locations.description as ldescription",
+      "locations.lat",
+      "locations.lng"
+    )
+    .innerJoin("locations", "rallies.id", "locations.rally_id");
 
 const getRalliesOfUser = (userId) =>
   db("rallies")
@@ -30,7 +42,7 @@ const doneLocation = (userId, locationId, visited) =>
 module.exports = {
   getUser,
   addUser,
-  getRallies,
+  getLocationsWithRallyInfo,
   getRalliesOfUser,
   getLocations,
   doneLocation,
