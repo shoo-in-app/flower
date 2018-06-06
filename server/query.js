@@ -21,10 +21,11 @@ const getLocations = (userId, rallyId) =>
     )
     .where("user_id", userId);
 
-const doneLocation = (userId, locationId) =>
-  db("locations")
-    .where("id", locationId)
-    .update("visited", true);
+const doneLocation = (userId, locationId, visited) =>
+  db("locations_to_users")
+    .where("user_id", userId)
+    .where("location_id", locationId)
+    .update("visited", visited);
 
 module.exports = {
   getUser,
