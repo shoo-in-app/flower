@@ -47,14 +47,6 @@ exports.seed = function(knex, Promise) {
         },
         {
           id: 6,
-          name: "Shimotsu cho",
-          lat: 34.10883,
-          lng: 135.1434213,
-          description: "Yusuke's Home town",
-          rally_id: 2,
-        },
-        {
-          id: 7,
           name: "Adventure World",
           lat: 33.6678415,
           lng: 135.3738168,
@@ -62,7 +54,7 @@ exports.seed = function(knex, Promise) {
           rally_id: 2,
         },
         {
-          id: 8,
+          id: 7,
           name: "Susami cho",
           lat: 33.5669612,
           lng: 135.4938991,
@@ -70,7 +62,7 @@ exports.seed = function(knex, Promise) {
           rally_id: 2,
         },
         {
-          id: 9,
+          id: 8,
           name: "Shionomisaki",
           lat: 33.4369984,
           lng: 135.7470104,
@@ -78,7 +70,7 @@ exports.seed = function(knex, Promise) {
           rally_id: 2,
         },
         {
-          id: 10,
+          id: 9,
           name: "Shinjuku Station",
           lat: 35.6895924,
           lng: 139.6982244,
@@ -86,7 +78,7 @@ exports.seed = function(knex, Promise) {
           rally_id: 3,
         },
         {
-          id: 11,
+          id: 10,
           name: "Shibuya Station",
           lat: 35.6580339,
           lng: 139.6994471,
@@ -94,7 +86,7 @@ exports.seed = function(knex, Promise) {
           rally_id: 3,
         },
         {
-          id: 12,
+          id: 11,
           name: "Tokyo Station",
           lat: 35.6811673,
           lng: 139.7648629,
