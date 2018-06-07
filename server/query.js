@@ -1,9 +1,6 @@
 const db = require("../db");
 
-const getUser = (username) =>
-  db("users")
-    .select("id", "username", "id_token")
-    .where("username", username);
+const getUser = (idToken) => db("users").where("id_token", idToken);
 
 const addUser = (idToken, username) =>
   db("users").insert({ id_token: idToken, username });
@@ -22,12 +19,12 @@ const getLocationsWithRallyInfo = () =>
     )
     .innerJoin("locations", "rallies.id", "locations.rally_id");
 
-const getRalliesOfUser = (username) =>
+const getRalliesOfUser = (id_token) =>
   db("rallies")
     .innerJoin("rallies_to_users", "rallies.id", "rallies_to_users.rally_id")
-    .where("username", username);
+    .where("id_token", idToken);
 
-const getLocations = (username, rallyId) =>
+const getLocations = (idToken, rallyId) =>
   db("locations")
     .where("rally_id", rallyId)
     .innerJoin(
@@ -35,11 +32,11 @@ const getLocations = (username, rallyId) =>
       "locations.id",
       "locations_to_users.location_id"
     )
-    .where("username", username);
+    .where("id_token", idToken);
 
-const doneLocation = (username, locationId, visited) =>
+const doneLocation = (idToken, locationId, visited) =>
   db("locations_to_users")
-    .where("username", username)
+    .where("id_token", idToken)
     .where("location_id", locationId)
     .update("visited", visited);
 

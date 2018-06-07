@@ -24,17 +24,12 @@ app.use(
 
 app.post("/user/", async (req, res) => {
   try {
-    const username = req.body.username;
     const idToken = req.body.idToken;
-    const user = await getUser(username);
+    const user = await getUser(idToken);
     if (user.length === 0) {
-      await addUser(idToken, username);
-      res.send({ login: true });
-    } else if (idToken === user[0].id_token) {
-      res.send({ login: true });
-    } else {
-      res.send({ login: false });
+      await addUser(idToken, req.body.username);
     }
+    res.send("Log in");
   } catch (err) {
     console.error("Error adding user!", err);
     res.status(500).send("Internal server error");
@@ -69,7 +64,7 @@ app.get("/rallies", async (req, res) => {
   }
 });
 
-app.get("/rallies/:username", async (req, res) => {
+app.get("/rallies/:idtoken", async (req, res) => {
   try {
     const ralliesOfUser = await getRalliesOfUser(req.params.username);
     res.send(ralliesOfUser);
@@ -79,10 +74,10 @@ app.get("/rallies/:username", async (req, res) => {
   }
 });
 
-app.get("/locations/:username/:rallyId", async (req, res) => {
+app.get("/locations/:idtoken/:rallyId", async (req, res) => {
   try {
     const locations = await getLocations(
-      req.params.username,
+      req.params.idtoken,
       req.params.rallyId
     );
     res.send(locations);
@@ -92,10 +87,10 @@ app.get("/locations/:username/:rallyId", async (req, res) => {
   }
 });
 
-app.patch("/location/:username/:locationId", async (req, res) => {
+app.patch("/location/:idtoken/:locationId", async (req, res) => {
   try {
     const visited = req.body.visited;
-    await doneLocation(req.params.username, req.params.locationId, visited);
+    await doneLocation(req.params.idtoken, req.params.locationId, visited);
     if (visited) {
       res.send("The location is now visited.");
     } else {
