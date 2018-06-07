@@ -22,9 +22,9 @@ app.use(
   )
 );
 
-app.get("/user/:userId", async (req, res) => {
+app.get("/user/:username", async (req, res) => {
   try {
-    const user = await getUser(req.params.userId);
+    const user = await getUser(req.params.username);
     res.send(user);
   } catch (err) {
     console.error("Error loading user!", err);
@@ -70,9 +70,9 @@ app.get("/rallies", async (req, res) => {
   }
 });
 
-app.get("/rallies/:userId", async (req, res) => {
+app.get("/rallies/:username", async (req, res) => {
   try {
-    const ralliesOfUser = await getRalliesOfUser(req.params.userId);
+    const ralliesOfUser = await getRalliesOfUser(req.params.username);
     res.send(ralliesOfUser);
   } catch (err) {
     console.error("Error loading highways!", err);
@@ -80,9 +80,12 @@ app.get("/rallies/:userId", async (req, res) => {
   }
 });
 
-app.get("/locations/:userId/:rallyId", async (req, res) => {
+app.get("/locations/:username/:rallyId", async (req, res) => {
   try {
-    const locations = await getLocations(req.params.userId, req.params.rallyId);
+    const locations = await getLocations(
+      req.params.username,
+      req.params.rallyId
+    );
     res.send(locations);
   } catch (err) {
     console.error("Error loading user history!", err);
@@ -90,10 +93,10 @@ app.get("/locations/:userId/:rallyId", async (req, res) => {
   }
 });
 
-app.patch("/location/:userId/:locationId", async (req, res) => {
+app.patch("/location/:username/:locationId", async (req, res) => {
   try {
     const visited = req.body.visited;
-    await doneLocation(req.params.userId, req.params.locationId, visited);
+    await doneLocation(req.params.username, req.params.locationId, visited);
     if (visited) {
       res.send("The location is now visited.");
     } else {
