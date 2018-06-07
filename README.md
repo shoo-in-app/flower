@@ -9,18 +9,6 @@ Server for butterfly app. This serve CRUD API Server. And data are from PostgreS
 
 ## API access points
 
-### get /user/:userId
-
-Get user data.
-
-```
-{
-  "id": 1,
-  "username": "Alex",
-  "social_id": null
-}
-```
-
 ### post /user
 
 Add user.
