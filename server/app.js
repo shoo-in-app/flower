@@ -25,7 +25,7 @@ app.use(
 app.get("/user/:username", async (req, res) => {
   try {
     const user = await getUser(req.params.username);
-    res.send(user);
+    res.send(user[0]);
   } catch (err) {
     console.error("Error loading user!", err);
     res.status(500).send("Internal server error");
@@ -34,8 +34,16 @@ app.get("/user/:username", async (req, res) => {
 
 app.post("/user/", async (req, res) => {
   try {
-    const result = await addUser(req.body.idToken, req.body.username);
-    res.send(result);
+    const username = req.body.username;
+    const user = await getUser(username);
+    if (user.length === 0) {
+      await addUser(req.body.idToken, username);
+      res.send({ login: true });
+    } else if (req.body.idToken === user[0].id_token) {
+      res.send({ login: true });
+    } else {
+      res.send({ login: false });
+    }
   } catch (err) {
     console.error("Error adding user!", err);
     res.status(500).send("Internal server error");
