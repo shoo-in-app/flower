@@ -34,8 +34,8 @@ app.get("/user/:username", async (req, res) => {
 
 app.post("/user/", async (req, res) => {
   try {
-    const users = await addUser(req.body.idToken, req.body.username);
-    res.send(user[0]);
+    const result = await addUser(req.body.idToken, req.body.username);
+    res.send(result);
   } catch (err) {
     console.error("Error adding user!", err);
     res.status(500).send("Internal server error");
