@@ -16,7 +16,7 @@ Get user data.
 ```
 {
   "id": 1,
-  "username": "alex",
+  "username": "Alex",
   "social_id": null
 }
 ```
