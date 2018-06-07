@@ -1,8 +1,12 @@
 const db = require("../db");
 
-const getUser = (userId) => db("users").where("id", userId);
+const getUser = (userId) =>
+  db("users")
+    .select("id", "username")
+    .where("id", userId);
 
-const addUser = (username) => db("users").insert({ username });
+const addUser = (idToken, username) =>
+  db("users").insert({ id_token: idToken, username });
 
 const getLocationsWithRallyInfo = () =>
   db("rallies")

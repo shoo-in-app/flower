@@ -34,7 +34,7 @@ app.get("/user/:userId", async (req, res) => {
 
 app.post("/user/", async (req, res) => {
   try {
-    const users = await addUser(req.body.username);
+    const users = await addUser(req.body.idToken, req.body.username);
     res.send(user[0]);
   } catch (err) {
     console.error("Error adding user!", err);

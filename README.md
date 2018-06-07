@@ -28,6 +28,7 @@ post body
 
 ```
 {
+  idToken: "bv4UrqEdJ97gUjS469LPX6zrbDMNcKhW5DqmQmuPP9wEEMK7YewqDRQxfQ9xT669bmHDfpRHSjEUssF8yEcEde2BJHeFgy64q9EKvfPa845pETHvRKuCaUzVtAbJwqAC"
   username: "Yusuke"
 }
 ```
