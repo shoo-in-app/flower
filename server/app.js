@@ -22,15 +22,15 @@ app.use(
   )
 );
 
-app.get("/user/:username", async (req, res) => {
-  try {
-    const user = await getUser(req.params.username);
-    res.send(user[0]);
-  } catch (err) {
-    console.error("Error loading user!", err);
-    res.status(500).send("Internal server error");
-  }
-});
+// app.get("/user/:username", async (req, res) => {
+//   try {
+//     const user = await getUser(req.params.username);
+//     res.send(user[0]);
+//   } catch (err) {
+//     console.error("Error loading user!", err);
+//     res.status(500).send("Internal server error");
+//   }
+// });
 
 app.post("/user/", async (req, res) => {
   try {

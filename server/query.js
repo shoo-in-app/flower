@@ -1,9 +1,9 @@
 const db = require("../db");
 
-const getUser = (userId) =>
+const getUser = (username) =>
   db("users")
-    .select("id", "username")
-    .where("id", userId);
+    .select("id", "username", "id_token")
+    .where("username", username);
 
 const addUser = (idToken, username) =>
   db("users").insert({ id_token: idToken, username });
