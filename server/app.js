@@ -76,7 +76,7 @@ app.get("/rallies/:idToken", async (req, res) => {
           id: location.rally_id,
           title: location.title,
           description: location.description,
-          complete: location.complete,
+          complete: chosenLocations.every((location) => location.visited),
           locations: [],
         };
       }
