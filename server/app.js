@@ -7,9 +7,14 @@ const {
   addUser,
   getLocationsWithRallyInfo,
   getRalliesOfUser,
-  getLocations,
+  getLocationsOfRally,
+  getLocationsOfRallyOfUser,
   doneLocation,
   getLocationsWithRallyInfoUserChoose,
+  insertRalliesToUsers,
+  insertLocationsToUsers,
+  deleteRalliesToUsers,
+  deleteLocationsToUsers,
 } = require("./query.js");
 
 const app = express();
@@ -90,14 +95,13 @@ app.get("/rallies/:idToken", async (req, res) => {
       });
     });
 
-    const ralliesIdsToRemove = (await getRalliesOfUser(userId)).map(
-      (rally) => rally.id
+    const ralliesIdsUserchosen = (await getRalliesOfUser(userId)).map(
+      (rally) => rally.rally_id
     );
     const locations = await getLocationsWithRallyInfo();
-    console.log(ralliesIdsToRemove, locations);
     const notChosenRallies = {};
     locations
-      .filter((rally) => !ralliesIdsToRemove.includes(rally.rally_id))
+      .filter((rally) => !ralliesIdsUserchosen.includes(rally.rally_id))
       .forEach((location) => {
         if (!notChosenRallies.hasOwnProperty(location.rally_id)) {
           notChosenRallies[location.rally_id] = {
@@ -126,9 +130,37 @@ app.get("/rallies/:idToken", async (req, res) => {
   }
 });
 
+app.patch("/rally/:idToken/:rallyId", async (req, res) => {
+  try {
+    const userId = (await getUser(req.params.idToken))[0].id;
+    const rallyId = req.params.rallyId;
+    const locationIds = (await getLocationsOfRally(rallyId)).map(
+      (location) => location.id
+    );
+    if (req.body.chosen === true) {
+      await insertRalliesToUsers(userId, rallyId);
+      const data = locationIds.map((id) => ({
+        user_id: userId,
+        location_id: id,
+        visited: false,
+      }));
+      await insertLocationsToUsers(data);
+      res.send("The rally is now chosen.");
+    } else if (req.body.chosen === false) {
+      await deleteRalliesToUsers(userId, rallyId);
+      await deleteLocationsToUsers(userId, locationIds);
+      res.send("The rally is now cancelled.");
+    }
+    res.send("Failed. Boolean key 'chosen' should be in body.");
+  } catch (err) {
+    console.error("Error updating user history!", err);
+    res.status(500).send("Internal server error");
+  }
+});
+
 app.get("/locations/:idToken/:rallyId", async (req, res) => {
   try {
-    const locations = await getLocations(
+    const locations = await getLocationsOfRallyOfUser(
       req.params.idToken,
       req.params.rallyId
     );

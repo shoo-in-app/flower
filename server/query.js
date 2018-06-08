@@ -35,7 +35,6 @@ const getLocationsWithRallyInfoUserChoose = (userId) =>
       "locations.description as ldescription",
       "locations.lat",
       "locations.lng",
-      "rallies_to_users.complete",
       "locations_to_users.visited"
     )
     .innerJoin("locations", "rallies.id", "locations.rally_id")
@@ -48,7 +47,7 @@ const getLocationsWithRallyInfoUserChoose = (userId) =>
     .where("rallies_to_users.user_id", userId)
     .where("locations_to_users.user_id", userId);
 
-const getLocations = (idToken, rallyId) =>
+const getLocationsOfRallyOfUser = (idToken, rallyId) =>
   db("locations")
     .where("rally_id", rallyId)
     .innerJoin(
@@ -58,18 +57,46 @@ const getLocations = (idToken, rallyId) =>
     )
     .where("id_token", idToken);
 
+const getLocationsOfRally = (rallyId) =>
+  db("locations").where("rally_id", rallyId);
+
 const doneLocation = (idToken, locationId, visited) =>
   db("locations_to_users")
     .where("id_token", idToken)
     .where("location_id", locationId)
     .update("visited", visited);
 
+const insertRalliesToUsers = (userId, rallyId) =>
+  db("rallies_to_users").insert({
+    user_id: userId,
+    rally_id: rallyId,
+  });
+
+const insertLocationsToUsers = (data) => db("locations_to_users").insert(data);
+
+const deleteRalliesToUsers = (userId, rallyId) =>
+  db("rallies_to_users")
+    .where("user_id", userId)
+    .where("rally_id", rallyId)
+    .del();
+
+const deleteLocationsToUsers = (userId, locations) =>
+  db("locations_to_users")
+    .where("user_id", userId)
+    .whereIn("location_id", locations)
+    .del();
+
 module.exports = {
   getUser,
   addUser,
   getLocationsWithRallyInfo,
   getRalliesOfUser,
-  getLocations,
+  getLocationsOfRallyOfUser,
   doneLocation,
   getLocationsWithRallyInfoUserChoose,
+  getLocationsOfRally,
+  deleteRalliesToUsers,
+  deleteLocationsToUsers,
+  insertRalliesToUsers,
+  insertLocationsToUsers,
 };
