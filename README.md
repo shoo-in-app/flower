@@ -141,6 +141,18 @@ body example
 }
 ```
 
+### patch /rally/:userId/:rallyId
+
+Choose rally/Unchoose rally.
+
+body example
+
+```
+{
+  "chosen":true
+}
+```
+
 ## Getting Started
 
 ```
