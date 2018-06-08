@@ -11,7 +11,6 @@ exports.up = (knex) =>
       .foreign("user_id")
       .references("id")
       .inTable("users");
-    table.boolean("complete");
   });
 
 exports.down = (knex) => knex.schema.dropTable("rallies_to_users");

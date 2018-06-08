@@ -7,19 +7,30 @@ Server for butterfly app. This serve CRUD API Server. And data are from PostgreS
 - dev branch deploy
   [https://cc4-flower-dev.herokuapp.com/](https://cc4-flower-dev.herokuapp.com/)
 
-## API access points
-
-### get /user/:userId
-
-Get user data.
+## Default Seeds Users
 
 ```
 {
-  "id": 1,
-  "username": "alex",
-  "social_id": null
+  id: 1000000,
+  id_token:
+    "LBVgfZewKaFZaKqX8vUDXtLGFEE2XDb4w78nXNH4mKANgTCKk6ar9mQne6JwDYp6HCej5xEsW82XZyWbDytRsb9vBh6sw6Z3GaHA2uMVbrPLQud3hqKV6ppbhRZdSpGH",
+  username: "Alex",
+},
+{
+  id: 2000000,
+  id_token:
+    "3qYFuJsxZSUupuCLQmxwjUDV5TSbhzB7kwNr2mpB2YNuMW3CPSGe8CK3hPcZDErDVu5eM83EcT6DmugqmpRFD5tQCped6geXgXYUfZwfQKmUcZ8qtPnQ7ssppVvQaHKX",
+  username: "Taka",
+},
+{
+  id: 3000000,
+  id_token:
+    "R3uHB52jTCExdwNCa2vgDJxY2QWGLdjcze8b722dfuRNE9yYJtLbuEPWGeFWcDzeaVmWvJ55YVtsTJxFk4N9e6mYkSAKgMj5se23LdVrgmTwnjp8MGUR32T2BYYgQ2G3",
+  username: "Yusuke",
 }
 ```
+
+## API access points
 
 ### post /user
 
@@ -28,6 +39,7 @@ post body
 
 ```
 {
+  idToken: "bv4UrqEdJ97gUjS469LPX6zrbDMNcKhW5DqmQmuPP9wEEMK7YewqDRQxfQ9xT669bmHDfpRHSjEUssF8yEcEde2BJHeFgy64q9EKvfPa845pETHvRKuCaUzVtAbJwqAC"
   username: "Yusuke"
 }
 ```

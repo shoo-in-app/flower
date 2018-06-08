@@ -1,8 +1,9 @@
 const db = require("../db");
 
-const getUser = (userId) => db("users").where("id", userId);
+const getUser = (idToken) => db("users").where("id_token", idToken);
 
-const addUser = (username) => db("users").insert({ username });
+const addUser = (idToken, username) =>
+  db("users").insert({ id_token: idToken, username });
 
 const getLocationsWithRallyInfo = () =>
   db("rallies")
@@ -21,9 +22,32 @@ const getLocationsWithRallyInfo = () =>
 const getRalliesOfUser = (userId) =>
   db("rallies")
     .innerJoin("rallies_to_users", "rallies.id", "rallies_to_users.rally_id")
-    .where("user_id", userId);
+    .where("rallies_to_users.user_id", userId);
 
-const getLocations = (userId, rallyId) =>
+const getLocationsWithRallyInfoUserChoose = (userId) =>
+  db("rallies")
+    .select(
+      "locations.rally_id",
+      "rallies.title",
+      "rallies.description",
+      "locations.id",
+      "locations.name",
+      "locations.description as ldescription",
+      "locations.lat",
+      "locations.lng",
+      "locations_to_users.visited"
+    )
+    .innerJoin("locations", "rallies.id", "locations.rally_id")
+    .innerJoin("rallies_to_users", "rallies.id", "rallies_to_users.rally_id")
+    .innerJoin(
+      "locations_to_users",
+      "locations.id",
+      "locations_to_users.location_id"
+    )
+    .where("rallies_to_users.user_id", userId)
+    .where("locations_to_users.user_id", userId);
+
+const getLocationsOfRallyOfUser = (idToken, rallyId) =>
   db("locations")
     .where("rally_id", rallyId)
     .innerJoin(
@@ -31,19 +55,48 @@ const getLocations = (userId, rallyId) =>
       "locations.id",
       "locations_to_users.location_id"
     )
-    .where("user_id", userId);
+    .where("id_token", idToken);
 
-const doneLocation = (userId, locationId, visited) =>
+const getLocationsOfRally = (rallyId) =>
+  db("locations").where("rally_id", rallyId);
+
+const doneLocation = (idToken, locationId, visited) =>
   db("locations_to_users")
-    .where("user_id", userId)
+    .where("id_token", idToken)
     .where("location_id", locationId)
     .update("visited", visited);
+
+const insertRalliesToUsers = (userId, rallyId) =>
+  db("rallies_to_users").insert({
+    user_id: userId,
+    rally_id: rallyId,
+  });
+
+const insertLocationsToUsers = (data) => db("locations_to_users").insert(data);
+
+const deleteRalliesToUsers = (userId, rallyId) =>
+  db("rallies_to_users")
+    .where("user_id", userId)
+    .where("rally_id", rallyId)
+    .del();
+
+const deleteLocationsToUsers = (userId, locations) =>
+  db("locations_to_users")
+    .where("user_id", userId)
+    .whereIn("location_id", locations)
+    .del();
 
 module.exports = {
   getUser,
   addUser,
   getLocationsWithRallyInfo,
   getRalliesOfUser,
-  getLocations,
+  getLocationsOfRallyOfUser,
   doneLocation,
+  getLocationsWithRallyInfoUserChoose,
+  getLocationsOfRally,
+  deleteRalliesToUsers,
+  deleteLocationsToUsers,
+  insertRalliesToUsers,
+  insertLocationsToUsers,
 };
