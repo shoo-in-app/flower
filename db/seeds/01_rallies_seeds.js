@@ -12,6 +12,21 @@ exports.seed = function(knex, Promise) {
           description: "Wakayama famous spots",
         },
         { id: 3, title: "Yamanote Line", description: "Go 3 stations" },
+        {
+          id: 4,
+          title: "Lunch Place near CC",
+          description: "Go 3 restaurants",
+        },
+        {
+          id: 5,
+          title: "Dinner Place near CC",
+          description: "Go 3 restaurants we went for beer",
+        },
+        {
+          id: 6,
+          title: "All around world",
+          description: "Go 4 countries CC4 from",
+        },
       ]);
     });
 };
