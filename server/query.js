@@ -62,7 +62,7 @@ const getLocationsOfRally = (rallyId) =>
 
 const doneLocation = (idToken, locationId, visited) =>
   db("locations_to_users")
-    .where("id_token", idToken)
+    .where("user_id", idToken)
     .where("location_id", locationId)
     .update("visited", visited);
 

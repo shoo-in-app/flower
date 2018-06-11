@@ -174,7 +174,8 @@ app.get("/locations/:idToken/:rallyId", async (req, res) => {
 app.patch("/location/:idToken/:locationId", async (req, res) => {
   try {
     const visited = req.body.visited;
-    await doneLocation(req.params.idToken, req.params.locationId, visited);
+    const userId = (await getUser(req.params.idToken))[0].id;
+    await doneLocation(userId, req.params.locationId, visited);
     if (visited) {
       res.send("The location is now visited.");
     } else {
