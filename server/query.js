@@ -47,7 +47,7 @@ const getLocationsWithRallyInfoUserChoose = (userId) =>
     .where("rallies_to_users.user_id", userId)
     .where("locations_to_users.user_id", userId);
 
-const getLocationsOfRallyOfUser = (idToken, rallyId) =>
+const getLocationsOfRallyOfUser = (userId, rallyId) =>
   db("locations")
     .where("rally_id", rallyId)
     .innerJoin(
@@ -55,14 +55,14 @@ const getLocationsOfRallyOfUser = (idToken, rallyId) =>
       "locations.id",
       "locations_to_users.location_id"
     )
-    .where("id_token", idToken);
+    .where("user_id", userId);
 
 const getLocationsOfRally = (rallyId) =>
   db("locations").where("rally_id", rallyId);
 
-const doneLocation = (idToken, locationId, visited) =>
+const doneLocation = (userId, locationId, visited) =>
   db("locations_to_users")
-    .where("user_id", idToken)
+    .where("user_id", userId)
     .where("location_id", locationId)
     .update("visited", visited);
 

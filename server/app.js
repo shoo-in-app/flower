@@ -160,8 +160,9 @@ app.patch("/rally/:idToken/:rallyId", async (req, res) => {
 
 app.get("/locations/:idToken/:rallyId", async (req, res) => {
   try {
+    const userId = (await getUser(req.params.idToken))[0].id;
     const locations = await getLocationsOfRallyOfUser(
-      req.params.idToken,
+      userId,
       req.params.rallyId
     );
     res.send(locations);
