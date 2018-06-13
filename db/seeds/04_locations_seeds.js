@@ -173,6 +173,30 @@ exports.seed = function(knex, Promise) {
           description: "Beau and Mike are from The US",
           rally_id: 6,
         },
+        {
+          id: 22,
+          name: "Code Chrisalis",
+          lat: 35.6579975,
+          lng: 139.7275789,
+          description: "The Immersive bootcamp",
+          rally_id: 7,
+        },
+        {
+          id: 23,
+          name: "Roppongi Hills",
+          lat: 35.6604896,
+          lng: 139.7292863,
+          description: "Big Building in Roppongi",
+          rally_id: 7,
+        },
+        {
+          id: 23,
+          name: "Roppongi Station (Hibiya line)",
+          lat: 35.662717,
+          lng: 139.7312066,
+          description: "Tokyo metro Hibiya line",
+          rally_id: 7,
+        },
       ]);
     });
 };

@@ -27,6 +27,11 @@ exports.seed = function(knex, Promise) {
           title: "All around world",
           description: "Go 4 countries CC4 from",
         },
+        {
+          id: 7,
+          title: "Roppongi",
+          description: "Good place to visit",
+        },
       ]);
     });
 };
