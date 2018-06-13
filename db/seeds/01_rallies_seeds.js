@@ -30,7 +30,7 @@ exports.seed = function(knex, Promise) {
         {
           id: 7,
           title: "Roppongi",
-          description: "Good place to visit",
+          description: "Good place to visit in Roppongi",
         },
       ]);
     });

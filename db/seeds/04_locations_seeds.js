@@ -190,7 +190,7 @@ exports.seed = function(knex, Promise) {
           rally_id: 7,
         },
         {
-          id: 23,
+          id: 24,
           name: "Roppongi Station (Hibiya line)",
           lat: 35.662717,
           lng: 139.7312066,
