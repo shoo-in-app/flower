@@ -1,9 +1,17 @@
 const db = require("../db");
 
-const getUser = (idToken) => db("users").where("id_token", idToken);
+const getUser = (idToken) =>
+  db("users")
+    .where("id_token", idToken)
+    .then((users) => (users.length > 0 ? user[0] : null));
 
 const addUser = (idToken, username) =>
   db("users").insert({ id_token: idToken, username });
+
+const updateExp = (idToken, exp) =>
+  db("users")
+    .where("id_token", idToken)
+    .update("exp", exp);
 
 const getLocationsWithRallyInfo = () =>
   db("rallies")
@@ -106,4 +114,5 @@ module.exports = {
   insertLocationsToUsers,
   addRally,
   addLocations,
+  updateExp,
 };

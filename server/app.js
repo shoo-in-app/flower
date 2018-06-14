@@ -17,6 +17,7 @@ const {
   deleteLocationsToUsers,
   addRally,
   addLocations,
+  updateExp,
 } = require("./query.js");
 
 const app = express();
@@ -34,10 +35,21 @@ app.post("/user/", async (req, res) => {
   try {
     const idToken = req.body.idToken;
     const user = await getUser(idToken);
-    if (user.length === 0) {
-      await addUser(idToken, req.body.username);
-    }
+    if (!user) await addUser(idToken, req.body.username);
     res.send("Log in");
+  } catch (err) {
+    console.error("Error adding user!", err);
+    res.status(500).send("Internal server error");
+  }
+});
+
+app.patch("/exp/:idToken", async (req, res) => {
+  try {
+    const idToken = req.params.idToken;
+    const user = await getUser(idToken);
+    const exp = user.exp + req.body.exp;
+    await updateExp(idToken, exp);
+    res.send(`${user.username} has ${exp} exp now.`);
   } catch (err) {
     console.error("Error adding user!", err);
     res.status(500).send("Internal server error");
@@ -74,9 +86,9 @@ app.get("/rallies", async (req, res) => {
 
 app.get("/rallies/:idToken", async (req, res) => {
   try {
-    const userId = (await getUser(req.params.idToken))[0].id;
+    const userID = (await getUser(req.params.idToken)).id;
     const chosenRallies = {};
-    const chosenLocations = await getLocationsWithRallyInfoUserChoose(userId);
+    const chosenLocations = await getLocationsWithRallyInfoUserChoose(userID);
     chosenLocations.forEach((location) => {
       if (!chosenRallies.hasOwnProperty(location.rally_id)) {
         chosenRallies[location.rally_id] = {
@@ -97,13 +109,13 @@ app.get("/rallies/:idToken", async (req, res) => {
       });
     });
 
-    const ralliesIdsUserchosen = (await getRalliesOfUser(userId)).map(
+    const ralliesIDsUserchosen = (await getRalliesOfUser(userID)).map(
       (rally) => rally.rally_id
     );
     const locations = await getLocationsWithRallyInfo();
     const notChosenRallies = {};
     locations
-      .filter((rally) => !ralliesIdsUserchosen.includes(rally.rally_id))
+      .filter((rally) => !ralliesIDsUserchosen.includes(rally.rally_id))
       .forEach((location) => {
         if (!notChosenRallies.hasOwnProperty(location.rally_id)) {
           notChosenRallies[location.rally_id] = {
@@ -132,25 +144,25 @@ app.get("/rallies/:idToken", async (req, res) => {
   }
 });
 
-app.patch("/rally/:idToken/:rallyId", async (req, res) => {
+app.patch("/rally/:idToken/:rallyID", async (req, res) => {
   try {
-    const userId = (await getUser(req.params.idToken))[0].id;
-    const rallyId = req.params.rallyId;
-    const locationIds = (await getLocationsOfRally(rallyId)).map(
+    const userID = (await getUser(req.params.idToken)).id;
+    const rallyID = req.params.rallyID;
+    const locationIDs = (await getLocationsOfRally(rallyID)).map(
       (location) => location.id
     );
     if (req.body.chosen === true) {
-      await insertRalliesToUsers(userId, rallyId);
-      const data = locationIds.map((id) => ({
-        user_id: userId,
+      await insertRalliesToUsers(userID, rallyID);
+      const data = locationIDs.map((id) => ({
+        user_id: userID,
         location_id: id,
         visited: false,
       }));
       await insertLocationsToUsers(data);
       res.send("The rally is now chosen.");
     } else if (req.body.chosen === false) {
-      await deleteRalliesToUsers(userId, rallyId);
-      await deleteLocationsToUsers(userId, locationIds);
+      await deleteRalliesToUsers(userID, rallyID);
+      await deleteLocationsToUsers(userID, locationIDs);
       res.send("The rally is now cancelled.");
     }
     res.send("Failed. Boolean key 'chosen' should be in body.");
@@ -160,12 +172,12 @@ app.patch("/rally/:idToken/:rallyId", async (req, res) => {
   }
 });
 
-app.get("/locations/:idToken/:rallyId", async (req, res) => {
+app.get("/locations/:idToken/:rallyID", async (req, res) => {
   try {
-    const userId = (await getUser(req.params.idToken))[0].id;
+    const userID = (await getUser(req.params.idToken)).id;
     const locations = await getLocationsOfRallyOfUser(
-      userId,
-      req.params.rallyId
+      userID,
+      req.params.rallyID
     );
     res.send(locations);
   } catch (err) {
@@ -174,11 +186,11 @@ app.get("/locations/:idToken/:rallyId", async (req, res) => {
   }
 });
 
-app.patch("/location/:idToken/:locationId", async (req, res) => {
+app.patch("/location/:idToken/:locationID", async (req, res) => {
   try {
     const visited = req.body.visited;
-    const userId = (await getUser(req.params.idToken))[0].id;
-    await doneLocation(userId, req.params.locationId, visited);
+    const userID = (await getUser(req.params.idToken)).id;
+    await doneLocation(userID, req.params.locationID, visited);
     if (visited) {
       res.send("The location is now visited.");
     } else {
