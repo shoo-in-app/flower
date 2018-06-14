@@ -35,6 +35,21 @@ exports.seed = function(knex, Promise) {
           location_id: 3,
           visited: false,
         },
+        {
+          user_id: 1000000,
+          location_id: 9,
+          visited: false,
+        },
+        {
+          user_id: 1000000,
+          location_id: 10,
+          visited: true,
+        },
+        {
+          user_id: 1000000,
+          location_id: 11,
+          visited: false,
+        },
       ]);
     });
 };
