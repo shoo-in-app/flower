@@ -2,6 +2,10 @@ import React, { Component } from "react";
 import MapWithMarker from "./MapWithMarker";
 export default class CreateNewRally extends Component {
   render() {
-    return <MapWithMarker />;
+    return (
+      <div>
+        <MapWithMarker />
+      </div>
+    );
   }
 }
