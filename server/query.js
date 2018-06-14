@@ -86,6 +86,11 @@ const deleteLocationsToUsers = (userId, locations) =>
     .whereIn("location_id", locations)
     .del();
 
+const addRally = (title, description) =>
+  db("rallies").insert({ title, description });
+
+const addLocations = (locations) => db("locations").insert(...locations);
+
 module.exports = {
   getUser,
   addUser,
@@ -99,4 +104,6 @@ module.exports = {
   deleteLocationsToUsers,
   insertRalliesToUsers,
   insertLocationsToUsers,
+  addRally,
+  addLocations,
 };

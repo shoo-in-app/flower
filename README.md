@@ -249,6 +249,32 @@ body example
 }
 ```
 
+### post /rally/
+
+Create new rally.
+body example:
+
+```
+[
+    "title": "Roppongi",
+    "description": "Good place to visit in Roppongi",
+    "locations": [
+        {
+          name: "Code Chrisalis",
+          lat: 35.6579975,
+          lng: 139.7275789,
+          description: "The Immersive bootcamp",
+        },
+        {
+          name: "Roppongi Hills",
+          lat: 35.6604896,
+          lng: 139.7292863,
+          description: "Big Building in Roppongi",
+        },
+    ]
+]
+```
+
 ## Getting Started
 
 ```

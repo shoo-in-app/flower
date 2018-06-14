@@ -15,6 +15,8 @@ const {
   insertLocationsToUsers,
   deleteRalliesToUsers,
   deleteLocationsToUsers,
+  addRally,
+  addLocations,
 } = require("./query.js");
 
 const app = express();
@@ -184,6 +186,21 @@ app.patch("/location/:idToken/:locationId", async (req, res) => {
     }
   } catch (err) {
     console.error("Error updating user history!", err);
+    res.status(500).send("Internal server error");
+  }
+});
+
+app.post("/rally/", async (req, res) => {
+  try {
+    const rallyID = await addRally(req.body.title, req.body.description);
+    const locations = req.body.locations.maps((l) => ({
+      rally_id: rallyID,
+      ...l,
+    }));
+    await addLocations(locations);
+    res.send("The rally is now added.");
+  } catch (err) {
+    console.error("Error adding new rally!", err);
     res.status(500).send("Internal server error");
   }
 });
