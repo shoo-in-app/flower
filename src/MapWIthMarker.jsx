@@ -139,7 +139,7 @@ const MapWithASearchBox = compose(
             boxSizing: `border-box`,
             border: `1px solid transparent`,
             width: `240px`,
-            height: `50px`,
+            height: `150px`,
             marginTop: `27px`,
             padding: `0 12px`,
             borderRadius: `3px`,
@@ -150,11 +150,24 @@ const MapWithASearchBox = compose(
           }}
         >
           <label htmlFor="name">Name: </label>
+          <br />
           <input type="text" name="" id="name" />
+          <br />
+          <label htmlFor="description">Description: </label>
+          <br />
+          <textarea type="text" name="" id="description" />
           <br />
           <span>
             Lat: {props.lat} <br /> Lng: {props.lng}
           </span>
+          <br />
+          <button
+            onClick={(e) => {
+              console.log(e);
+            }}
+          >
+            Add
+          </button>
         </div>
       </div>
     </SearchBox>
@@ -191,17 +204,14 @@ export default class CreateNewRally extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      lat: 0,
-      lng: 0,
       isMarkerShown: false,
+      locations: [],
     };
   }
 
-  componentWillMount() {
-    this.setState({ markers: [] });
-  }
-
   render() {
+    console.log(this.state.locations);
+
     return (
       <div>
         <MapWithASearchBox />
