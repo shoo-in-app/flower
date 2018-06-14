@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import List from "./List";
+import CreateNewRally from "./CreateNewRally";
 import "react-tabs/style/react-tabs.css";
 
 export default class App extends Component {
@@ -7,18 +9,17 @@ export default class App extends Component {
     return (
       <Tabs>
         <TabList>
-          <Tab>Title 1</Tab>
-          <Tab>Title 2</Tab>
+          <Tab>List of Rallies</Tab>
+          <Tab>Create New Rally</Tab>
         </TabList>
 
         <TabPanel>
-          <h2>Any content 1</h2>
+          <List />
         </TabPanel>
         <TabPanel>
-          <h2>Any content 2</h2>
+          <CreateNewRally />
         </TabPanel>
       </Tabs>
     );
-    // <div>Hello World</div>;
   }
 }
