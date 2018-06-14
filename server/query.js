@@ -3,7 +3,7 @@ const db = require("../db");
 const getUser = (idToken) =>
   db("users")
     .where("id_token", idToken)
-    .then((users) => (users.length > 0 ? user[0] : null));
+    .then((users) => (users.length > 0 ? users[0] : null));
 
 const addUser = (idToken, username) =>
   db("users").insert({ id_token: idToken, username });
@@ -95,9 +95,12 @@ const deleteLocationsToUsers = (userId, locations) =>
     .del();
 
 const addRally = (title, description) =>
-  db("rallies").insert({ title, description });
+  db("rallies")
+    .insert({ title, description })
+    .returning("id")
+    .then((ids) => ids[0]);
 
-const addLocations = (locations) => db("locations").insert(...locations);
+const addLocations = (locations) => db("locations").insert(locations);
 
 module.exports = {
   getUser,

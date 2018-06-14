@@ -255,50 +255,35 @@ Create new rally.
 body example:
 
 ```
-[
+{
     "title": "Roppongi",
     "description": "Good place to visit in Roppongi",
     "locations": [
         {
-          name: "Code Chrisalis",
-          lat: 35.6579975,
-          lng: 139.7275789,
-          description: "The Immersive bootcamp",
+          "name": "Code Chrisalis",
+          "lat": 35.6579975,
+          "lng": 139.7275789,
+          "description": "The Immersive bootcamp"
         },
         {
-          name: "Roppongi Hills",
-          lat: 35.6604896,
-          lng: 139.7292863,
-          description: "Big Building in Roppongi",
-        },
+          "name": "Roppongi Hills",
+          "lat": 35.6604896,
+          "lng": 139.7292863,
+          "description": "Big Building in Roppongi"
+        }
     ]
-]
+}
 ```
 
 ### patch /exp/:userID
 
-Increase new rally.
+Increase exp (new exp will be `[current exp] + [exp which you send]`).
 body example:
 
 ```
-[
-    "title": "Roppongi",
-    "description": "Good place to visit in Roppongi",
-    "locations": [
-        {
-          name: "Code Chrisalis",
-          lat: 35.6579975,
-          lng: 139.7275789,
-          description: "The Immersive bootcamp",
-        },
-        {
-          name: "Roppongi Hills",
-          lat: 35.6604896,
-          lng: 139.7292863,
-          description: "Big Building in Roppongi",
-        },
-    ]
-]
+{
+    exp:10
+}
 ```
 
 ## Getting Started

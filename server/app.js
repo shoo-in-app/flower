@@ -205,7 +205,7 @@ app.patch("/location/:idToken/:locationID", async (req, res) => {
 app.post("/rally/", async (req, res) => {
   try {
     const rallyID = await addRally(req.body.title, req.body.description);
-    const locations = req.body.locations.maps((l) => ({
+    const locations = req.body.locations.map((l) => ({
       rally_id: rallyID,
       ...l,
     }));
