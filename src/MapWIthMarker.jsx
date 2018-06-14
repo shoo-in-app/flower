@@ -1,6 +1,12 @@
 import React, { Component } from "react";
 const _ = require("lodash");
-const { compose, withProps, lifecycle } = require("recompose");
+const {
+  compose,
+  withProps,
+  lifecycle,
+  withStateHandlers,
+} = require("recompose");
+const { InfoBox } = require("react-google-maps/lib/components/addons/InfoBox");
 const {
   withScriptjs,
   withGoogleMap,
@@ -12,6 +18,16 @@ const {
 } = require("react-google-maps/lib/components/places/SearchBox");
 
 const MapWithASearchBox = compose(
+  withStateHandlers(
+    () => ({
+      isOpen: false,
+    }),
+    {
+      onToggleOpen: ({ isOpen }) => () => ({
+        isOpen: !isOpen,
+      }),
+    }
+  ),
   withProps({
     googleMapURL:
       "https://maps.googleapis.com/maps/api/js?key=AIzaSyDe-SSvqZrjeDeD3clObxGng67gPOB76aQ&v=3.exp&libraries=geometry,drawing,places",
@@ -30,6 +46,10 @@ const MapWithASearchBox = compose(
           lng: -87.624,
         },
         markers: [],
+        marker: {
+          lat: 0,
+          lng: 0,
+        },
         onMapMounted: (ref) => {
           refs.map = ref;
         },
@@ -37,6 +57,13 @@ const MapWithASearchBox = compose(
           this.setState({
             bounds: refs.map.getBounds(),
             center: refs.map.getCenter(),
+          });
+        },
+        onClick: (e) => {
+          console.log(e);
+          this.setState({
+            lat: e.pa.x,
+            lng: e.pa.y,
           });
         },
         onSearchBoxMounted: (ref) => {
@@ -75,10 +102,12 @@ const MapWithASearchBox = compose(
   withGoogleMap
 )((props) => (
   <GoogleMap
+    onDrag={true}
     ref={props.onMapMounted}
     defaultZoom={15}
     center={props.center}
     onBoundsChanged={props.onBoundsChanged}
+    onClick={props.onClick}
   >
     <SearchBox
       ref={props.onSearchBoxMounted}
@@ -86,54 +115,97 @@ const MapWithASearchBox = compose(
       controlPosition={google.maps.ControlPosition.TOP_LEFT}
       onPlacesChanged={props.onPlacesChanged}
     >
-      <input
-        type="text"
-        placeholder="Customized your placeholder"
-        style={{
-          boxSizing: `border-box`,
-          border: `1px solid transparent`,
-          width: `240px`,
-          height: `32px`,
-          marginTop: `27px`,
-          padding: `0 12px`,
-          borderRadius: `3px`,
-          boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
-          fontSize: `14px`,
-          outline: `none`,
-          textOverflow: `ellipses`,
-        }}
-      />
+      <div>
+        <input
+          type="text"
+          placeholder="Customized your placeholder"
+          style={{
+            boxSizing: `border-box`,
+            border: `1px solid transparent`,
+            width: `240px`,
+            height: `32px`,
+            marginTop: `27px`,
+            padding: `0 12px`,
+            borderRadius: `3px`,
+            boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
+            fontSize: `14px`,
+            outline: `none`,
+            textOverflow: `ellipses`,
+          }}
+        />
+        <div
+          style={{
+            backgroundColor: "#fff",
+            boxSizing: `border-box`,
+            border: `1px solid transparent`,
+            width: `240px`,
+            height: `50px`,
+            marginTop: `27px`,
+            padding: `0 12px`,
+            borderRadius: `3px`,
+            boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
+            fontSize: `14px`,
+            outline: `none`,
+            textOverflow: `ellipses`,
+          }}
+        >
+          <label htmlFor="name">Name: </label>
+          <input type="text" name="" id="name" />
+          <br />
+          <span>
+            Lat: {props.lat} <br /> Lng: {props.lng}
+          </span>
+        </div>
+      </div>
     </SearchBox>
     {props.markers.map((marker, index) => (
-      <Marker key={index} position={marker.position} />
+      <Marker
+        key={index}
+        position={marker.position}
+        onClick={props.onToggleOpen}
+      >
+        {props.isOpen && (
+          <InfoBox
+            onCloseClick={props.onToggleOpen}
+            options={{ closeBoxURL: ``, enableEventPropagation: true }}
+          >
+            <div
+              style={{
+                backgroundColor: `yellow`,
+                opacity: 0.75,
+                padding: `12px`,
+              }}
+            >
+              <span>
+                Lat: {props.lat} <br /> Lng: {props.lng}
+              </span>
+            </div>
+          </InfoBox>
+        )}
+      </Marker>
     ))}
   </GoogleMap>
 ));
 
 export default class CreateNewRally extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      lat: 0,
+      lng: 0,
+      isMarkerShown: false,
+    };
+  }
+
   componentWillMount() {
     this.setState({ markers: [] });
   }
 
-  // componentDidMount() {
-  //     const url = [
-  //         // Length issue
-  //         `https://gist.githubusercontent.com`,
-  //         `/farrrr/dfda7dd7fccfec5474d3`,
-  //         `/raw/758852bbc1979f6c4522ab4e92d1c92cba8fb0dc/data.json`
-  //     ].join("")
-
-  //     fetch(url)
-  //         .then(res => res.json())
-  //         .then(data => {
-  //             this.setState({ markers: data.photos });
-  //         });
-  // }
-
   render() {
     return (
-      // <MapWithAMarker /> //markers={this.state.markers} />
-      <MapWithASearchBox />
+      <div>
+        <MapWithASearchBox />
+      </div>
     );
   }
 }
