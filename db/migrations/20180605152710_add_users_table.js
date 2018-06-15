@@ -10,6 +10,7 @@ exports.up = (knex) =>
     table.string("google_id", 255);
     table.string("name", 255);
     table.string("photo_url", 255);
+    table.integer("exp").defaultTo(0);
   });
 
 exports.down = (knex) => knex.schema.dropTable("users");
