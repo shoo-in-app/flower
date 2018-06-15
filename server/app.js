@@ -3,7 +3,7 @@ const express = require("express");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const {
-  getUserID,
+  getUser,
   addUser,
   getLocationsWithRallyInfo,
   getRalliesOfUser,
@@ -34,9 +34,14 @@ app.use(
 app.post("/user/", async (req, res) => {
   try {
     const email = req.body.email;
-    let userID = await getUserID(email);
-    if (!userID) userID = await addUser(email, req.body.username);
-    res.send(userID);
+    let user = await getUser(email);
+    if (!user) user = await addUser(email, req.body.username);
+    res.send({
+      userID: user.id,
+      username: user.username,
+      email: user.email,
+      exp: user.exp,
+    });
   } catch (err) {
     console.error("Error adding user!", err);
     res.status(500).send("Internal server error");
