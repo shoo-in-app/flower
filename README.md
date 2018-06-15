@@ -39,8 +39,8 @@ post body
 
 ```
 {
-  idToken: "bv4UrqEdJ97gUjS469LPX6zrbDMNcKhW5DqmQmuPP9wEEMK7YewqDRQxfQ9xT669bmHDfpRHSjEUssF8yEcEde2BJHeFgy64q9EKvfPa845pETHvRKuCaUzVtAbJwqAC"
-  username: "Yusuke"
+  "idToken": "bv4UrqEdJ97gUjS469LPX6zrbDMNcKhW5DqmQmuPP9wEEMK7YewqDRQxfQ9xT669bmHDfpRHSjEUssF8yEcEde2BJHeFgy64q9EKvfPa845pETHvRKuCaUzVtAbJwqAC",
+  "username": "Yusuke"
 }
 ```
 
@@ -68,7 +68,7 @@ Get all rallies.
 ]
 ```
 
-### get /rallies/:userId
+### get /rallies/:userID
 
 Get rallies which a user join.
 
@@ -183,7 +183,7 @@ Get rallies which a user join.
 }
 ```
 
-### get /locations/:userId/:rallyId
+### get /locations/:userID/:rallyID
 
 Get locations history which user visited in one rally.
 
@@ -225,7 +225,7 @@ Get locations history which user visited in one rally.
 ]
 ```
 
-### patch /location/:userId/:locationId
+### patch /location/:userID/:locationID
 
 Update location history as visited.
 
@@ -237,7 +237,7 @@ body example
 }
 ```
 
-### patch /rally/:userId/:rallyId
+### patch /rally/:userID/:rallyID
 
 Choose rally/Unchoose rally.
 
@@ -246,6 +246,45 @@ body example
 ```
 {
   "chosen":true
+}
+```
+
+### post /rally/
+
+Create new rally.
+body example:
+
+```
+{
+    "title": "Roppongi",
+    "description": "Good place to visit in Roppongi",
+    "start_datetime": "2018-06-15T00:00:00.000Z",
+    "end_datetime": "2018-07-15T00:00:00.000Z",
+    "locations": [
+        {
+          "name": "Code Chrisalis",
+          "lat": 35.6579975,
+          "lng": 139.7275789,
+          "description": "The Immersive bootcamp"
+        },
+        {
+          "name": "Roppongi Hills",
+          "lat": 35.6604896,
+          "lng": 139.7292863,
+          "description": "Big Building in Roppongi"
+        }
+    ]
+}
+```
+
+### patch /exp/:userID
+
+Increase exp (new exp will be `[current exp] + [exp which you send]`).
+body example:
+
+```
+{
+    exp:10
 }
 ```
 
