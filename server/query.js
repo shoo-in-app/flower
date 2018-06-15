@@ -38,6 +38,9 @@ const getLocationsWithRallyInfoUserChoose = (userId) =>
       "locations.rally_id",
       "rallies.title",
       "rallies.description",
+      "rallies.start_datetime",
+      "rallies.end_datetime",
+      "creators.username",
       "locations.id",
       "locations.name",
       "locations.description as ldescription",
@@ -52,6 +55,7 @@ const getLocationsWithRallyInfoUserChoose = (userId) =>
       "locations.id",
       "locations_to_users.location_id"
     )
+    .innerJoin("creators", "rallies.creator_id", "creators.id")
     .where("rallies_to_users.user_id", userId)
     .where("locations_to_users.user_id", userId);
 

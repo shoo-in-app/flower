@@ -7,11 +7,11 @@ exports.seed = function(knex, Promise) {
       return knex("creators").insert([
         {
           id: 10001,
-          name: "CodeChrisalis",
+          username: "CodeChrisalis",
         },
         {
           id: 10002,
-          name: "SomeCompany",
+          username: "SomeCompany",
         },
       ]);
     });
