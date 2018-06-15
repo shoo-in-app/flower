@@ -35,7 +35,7 @@ app.use(
 app.post("/user/", async (req, res) => {
   try {
     const email = req.body.email;
-    var hash = bcrypt.hashSync(email, "SUPER_SECRET_SALT");
+    var hash = bcrypt.hashSync(email, 10);
     let user = await getUser(hash);
     if (!user) user = await addUser(hash, req.body.username, email);
     res.send({
