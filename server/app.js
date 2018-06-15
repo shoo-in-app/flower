@@ -19,7 +19,7 @@ const {
   addLocations,
   incrementExp,
 } = require("./query.js");
-const bcrypt = require("bcrypt");
+const crypto = require("crypto");
 
 const app = express();
 
@@ -35,7 +35,10 @@ app.use(
 app.post("/user/", async (req, res) => {
   try {
     const email = req.body.email;
-    var hash = bcrypt.hashSync(email, 10);
+    const hash = crypto
+      .createHmac("sha256", email)
+      .update("super secret password")
+      .digest("hex");
     let user = await getUser(hash);
     if (!user) user = await addUser(hash, req.body.username, email);
     res.send({
