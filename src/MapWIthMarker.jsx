@@ -229,6 +229,14 @@ export default class CreateNewRally extends Component {
     const rally = period;
     rally["locations"] = this.state.locations;
     console.log("rallies: ", rally);
+    axios
+      .post("https://cc4-flower-dev.herokuapp.com/rally/", rally)
+      .then((response) => {
+        console.log("response: ", response);
+      })
+      .catch(function(error) {
+        console.log("Something wrong: ", error);
+      });
   }
   changeDesc(description) {
     this.setState({ description });
