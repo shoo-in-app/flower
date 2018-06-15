@@ -254,19 +254,23 @@ export default class CreateNewRally extends Component {
         <br />
         <label htmlFor="start">Start: </label>
         <br />
-        <input type="text" name="start" id="start" />
+        <input type="datetime-local" name="start" id="start" />
         <br />
         <label htmlFor="end">End: </label>
         <br />
-        <input type="text" name="end" id="end" />
+        <input type="datetime-local" name="end" id="end" />
         <br />
         <button
           onClick={() => {
             const period = {
               title: document.getElementById("title").value,
               description: this.state.description,
-              start_datetime: document.getElementById("start").value,
-              end_datetime: document.getElementById("end").value,
+              start_datetime: new Date(
+                document.getElementById("start").value
+              ).toISOString(),
+              end_datetime: new Date(
+                document.getElementById("end").value
+              ).toISOString(),
             };
             return this.submit(period);
           }}
