@@ -97,7 +97,7 @@ app.get("/rallies/:idToken", async (req, res) => {
           complete: chosenLocations.every((location) => location.visited),
           start_datetime: location.start_datetime,
           end_datetime: location.end_datetime,
-          users_count: rallies.users_count,
+          user_count: location.user_count,
           locations: [],
         };
       }
@@ -127,7 +127,7 @@ app.get("/rallies/:idToken", async (req, res) => {
             description: location.description,
             start_datetime: location.start_datetime,
             end_datetime: location.end_datetime,
-            users_count: rallies.users_count,
+            user_count: location.user_count,
             locations: [],
           };
         }
