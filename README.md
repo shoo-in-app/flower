@@ -258,6 +258,8 @@ body example:
 {
     "title": "Roppongi",
     "description": "Good place to visit in Roppongi",
+    "start_datetime": "2018-06-15T00:00:00.000Z",
+    "end_datetime": "2018-07-15T00:00:00.000Z",
     "locations": [
         {
           "name": "Code Chrisalis",

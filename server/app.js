@@ -17,7 +17,7 @@ const {
   deleteLocationsToUsers,
   addRally,
   addLocations,
-  updateExp,
+  incrementExp,
 } = require("./query.js");
 
 const app = express();
@@ -46,9 +46,7 @@ app.post("/user/", async (req, res) => {
 app.patch("/exp/:idToken", async (req, res) => {
   try {
     const idToken = req.params.idToken;
-    const user = await getUser(idToken);
-    const exp = user.exp + req.body.exp;
-    await updateExp(idToken, exp);
+    await incrementExp(idToken, exp);
     res.send(`${user.username} has ${exp} exp now.`);
   } catch (err) {
     console.error("Error adding user!", err);

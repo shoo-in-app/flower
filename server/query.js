@@ -8,10 +8,10 @@ const getUser = (idToken) =>
 const addUser = (idToken, username) =>
   db("users").insert({ id_token: idToken, username });
 
-const updateExp = (idToken, exp) =>
+const incrementExp = (idToken, exp) =>
   db("users")
     .where("id_token", idToken)
-    .update("exp", exp);
+    .increment("exp", exp);
 
 const getLocationsWithRallyInfo = () =>
   db("rallies")
@@ -75,10 +75,16 @@ const doneLocation = (userId, locationId, visited) =>
     .update("visited", visited);
 
 const insertRalliesToUsers = (userId, rallyId) =>
-  db("rallies_to_users").insert({
-    user_id: userId,
-    rally_id: rallyId,
-  });
+  db("rallies_to_users")
+    .insert({
+      user_id: userId,
+      rally_id: rallyId,
+    })
+    .then(() => {
+      db("rallies")
+        .where("id", rallyId)
+        .increment("users_count", 1);
+    });
 
 const insertLocationsToUsers = (data) => db("locations_to_users").insert(data);
 
@@ -86,7 +92,12 @@ const deleteRalliesToUsers = (userId, rallyId) =>
   db("rallies_to_users")
     .where("user_id", userId)
     .where("rally_id", rallyId)
-    .del();
+    .del()
+    .then(() => {
+      db("rallies")
+        .where("id", rallyId)
+        .decrement("users_count", 1);
+    });
 
 const deleteLocationsToUsers = (userId, locations) =>
   db("locations_to_users")
@@ -117,5 +128,5 @@ module.exports = {
   insertLocationsToUsers,
   addRally,
   addLocations,
-  updateExp,
+  incrementExp,
 };
