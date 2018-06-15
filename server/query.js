@@ -1,12 +1,14 @@
 const db = require("../db");
 
-const getUser = (idToken) =>
+const getUserID = (idToken) =>
   db("users")
     .where("id_token", idToken)
-    .then((users) => (users.length > 0 ? users[0] : null));
+    .then((users) => (users.length > 0 ? users[0].id : null));
 
-const addUser = (idToken, username) =>
-  db("users").insert({ id_token: idToken, username });
+const addUser = (email, username) =>
+  db("users")
+    .insert({ email, username })
+    .returning("id");
 
 const incrementExp = (idToken, exp) =>
   db("users")
@@ -124,7 +126,7 @@ const addRally = (title, description) =>
 const addLocations = (locations) => db("locations").insert(locations);
 
 module.exports = {
-  getUser,
+  getUserID,
   addUser,
   getLocationsWithRallyInfo,
   getRalliesOfUser,
