@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from "axios";
 const _ = require("lodash");
 const {
   compose,
@@ -212,8 +213,10 @@ export default class CreateNewRally extends Component {
     this.state = {
       isMarkerShown: false,
       locations: [],
+      description: "",
     };
     this.changeData = this.changeData.bind(this);
+    this.submit = this.submit.bind(this);
   }
 
   changeData(data) {
@@ -222,11 +225,54 @@ export default class CreateNewRally extends Component {
     this.setState({ locations });
   }
 
+  submit(period) {
+    const rally = period;
+    rally["locations"] = this.state.locations;
+    console.log("rallies: ", rally);
+  }
+  changeDesc(description) {
+    this.setState({ description });
+  }
   render() {
     return (
       <div>
         <MapWithASearchBox changeData={this.changeData} />
         {JSON.stringify(this.state.locations)}
+        <br />
+        <label htmlFor="title">Title: </label>
+        <br />
+        <input type="text" name="title" id="title" />
+        <br />
+        <label htmlFor="description">Description: </label>
+        <br />
+        <input
+          type="text"
+          name="description"
+          id="description"
+          onChange={(e) => this.changeDesc(e.target.value)}
+        />
+        <br />
+        <label htmlFor="start">Start: </label>
+        <br />
+        <input type="text" name="start" id="start" />
+        <br />
+        <label htmlFor="end">End: </label>
+        <br />
+        <input type="text" name="end" id="end" />
+        <br />
+        <button
+          onClick={() => {
+            const period = {
+              title: document.getElementById("title").value,
+              description: this.state.description,
+              start_datetime: document.getElementById("start").value,
+              end_datetime: document.getElementById("end").value,
+            };
+            return this.submit(period);
+          }}
+        >
+          Submit
+        </button>
       </div>
     );
   }
