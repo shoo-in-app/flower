@@ -163,7 +163,13 @@ const MapWithASearchBox = compose(
           <br />
           <button
             onClick={(e) => {
-              console.log(e);
+              const locationData = {
+                name: document.getElementById("name").value,
+                description: document.getElementById("description").value,
+                lat: props.lat,
+                lng: props.lng,
+              };
+              props.changeData(locationData);
             }}
           >
             Add
@@ -207,14 +213,20 @@ export default class CreateNewRally extends Component {
       isMarkerShown: false,
       locations: [],
     };
+    this.changeData = this.changeData.bind(this);
+  }
+
+  changeData(data) {
+    const locations = this.state.locations.slice();
+    locations.push(data);
+    this.setState({ locations });
   }
 
   render() {
-    console.log(this.state.locations);
-
     return (
       <div>
-        <MapWithASearchBox />
+        <MapWithASearchBox changeData={this.changeData} />
+        {JSON.stringify(this.state.locations)}
       </div>
     );
   }
