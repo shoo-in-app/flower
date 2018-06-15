@@ -97,6 +97,7 @@ app.get("/rallies/:idToken", async (req, res) => {
           complete: chosenLocations.every((location) => location.visited),
           start_datetime: location.start_datetime,
           end_datetime: location.end_datetime,
+          users_count: rallies.users_count,
           locations: [],
         };
       }
@@ -121,8 +122,12 @@ app.get("/rallies/:idToken", async (req, res) => {
         if (!notChosenRallies.hasOwnProperty(location.rally_id)) {
           notChosenRallies[location.rally_id] = {
             id: location.rally_id,
+            creator_name: location.username,
             title: location.title,
             description: location.description,
+            start_datetime: location.start_datetime,
+            end_datetime: location.end_datetime,
+            users_count: rallies.users_count,
             locations: [],
           };
         }

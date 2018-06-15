@@ -19,13 +19,18 @@ const getLocationsWithRallyInfo = () =>
       "locations.rally_id",
       "rallies.title",
       "rallies.description",
+      "rallies.start_datetime",
+      "rallies.end_datetime",
+      "rallies.users_count",
       "locations.id",
       "locations.name",
       "locations.description as ldescription",
       "locations.lat",
-      "locations.lng"
+      "locations.lng",
+      "creators.username"
     )
-    .innerJoin("locations", "rallies.id", "locations.rally_id");
+    .innerJoin("locations", "rallies.id", "locations.rally_id")
+    .innerJoin("creators", "rallies.creator_id", "creators.id");
 
 const getRalliesOfUser = (userId) =>
   db("rallies")
@@ -40,6 +45,7 @@ const getLocationsWithRallyInfoUserChoose = (userId) =>
       "rallies.description",
       "rallies.start_datetime",
       "rallies.end_datetime",
+      "rallies.users_count",
       "creators.username",
       "locations.id",
       "locations.name",
