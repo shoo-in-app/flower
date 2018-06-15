@@ -19,6 +19,7 @@ const {
   addLocations,
   incrementExp,
 } = require("./query.js");
+const bcrypt = require("bcrypt");
 
 const app = express();
 
@@ -34,10 +35,11 @@ app.use(
 app.post("/user/", async (req, res) => {
   try {
     const email = req.body.email;
-    let user = await getUser(email);
-    if (!user) user = await addUser(email, req.body.username);
+    var hash = bcrypt.hashSync(email, "SUPER_SECRET_SALT");
+    let user = await getUser(hash);
+    if (!user) user = await addUser(hash, req.body.username, email);
     res.send({
-      userID: user.id,
+      userID: user.hash,
       username: user.username,
       email: user.email,
       exp: user.exp,
@@ -50,7 +52,7 @@ app.post("/user/", async (req, res) => {
 
 app.patch("/exp/:userID", async (req, res) => {
   try {
-    const userID = req.params.userID;
+    const userID = (await getUser(req.params.userID)).id;
     await incrementExp(userID, exp);
     res.send(`${user.username} has ${exp} exp now.`);
   } catch (err) {
@@ -89,7 +91,7 @@ app.get("/rallies", async (req, res) => {
 
 app.get("/rallies/:userID", async (req, res) => {
   try {
-    const userID = req.params.userID;
+    const userID = (await getUser(req.params.userID)).id;
     const chosenRallies = {};
     const chosenLocations = await getLocationsWithRallyInfoUserChoose(userID);
     chosenLocations.forEach((location) => {
@@ -155,9 +157,9 @@ app.get("/rallies/:userID", async (req, res) => {
   }
 });
 
-app.patch("/rally/:idToken/:rallyID", async (req, res) => {
+app.patch("/rally/:userID/:rallyID", async (req, res) => {
   try {
-    const userID = req.params.userID;
+    const userID = (await getUser(req.params.userID)).id;
     const rallyID = req.params.rallyID;
     const locationIDs = (await getLocationsOfRally(rallyID)).map(
       (location) => location.id
@@ -183,9 +185,9 @@ app.patch("/rally/:idToken/:rallyID", async (req, res) => {
   }
 });
 
-app.get("/locations/:idToken/:rallyID", async (req, res) => {
+app.get("/locations/:userID/:rallyID", async (req, res) => {
   try {
-    const userID = req.params.userID;
+    const userID = (await getUser(req.params.userID)).id;
     const locations = await getLocationsOfRallyOfUser(
       userID,
       req.params.rallyID
@@ -197,10 +199,10 @@ app.get("/locations/:idToken/:rallyID", async (req, res) => {
   }
 });
 
-app.patch("/location/:idToken/:locationID", async (req, res) => {
+app.patch("/location/:userID/:locationID", async (req, res) => {
   try {
     const visited = req.body.visited;
-    const userID = req.params.userID;
+    const userID = (await getUser(req.params.userID)).id;
     await doneLocation(userID, req.params.locationID, visited);
     if (visited) {
       res.send("The location is now visited.");
