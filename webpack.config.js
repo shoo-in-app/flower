@@ -1,6 +1,11 @@
 const OpenBrowserPlugin = require("open-browser-webpack-plugin");
 const path = require("path");
 const webpack = require("webpack");
+const HtmlWebPackPlugin = require("html-webpack-plugin");
+const htmlWebPackPlugin = new HtmlWebPackPlugin({
+  template: "./index.html",
+  filename: "./index.html",
+});
 
 module.exports = {
   entry: [
@@ -9,6 +14,10 @@ module.exports = {
   ],
   module: {
     loaders: [
+      {
+        loaders: ["html-loader"],
+        test: /\.html$/,
+      },
       {
         loaders: ["style-loader", "css-loader"],
         test: /\.css$/,
@@ -30,7 +39,11 @@ module.exports = {
     path: path.resolve(__dirname, "dist"),
     publicPath: "/dist",
   },
-  plugins: [new OpenBrowserPlugin({ url: "http://localhost:8080" })],
+  plugins: [
+    new OpenBrowserPlugin({ url: "http://localhost:8080" }),
+    new webpack.HotModuleReplacementPlugin(),
+    htmlWebPackPlugin,
+  ],
   resolve: {
     extensions: [".webpack.js", ".js", ".jsx"],
   },
