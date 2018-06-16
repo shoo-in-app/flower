@@ -4,6 +4,7 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const {
   getUser,
+  deleteUser,
   addUser,
   getLocationsWithRallyInfo,
   getRalliesOfUser,
@@ -49,6 +50,16 @@ app.post("/user/", async (req, res) => {
     });
   } catch (err) {
     console.error("Error adding user!", err);
+    res.status(500).send("Internal server error");
+  }
+});
+
+app.delete("/user/:userID", async (req, res) => {
+  try {
+    await deleteUser(userID);
+    res.send(`USER:${userID} was correctly deleted`);
+  } catch (err) {
+    console.error("Error deleting user!", err);
     res.status(500).send("Internal server error");
   }
 });
