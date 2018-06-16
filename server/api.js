@@ -1,7 +1,5 @@
 // server/app.js
-const express = require("express");
-const morgan = require("morgan");
-const bodyParser = require("body-parser");
+const router = require("express").Router();
 const {
   getUser,
   addUser,
@@ -20,18 +18,7 @@ const {
   incrementExp,
 } = require("./query.js");
 
-const app = express();
-
-app.use("/", [bodyParser.json(), bodyParser.urlencoded({ extended: true })]);
-
-// Setup logger
-app.use(
-  morgan(
-    ':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] :response-time ms'
-  )
-);
-
-app.post("/user/", async (req, res) => {
+router.post("/user/", async (req, res) => {
   try {
     const idToken = req.body.idToken;
     const user = await getUser(idToken);
@@ -43,7 +30,7 @@ app.post("/user/", async (req, res) => {
   }
 });
 
-app.patch("/exp/:idToken", async (req, res) => {
+router.patch("/exp/:idToken", async (req, res) => {
   try {
     const idToken = req.params.idToken;
     await incrementExp(idToken, exp);
@@ -54,7 +41,7 @@ app.patch("/exp/:idToken", async (req, res) => {
   }
 });
 
-app.get("/rallies", async (req, res) => {
+router.get("/rallies", async (req, res) => {
   try {
     const locations = await getLocationsWithRallyInfo();
     const rallies = {};
@@ -82,7 +69,7 @@ app.get("/rallies", async (req, res) => {
   }
 });
 
-app.get("/rallies/:idToken", async (req, res) => {
+router.get("/rallies/:idToken", async (req, res) => {
   try {
     const userID = (await getUser(req.params.idToken)).id;
     const chosenRallies = {};
@@ -150,7 +137,7 @@ app.get("/rallies/:idToken", async (req, res) => {
   }
 });
 
-app.patch("/rally/:idToken/:rallyID", async (req, res) => {
+router.patch("/rally/:idToken/:rallyID", async (req, res) => {
   try {
     const userID = (await getUser(req.params.idToken)).id;
     const rallyID = req.params.rallyID;
@@ -178,7 +165,7 @@ app.patch("/rally/:idToken/:rallyID", async (req, res) => {
   }
 });
 
-app.get("/locations/:idToken/:rallyID", async (req, res) => {
+router.get("/locations/:idToken/:rallyID", async (req, res) => {
   try {
     const userID = (await getUser(req.params.idToken)).id;
     const locations = await getLocationsOfRallyOfUser(
@@ -192,7 +179,7 @@ app.get("/locations/:idToken/:rallyID", async (req, res) => {
   }
 });
 
-app.patch("/location/:idToken/:locationID", async (req, res) => {
+router.patch("/location/:idToken/:locationID", async (req, res) => {
   try {
     const visited = req.body.visited;
     const userID = (await getUser(req.params.idToken)).id;
@@ -208,7 +195,7 @@ app.patch("/location/:idToken/:locationID", async (req, res) => {
   }
 });
 
-app.post("/rally/", async (req, res) => {
+router.post("/rally/", async (req, res) => {
   try {
     const rallyID = await addRally(req.body.title, req.body.description);
     const locations = req.body.locations.map((l) => ({
@@ -223,4 +210,4 @@ app.post("/rally/", async (req, res) => {
   }
 });
 
-module.exports = app;
+module.exports = router;
