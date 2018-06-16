@@ -41,6 +41,10 @@ post body. It returns userID.
 }
 ```
 
+### delete /user/:userID
+
+Delete user.
+
 ### get /rallies/:userID
 
 Get rallies which a user join.
