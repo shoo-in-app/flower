@@ -5,6 +5,11 @@ const getUser = (hash) =>
     .where("hash", hash)
     .then((users) => (users.length > 0 ? users[0] : null));
 
+const deleteUser = (hash) =>
+  db("users")
+    .where("hash", hash)
+    .del();
+
 const addUser = (hash, username, email) =>
   db("users")
     .insert({ hash, username, email })
@@ -129,6 +134,7 @@ const addLocations = (locations) => db("locations").insert(locations);
 module.exports = {
   getUser,
   addUser,
+  deleteUser,
   getLocationsWithRallyInfo,
   getRalliesOfUser,
   getLocationsOfRallyOfUser,
