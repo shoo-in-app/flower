@@ -37,7 +37,7 @@ module.exports = {
   output: {
     filename: "bundle.js",
     path: path.resolve(__dirname, "dist"),
-    publicPath: "/dist",
+    publicPath: "/",
   },
   plugins: [
     new OpenBrowserPlugin({ url: "http://localhost:8080" }),
