@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-import { withFormik } from "formik";
-import axios from "axios";
 const _ = require("lodash");
 const {
   compose,
