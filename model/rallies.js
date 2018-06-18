@@ -113,7 +113,7 @@ module.exports = (db) => {
       )
       .innerJoin("locations", "rallies.id", "locations.rally_id")
       .innerJoin("creators", "rallies.creator_id", "creators.id")
-      .where("creators.id", creatorId);
+      .where("creators.google_id", creatorId);
 
   const getAllRallies = async () => {
     const locations = await getLocationsWithRallyInfo();

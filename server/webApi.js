@@ -25,7 +25,7 @@ router.post("/rally/", isAuthenticated, async (req, res) => {
 
 router.get("/rallies/", isAuthenticated, async (req, res) => {
   try {
-    const rallies = await Rallies.getCreatedRallies(req.user.id);
+    const rallies = await Rallies.getCreatedRallies(req.user);
     res.send(rallies);
   } catch (err) {
     console.error("Error getting created rallies!", err);

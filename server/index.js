@@ -3,7 +3,9 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const passport = require("passport");
+const cookieParser = require("cookie-parser");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const session = require("express-session");
 
 const mobileApi = require("./mobileApi");
 const webApi = require("./webApi");
@@ -27,17 +29,23 @@ passport.use(
 );
 
 passport.serializeUser((user, done) => {
-  console.log("serialize", user);
   done(null, user.id);
 });
 passport.deserializeUser((userId, done) => {
-  console.log("deserialize", userId);
   done(null, userId);
 });
+app.use(
+  session({
+    secret: "code chrysalis banzai!",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
 app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use(passport.initialize());
 app.use(passport.session());
 app.get(

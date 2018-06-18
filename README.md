@@ -223,7 +223,7 @@ body example:
 }
 ```
 
-#### get /web-api/rallies/:creatorId
+#### get /web-api/rallies/
 
 Create new rally.
 body example:
