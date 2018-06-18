@@ -175,7 +175,7 @@ module.exports = (db) => {
     const ralliesIdsUserchosen = (await getRalliesOfUser(userId)).map(
       (rally) => rally.rally_id
     );
-    const locations = await Users.getLocationsWithRallyInfo();
+    const locations = await getLocationsWithRallyInfo();
     const notChosenRallies = {};
     locations
       .filter((rally) => !ralliesIdsUserchosen.includes(rally.rally_id))
