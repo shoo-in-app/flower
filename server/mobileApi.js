@@ -13,7 +13,7 @@ router.post("/user/", async (req, res) => {
     });
   } catch (err) {
     console.error("Error adding user!", err);
-    res.status(500).send("Internal server error");
+    res.status(500).send(`Internal server error: ${err}`);
   }
 });
 
@@ -23,7 +23,7 @@ router.delete("/user/:userId", async (req, res) => {
     res.send(`USER:${userId} was correctly deleted`);
   } catch (err) {
     console.error("Error deleting user!", err);
-    res.status(500).send("Internal server error");
+    res.status(500).send(`Internal server error: ${err}`);
   }
 });
 
@@ -34,7 +34,7 @@ router.patch("/exp/:userId", async (req, res) => {
     res.send(`${user.username} has ${exp} exp now.`);
   } catch (err) {
     console.error("Error adding user!", err);
-    res.status(500).send("Internal server error");
+    res.status(500).send(`Internal server error: ${err}`);
   }
 });
 
@@ -44,7 +44,7 @@ router.get("/rallies", async (req, res) => {
     res.send(Object.values(rallies));
   } catch (err) {
     console.error("Error loading rallies!", err);
-    res.status(500).send("Internal server error");
+    res.status(500).send(`Internal server error: ${err}`);
   }
 });
 
@@ -59,7 +59,7 @@ router.get("/rallies/:userId", async (req, res) => {
     });
   } catch (err) {
     console.error("Error loading locations!", err);
-    res.status(500).send("Internal server error");
+    res.status(500).send(`Internal server error: ${err}`);
   }
 });
 
@@ -78,7 +78,7 @@ router.patch("/rally/:userId/:rallyId", async (req, res) => {
     }
   } catch (err) {
     console.error("Error updating user history!", err);
-    res.status(500).send("Internal server error");
+    res.status(500).send(`Internal server error: ${err}`);
   }
 });
 
@@ -94,7 +94,7 @@ router.patch("/location/:userId/:locationId", async (req, res) => {
     }
   } catch (err) {
     console.error("Error updating user history!", err);
-    res.status(500).send("Internal server error");
+    res.status(500).send(`Internal server error: ${err}`);
   }
 });
 
