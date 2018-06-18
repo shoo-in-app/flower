@@ -245,7 +245,7 @@ export default class CreateNewRally extends Component {
     const rally = period;
     rally["locations"] = this.state.locations;
     axios
-      .post("https://cc4-flower-dev.herokuapp.com/rally/", rally)
+      .post("https://cc4-flower-dev.herokuapp.com/web-api/rally/", rally)
       .then((response) => {
         console.log("response: ", response);
       })
