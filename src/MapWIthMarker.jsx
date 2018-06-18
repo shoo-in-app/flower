@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from "axios";
 const _ = require("lodash");
 const {
   compose,
@@ -70,8 +71,8 @@ const MapWithASearchBox = compose(
         onClick: (e) => {
           console.log(e);
           this.setState({
-            lat: e.pa.x,
-            lng: e.pa.y,
+            lat: e.qa.x,
+            lng: e.qa.y,
           });
         },
         onSearchBoxMounted: (ref) => {
@@ -243,15 +244,14 @@ export default class CreateNewRally extends Component {
   submit(period) {
     const rally = period;
     rally["locations"] = this.state.locations;
-    console.log("rallies: ", rally);
-    // axios
-    //     .post("https://cc4-flower-dev.herokuapp.com/rally/", rally)
-    //     .then((response) => {
-    //         console.log("response: ", response);
-    //     })
-    //     .catch(function (error) {
-    //         console.log("Something wrong: ", error);
-    //     });
+    axios
+      .post("https://cc4-flower-dev.herokuapp.com/rally/", rally)
+      .then((response) => {
+        console.log("response: ", response);
+      })
+      .catch(function(error) {
+        console.log("Something wrong: ", error);
+      });
   }
   changeDesc(description) {
     this.setState({ description });
@@ -306,15 +306,15 @@ export default class CreateNewRally extends Component {
               start_datetime,
               end_datetime,
             };
-            if (
-              this.isDateValid(start_datetime, end_datetime) ||
-              this.isFilledIn(title) ||
-              this.isFilledIn(description)
-            ) {
-              alert("Something wrong with your form");
-            } else {
-              return this.submit(period);
-            }
+            // if (
+            //   this.isDateValid(start_datetime, end_datetime) ||
+            //   this.isFilledIn(title) ||
+            //   this.isFilledIn(description)
+            // ) {
+            //   alert("Something wrong with your form");
+            // } else {
+            return this.submit(period);
+            // }
           }}
         >
           Submit
