@@ -50,11 +50,37 @@ export default class List extends Component {
   render() {
     let rallies;
     if (this.state.rallies.length > 0) {
+      const titleStyle = {
+        fontSize: "13px",
+        fontWeight: "600",
+        lineHeight: "1.6",
+        letterSpacing: "-.02em",
+        wordSpacing: ".1em",
+      };
+      const liStyle = {
+        fontFamily: '"Graphik Meetup",helvetica,arial,sans-serif',
+        color: "#333",
+        margin: "10px",
+        padding: "16px 16px 0",
+        borderBottom: "1px solid rgba(0, 0, 0, .12)",
+        fontSize: "16px",
+        listStyle: "none",
+      };
       rallies = (
         <ul>
-          {this.state.rallies.map((rally, index) => (
-            <li key={index}>{JSON.stringify(rally)}</li>
-          ))}
+          {this.state.rallies.map((rally, index) => {
+            console.log(rally);
+            return (
+              <li key={index} style={liStyle}>
+                <h3 style={titleStyle}>{rally.title}</h3>
+                <p>{rally.description}</p>
+                <p>{JSON.stringify(rally.locations)}</p>
+                <span>
+                  {rally.start_datetime} ~ {rally.end_datetime}
+                </span>
+              </li>
+            );
+          })}
         </ul>
       );
     } else {
