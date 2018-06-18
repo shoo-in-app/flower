@@ -1,19 +1,13 @@
 // server/app.js
 const router = require("express").Router();
 const { Users, Rallies } = require("../model");
-const crypto = require("crypto");
 
 router.post("/user/", async (req, res) => {
   try {
     const email = req.body.email;
-    const hash = crypto
-      .createHmac("sha256", email)
-      .update("super secret password")
-      .digest("hex");
-    let user = await Users.getUser(hash);
-    if (!user) user = await Users.addUser(hash, req.body.username, email);
+    const user = await Users.findOrCreateUser(email);
     res.send({
-      userID: user.hash,
+      userId: user.hash,
       username: user.username,
       email: user.email,
       exp: user.exp,
@@ -24,20 +18,20 @@ router.post("/user/", async (req, res) => {
   }
 });
 
-router.delete("/user/:userID", async (req, res) => {
+router.delete("/user/:userId", async (req, res) => {
   try {
-    await Users.deleteUser(userID);
-    res.send(`USER:${userID} was correctly deleted`);
+    await Users.deleteUser(userId);
+    res.send(`USER:${userId} was correctly deleted`);
   } catch (err) {
     console.error("Error deleting user!", err);
     res.status(500).send("Internal server error");
   }
 });
 
-router.patch("/exp/:userID", async (req, res) => {
+router.patch("/exp/:userId", async (req, res) => {
   try {
-    const userID = (await Users.getUser(req.params.userID)).id;
-    await Users.incrementExp(userID, exp);
+    const userId = await Users.getUserId(req.params.userId);
+    await Users.incrementExp(userId, exp);
     res.send(`${user.username} has ${exp} exp now.`);
   } catch (err) {
     console.error("Error adding user!", err);
@@ -47,25 +41,7 @@ router.patch("/exp/:userID", async (req, res) => {
 
 router.get("/rallies", async (req, res) => {
   try {
-    const locations = await Rallies.getLocationsWithRallyInfo();
-    const rallies = {};
-    locations.forEach((location) => {
-      if (!rallies.hasOwnProperty(location.rally_id)) {
-        rallies[location.rally_id] = {
-          id: location.rally_id,
-          title: location.title,
-          description: location.description,
-          locations: [],
-        };
-      }
-      rallies[location.rally_id].locations.push({
-        id: location.id,
-        name: location.name,
-        description: location.ldescription,
-        lat: location.lat,
-        lng: location.lng,
-      });
-    });
+    const rallies = await Rallies.getAllRallies();
     res.send(Object.values(rallies));
   } catch (err) {
     console.error("Error loading rallies!", err);
@@ -73,69 +49,14 @@ router.get("/rallies", async (req, res) => {
   }
 });
 
-router.get("/rallies/:userID", async (req, res) => {
+router.get("/rallies/:userId", async (req, res) => {
   try {
-    const userID = (await Users.getUser(req.params.userID)).id;
-    const chosenRallies = {};
-    const chosenLocations = await Rallies.getLocationsWithRallyInfoUserChoose(
-      userID
-    );
-    chosenLocations.forEach((location) => {
-      if (!chosenRallies.hasOwnProperty(location.rally_id)) {
-        chosenRallies[location.rally_id] = {
-          id: location.rally_id,
-          creator_name: location.username,
-          title: location.title,
-          description: location.description,
-          complete: chosenLocations.every((location) => location.visited),
-          start_datetime: location.start_datetime,
-          end_datetime: location.end_datetime,
-          user_count: location.user_count,
-          locations: [],
-        };
-      }
-      chosenRallies[location.rally_id].locations.push({
-        id: location.id,
-        name: location.name,
-        description: location.ldescription,
-        lat: location.lat,
-        lng: location.lng,
-        visited: location.visited,
-      });
-    });
-
-    const ralliesIDsUserchosen = (await Rallies.getRalliesOfUser(userID)).map(
-      (rally) => rally.rally_id
-    );
-    const locations = await Users.getLocationsWithRallyInfo();
-    const notChosenRallies = {};
-    locations
-      .filter((rally) => !ralliesIDsUserchosen.includes(rally.rally_id))
-      .forEach((location) => {
-        if (!notChosenRallies.hasOwnProperty(location.rally_id)) {
-          notChosenRallies[location.rally_id] = {
-            id: location.rally_id,
-            creator_name: location.username,
-            title: location.title,
-            description: location.description,
-            start_datetime: location.start_datetime,
-            end_datetime: location.end_datetime,
-            user_count: location.user_count,
-            locations: [],
-          };
-        }
-        notChosenRallies[location.rally_id].locations.push({
-          id: location.id,
-          name: location.name,
-          description: location.ldescription,
-          lat: location.lat,
-          lng: location.lng,
-        });
-      });
-
+    const userId = await Users.getUserId(req.params.userId);
+    const chosenRallies = await Rallies.getChoosenRallies(userId);
+    const notChosenRallies = await Rallies.getNotChosenRallies(userId);
     res.send({
-      chosen: Object.values(chosenRallies),
-      notChosen: Object.values(notChosenRallies),
+      chosen: chosenRallies,
+      notChosen: notChosenRallies,
     });
   } catch (err) {
     console.error("Error loading locations!", err);
@@ -143,53 +64,30 @@ router.get("/rallies/:userID", async (req, res) => {
   }
 });
 
-router.patch("/rally/:userID/:rallyID", async (req, res) => {
+router.patch("/rally/:userId/:rallyId", async (req, res) => {
   try {
-    const userID = (await Users.getUser(req.params.userID)).id;
-    const rallyID = req.params.rallyID;
-    const locationIDs = (await Rallies.getLocationsOfRally(rallyID)).map(
-      (location) => location.id
-    );
-    if (req.body.chosen === true) {
-      await Rallies.insertRalliesToUsers(userID, rallyID);
-      const data = locationIDs.map((id) => ({
-        user_id: userID,
-        location_id: id,
-        visited: false,
-      }));
-      await Rallies.insertLocationsToUsers(data);
+    const userId = await Users.getUserId(req.params.userId);
+    const rallyId = req.params.rallyId;
+    const chosen = req.body.chosen;
+    await toggleRally(userId, rallyId, chosen);
+    if (chosen === true) {
       res.send("The rally is now chosen.");
-    } else if (req.body.chosen === false) {
-      await Rallies.deleteRalliesToUsers(userID, rallyID);
-      await Rallies.deleteLocationsToUsers(userID, locationIDs);
+    } else if (chosen === false) {
       res.send("The rally is now cancelled.");
+    } else {
+      res.send("Failed. Boolean key 'chosen' should be in body.");
     }
-    res.send("Failed. Boolean key 'chosen' should be in body.");
   } catch (err) {
     console.error("Error updating user history!", err);
     res.status(500).send("Internal server error");
   }
 });
 
-router.get("/locations/:userID/:rallyID", async (req, res) => {
-  try {
-    const userID = (await Users.getUser(req.params.userID)).id;
-    const locations = await Rallies.getLocationsOfRallyOfUser(
-      userID,
-      req.params.rallyID
-    );
-    res.send(locations);
-  } catch (err) {
-    console.error("Error loading user history!", err);
-    res.status(500).send("Internal server error");
-  }
-});
-
-router.patch("/location/:userID/:locationID", async (req, res) => {
+router.patch("/location/:userId/:locationId", async (req, res) => {
   try {
     const visited = req.body.visited;
-    const userID = (await Users.getUser(req.params.userID)).id;
-    await Rallies.doneLocation(userID, req.params.locationID, visited);
+    const userId = await Users.getUserId(req.params.userId);
+    await Rallies.toggleLocation(userId, req.params.locationId, visited);
     if (visited) {
       res.send("The location is now visited.");
     } else {
@@ -201,17 +99,31 @@ router.patch("/location/:userID/:locationID", async (req, res) => {
   }
 });
 
-router.post("/rally/", async (req, res) => {
+router.post("/creator/rallies/", async (req, res) => {
   try {
-    const rallyID = await Rallies.addRally(
+    await Rallies.createRally(
       req.body.title,
-      req.body.description
+      req.body.description,
+      req.body.start_datetime,
+      req.body.end_datetime,
+      req.body.locations
     );
-    const locations = req.body.locations.map((l) => ({
-      rally_id: rallyID,
-      ...l,
-    }));
-    await Rallies.addLocations(locations);
+    res.send("The rally is now added.");
+  } catch (err) {
+    console.error("Error adding new rally!", err);
+    res.status(500).send("Internal server error");
+  }
+});
+
+router.get("/creator/rallies/", async (req, res) => {
+  try {
+    await Rallies.createRally(
+      req.body.title,
+      req.body.description,
+      req.body.start_datetime,
+      req.body.end_datetime,
+      req.body.locations
+    );
     res.send("The rally is now added.");
   } catch (err) {
     console.error("Error adding new rally!", err);

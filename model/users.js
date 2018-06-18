@@ -1,3 +1,5 @@
+const crypto = require("crypto");
+
 module.exports = (db) => {
   const getUser = (hash) =>
     db("users")
@@ -9,9 +11,9 @@ module.exports = (db) => {
       .where("hash", hash)
       .del();
 
-  const addUser = (hash, username, email) =>
+  const addUser = (hash, email) =>
     db("users")
-      .insert({ hash, username, email })
+      .insert({ hash, email })
       .returning("*")
       .then((arr) => arr[0]);
 
@@ -20,10 +22,23 @@ module.exports = (db) => {
       .where("id_token", idToken)
       .increment("exp", exp);
 
+  const findOrCreateUser = async (email) => {
+    const hash = crypto
+      .createHmac("sha256", email)
+      .update("super secret password")
+      .digest("hex");
+    let user = await getUser(hash);
+    if (!user) user = await addUser(hash, email);
+    return user;
+  };
+
+  const getUserId = (hash) =>
+    getUser(hash).then((user) => (user ? user.id : null));
+
   return {
-    getUser,
+    getUserId,
     deleteUser,
-    addUser,
+    findOrCreateUser,
     incrementExp,
   };
 };
