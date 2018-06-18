@@ -9,7 +9,7 @@ function isAuthenticated(req, res, next) {
 router.post("/rally/", isAuthenticated, async (req, res) => {
   try {
     await Rallies.createRally(
-      req.user.id,
+      req.user,
       req.body.title,
       req.body.description,
       req.body.startDatetime,
