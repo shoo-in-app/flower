@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 8000;
 const api = require("./api");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const app = express();
-const { findOrCreateCreator } = require("./query.js");
+const { Creators } = require("../model");
 
 passport.use(
   new GoogleStrategy(
@@ -17,7 +17,7 @@ passport.use(
       callbackURL: "http://localhost:8000/auth/google/callback",
     },
     (accessToken, refreshToken, profile, cb) => {
-      findOrCreateCreator({ googleId: profile.id })
+      Creators.findOrCreateCreator({ googleId: profile.id })
         .then((user) => cb(null, user))
         .catch((err) => cb(err, null));
     }

@@ -1,23 +1,6 @@
 // server/app.js
 const router = require("express").Router();
-const {
-  getUser,
-  deleteUser,
-  addUser,
-  getLocationsWithRallyInfo,
-  getRalliesOfUser,
-  getLocationsOfRally,
-  getLocationsOfRallyOfUser,
-  doneLocation,
-  getLocationsWithRallyInfoUserChoose,
-  insertRalliesToUsers,
-  insertLocationsToUsers,
-  deleteRalliesToUsers,
-  deleteLocationsToUsers,
-  addRally,
-  addLocations,
-  incrementExp,
-} = require("./query.js");
+const { Users, Rallies } = require("../model");
 const crypto = require("crypto");
 
 router.post("/user/", async (req, res) => {
@@ -27,8 +10,8 @@ router.post("/user/", async (req, res) => {
       .createHmac("sha256", email)
       .update("super secret password")
       .digest("hex");
-    let user = await getUser(hash);
-    if (!user) user = await addUser(hash, req.body.username, email);
+    let user = await Users.getUser(hash);
+    if (!user) user = await Users.addUser(hash, req.body.username, email);
     res.send({
       userID: user.hash,
       username: user.username,
@@ -43,7 +26,7 @@ router.post("/user/", async (req, res) => {
 
 router.delete("/user/:userID", async (req, res) => {
   try {
-    await deleteUser(userID);
+    await Users.deleteUser(userID);
     res.send(`USER:${userID} was correctly deleted`);
   } catch (err) {
     console.error("Error deleting user!", err);
@@ -53,8 +36,8 @@ router.delete("/user/:userID", async (req, res) => {
 
 router.patch("/exp/:userID", async (req, res) => {
   try {
-    const userID = (await getUser(req.params.userID)).id;
-    await incrementExp(userID, exp);
+    const userID = (await Users.getUser(req.params.userID)).id;
+    await Users.incrementExp(userID, exp);
     res.send(`${user.username} has ${exp} exp now.`);
   } catch (err) {
     console.error("Error adding user!", err);
@@ -64,7 +47,7 @@ router.patch("/exp/:userID", async (req, res) => {
 
 router.get("/rallies", async (req, res) => {
   try {
-    const locations = await getLocationsWithRallyInfo();
+    const locations = await Rallies.getLocationsWithRallyInfo();
     const rallies = {};
     locations.forEach((location) => {
       if (!rallies.hasOwnProperty(location.rally_id)) {
@@ -92,9 +75,11 @@ router.get("/rallies", async (req, res) => {
 
 router.get("/rallies/:userID", async (req, res) => {
   try {
-    const userID = (await getUser(req.params.userID)).id;
+    const userID = (await Users.getUser(req.params.userID)).id;
     const chosenRallies = {};
-    const chosenLocations = await getLocationsWithRallyInfoUserChoose(userID);
+    const chosenLocations = await Rallies.getLocationsWithRallyInfoUserChoose(
+      userID
+    );
     chosenLocations.forEach((location) => {
       if (!chosenRallies.hasOwnProperty(location.rally_id)) {
         chosenRallies[location.rally_id] = {
@@ -119,10 +104,10 @@ router.get("/rallies/:userID", async (req, res) => {
       });
     });
 
-    const ralliesIDsUserchosen = (await getRalliesOfUser(userID)).map(
+    const ralliesIDsUserchosen = (await Rallies.getRalliesOfUser(userID)).map(
       (rally) => rally.rally_id
     );
-    const locations = await getLocationsWithRallyInfo();
+    const locations = await Users.getLocationsWithRallyInfo();
     const notChosenRallies = {};
     locations
       .filter((rally) => !ralliesIDsUserchosen.includes(rally.rally_id))
@@ -160,23 +145,23 @@ router.get("/rallies/:userID", async (req, res) => {
 
 router.patch("/rally/:userID/:rallyID", async (req, res) => {
   try {
-    const userID = (await getUser(req.params.userID)).id;
+    const userID = (await Users.getUser(req.params.userID)).id;
     const rallyID = req.params.rallyID;
-    const locationIDs = (await getLocationsOfRally(rallyID)).map(
+    const locationIDs = (await Rallies.getLocationsOfRally(rallyID)).map(
       (location) => location.id
     );
     if (req.body.chosen === true) {
-      await insertRalliesToUsers(userID, rallyID);
+      await Rallies.insertRalliesToUsers(userID, rallyID);
       const data = locationIDs.map((id) => ({
         user_id: userID,
         location_id: id,
         visited: false,
       }));
-      await insertLocationsToUsers(data);
+      await Rallies.insertLocationsToUsers(data);
       res.send("The rally is now chosen.");
     } else if (req.body.chosen === false) {
-      await deleteRalliesToUsers(userID, rallyID);
-      await deleteLocationsToUsers(userID, locationIDs);
+      await Rallies.deleteRalliesToUsers(userID, rallyID);
+      await Rallies.deleteLocationsToUsers(userID, locationIDs);
       res.send("The rally is now cancelled.");
     }
     res.send("Failed. Boolean key 'chosen' should be in body.");
@@ -188,8 +173,8 @@ router.patch("/rally/:userID/:rallyID", async (req, res) => {
 
 router.get("/locations/:userID/:rallyID", async (req, res) => {
   try {
-    const userID = (await getUser(req.params.userID)).id;
-    const locations = await getLocationsOfRallyOfUser(
+    const userID = (await Users.getUser(req.params.userID)).id;
+    const locations = await Rallies.getLocationsOfRallyOfUser(
       userID,
       req.params.rallyID
     );
@@ -203,8 +188,8 @@ router.get("/locations/:userID/:rallyID", async (req, res) => {
 router.patch("/location/:userID/:locationID", async (req, res) => {
   try {
     const visited = req.body.visited;
-    const userID = (await getUser(req.params.userID)).id;
-    await doneLocation(userID, req.params.locationID, visited);
+    const userID = (await Users.getUser(req.params.userID)).id;
+    await Rallies.doneLocation(userID, req.params.locationID, visited);
     if (visited) {
       res.send("The location is now visited.");
     } else {
@@ -218,12 +203,15 @@ router.patch("/location/:userID/:locationID", async (req, res) => {
 
 router.post("/rally/", async (req, res) => {
   try {
-    const rallyID = await addRally(req.body.title, req.body.description);
+    const rallyID = await Rallies.addRally(
+      req.body.title,
+      req.body.description
+    );
     const locations = req.body.locations.map((l) => ({
       rally_id: rallyID,
       ...l,
     }));
-    await addLocations(locations);
+    await Rallies.addLocations(locations);
     res.send("The rally is now added.");
   } catch (err) {
     console.error("Error adding new rally!", err);
