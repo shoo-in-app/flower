@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-
+import axios from "axios";
+import { get } from "https";
 export default class List extends Component {
   constructor(props) {
     super(props);
@@ -22,9 +23,26 @@ export default class List extends Component {
       ],
     };
   }
+  // After creating GET method, use the below
+  // componentDidMount() {
+  //   axios.get(`https://cc4-flower-dev.herokuapp.com/rallies/${userId}`).then(response => {
+  //     return response.json();
+  //   })
+  //     .then(rallies => this.setState({ rallies }))
+  //     .catch(err => {
+  //       console.log("Something wrong: ", err);
+  //     })
+  // }
   render() {
-    // if there is a list of rallies, display them
-    return <div>{JSON.stringify(this.state.rallies)}</div>;
-    // if not, display the friendly message to inform the user that there is no list of rallies
+    let rallies;
+    if (this.state.rallies.length > 0) {
+      const rallyList = this.state.rallies.map((rally, index) => (
+        <li key={index}>{rally}</li>
+      ));
+      rallies = <ul>{JSON.stringify(rallyList[0].props.children)}</ul>;
+    } else {
+      rallies = <p>You have not created any rallies yet.</p>;
+    }
+    return <div>{rallies}</div>;
   }
 }
