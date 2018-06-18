@@ -1,7 +1,7 @@
 exports.up = (knex) =>
   knex.schema.createTable("rallies", (table) => {
     table.increments("id");
-    table.string("creator_id", 255);
+    table.integer("creator_id");
     table
       .foreign("creator_id")
       .references("id")
