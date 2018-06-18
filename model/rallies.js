@@ -240,7 +240,7 @@ module.exports = (db) => {
     locations
   ) => {
     const rallyId = await insertRally({
-      creator_id: creatorId,
+      google_id: creatorId,
       title,
       description,
       start_datetime,
