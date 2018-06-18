@@ -1,12 +1,20 @@
 const db = require("../db");
 
-const getUser = (idToken) =>
+const getUser = (hash) =>
   db("users")
-    .where("id_token", idToken)
+    .where("hash", hash)
     .then((users) => (users.length > 0 ? users[0] : null));
 
-const addUser = (idToken, username) =>
-  db("users").insert({ id_token: idToken, username });
+const deleteUser = (hash) =>
+  db("users")
+    .where("hash", hash)
+    .del();
+
+const addUser = (hash, username, email) =>
+  db("users")
+    .insert({ hash, username, email })
+    .returning("*")
+    .then((arr) => arr[0]);
 
 const incrementExp = (idToken, exp) =>
   db("users")
@@ -123,9 +131,23 @@ const addRally = (title, description) =>
 
 const addLocations = (locations) => db("locations").insert(locations);
 
+const findOrCreateCreator = async (data) => {
+  let user = await db("creators")
+    .where("google_id", data.googleId)
+    .then((users) => (users.length > 0 ? users[0] : null));
+  if (!user) {
+    user = await db("creators")
+      .insert({ google_id: data.googleId })
+      .returning("*")
+      .then((arr) => arr[0]);
+  }
+  return user;
+};
+
 module.exports = {
   getUser,
   addUser,
+  deleteUser,
   getLocationsWithRallyInfo,
   getRalliesOfUser,
   getLocationsOfRallyOfUser,
@@ -139,4 +161,5 @@ module.exports = {
   addRally,
   addLocations,
   incrementExp,
+  findOrCreateCreator,
 };

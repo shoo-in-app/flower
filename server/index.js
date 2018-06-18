@@ -1,35 +1,52 @@
-const app = require("./app");
 const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
+const passport = require("passport");
 const PORT = process.env.PORT || 8000;
 const api = require("./api");
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const app = express();
+const { findOrCreateCreator } = require("./query.js");
 
 passport.use(
   new GoogleStrategy(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://localhost:3001/auth/google/return",
+      callbackURL: "http://localhost:8000/auth/google/callback",
     },
-    (accessToken, refreshToken, profile, done) => {
-      const payload = [
-        {
-          topic: "users",
-          messages: JSON.stringify(profile),
-        },
-      ];
-      kafkaProducer.send(payload, (err) => {
-        if (err) {
-          console.log(err);
-          return;
-        }
-        console.log("User profile send to kafka");
-      });
-      done(null, profile);
+    (accessToken, refreshToken, profile, cb) => {
+      findOrCreateCreator({ googleId: profile.id })
+        .then((user) => cb(null, user))
+        .catch((err) => cb(err, null));
     }
   )
+);
+
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser((userId, done) => {
+  done(null, userId);
+});
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.get(
+  "/auth/google",
+  passport.authenticate("google", { scope: ["profile"] })
+);
+
+app.get(
+  "/auth/google/callback",
+  passport.authenticate("google", { failureRedirect: "/login" }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    res.redirect("/");
+  }
 );
 
 app.use(morgan("dev"));

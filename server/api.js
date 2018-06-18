@@ -2,6 +2,7 @@
 const router = require("express").Router();
 const {
   getUser,
+  deleteUser,
   addUser,
   getLocationsWithRallyInfo,
   getRalliesOfUser,
@@ -17,23 +18,43 @@ const {
   addLocations,
   incrementExp,
 } = require("./query.js");
+const crypto = require("crypto");
 
 router.post("/user/", async (req, res) => {
   try {
-    const idToken = req.body.idToken;
-    const user = await getUser(idToken);
-    if (!user) await addUser(idToken, req.body.username);
-    res.send("Log in");
+    const email = req.body.email;
+    const hash = crypto
+      .createHmac("sha256", email)
+      .update("super secret password")
+      .digest("hex");
+    let user = await getUser(hash);
+    if (!user) user = await addUser(hash, req.body.username, email);
+    res.send({
+      userID: user.hash,
+      username: user.username,
+      email: user.email,
+      exp: user.exp,
+    });
   } catch (err) {
     console.error("Error adding user!", err);
     res.status(500).send("Internal server error");
   }
 });
 
-router.patch("/exp/:idToken", async (req, res) => {
+router.delete("/user/:userID", async (req, res) => {
   try {
-    const idToken = req.params.idToken;
-    await incrementExp(idToken, exp);
+    await deleteUser(userID);
+    res.send(`USER:${userID} was correctly deleted`);
+  } catch (err) {
+    console.error("Error deleting user!", err);
+    res.status(500).send("Internal server error");
+  }
+});
+
+router.patch("/exp/:userID", async (req, res) => {
+  try {
+    const userID = (await getUser(req.params.userID)).id;
+    await incrementExp(userID, exp);
     res.send(`${user.username} has ${exp} exp now.`);
   } catch (err) {
     console.error("Error adding user!", err);
@@ -69,9 +90,9 @@ router.get("/rallies", async (req, res) => {
   }
 });
 
-router.get("/rallies/:idToken", async (req, res) => {
+router.get("/rallies/:userID", async (req, res) => {
   try {
-    const userID = (await getUser(req.params.idToken)).id;
+    const userID = (await getUser(req.params.userID)).id;
     const chosenRallies = {};
     const chosenLocations = await getLocationsWithRallyInfoUserChoose(userID);
     chosenLocations.forEach((location) => {
@@ -84,7 +105,7 @@ router.get("/rallies/:idToken", async (req, res) => {
           complete: chosenLocations.every((location) => location.visited),
           start_datetime: location.start_datetime,
           end_datetime: location.end_datetime,
-          users_count: rallies.users_count,
+          user_count: location.user_count,
           locations: [],
         };
       }
@@ -114,7 +135,7 @@ router.get("/rallies/:idToken", async (req, res) => {
             description: location.description,
             start_datetime: location.start_datetime,
             end_datetime: location.end_datetime,
-            users_count: rallies.users_count,
+            user_count: location.user_count,
             locations: [],
           };
         }
@@ -137,9 +158,9 @@ router.get("/rallies/:idToken", async (req, res) => {
   }
 });
 
-router.patch("/rally/:idToken/:rallyID", async (req, res) => {
+router.patch("/rally/:userID/:rallyID", async (req, res) => {
   try {
-    const userID = (await getUser(req.params.idToken)).id;
+    const userID = (await getUser(req.params.userID)).id;
     const rallyID = req.params.rallyID;
     const locationIDs = (await getLocationsOfRally(rallyID)).map(
       (location) => location.id
@@ -165,9 +186,9 @@ router.patch("/rally/:idToken/:rallyID", async (req, res) => {
   }
 });
 
-router.get("/locations/:idToken/:rallyID", async (req, res) => {
+router.get("/locations/:userID/:rallyID", async (req, res) => {
   try {
-    const userID = (await getUser(req.params.idToken)).id;
+    const userID = (await getUser(req.params.userID)).id;
     const locations = await getLocationsOfRallyOfUser(
       userID,
       req.params.rallyID
@@ -179,10 +200,10 @@ router.get("/locations/:idToken/:rallyID", async (req, res) => {
   }
 });
 
-router.patch("/location/:idToken/:locationID", async (req, res) => {
+router.patch("/location/:userID/:locationID", async (req, res) => {
   try {
     const visited = req.body.visited;
-    const userID = (await getUser(req.params.idToken)).id;
+    const userID = (await getUser(req.params.userID)).id;
     await doneLocation(userID, req.params.locationID, visited);
     if (visited) {
       res.send("The location is now visited.");
