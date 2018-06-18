@@ -49,6 +49,11 @@ module.exports = (db) => {
   const getLocationsOfRally = (rallyId) =>
     db("locations").where("rally_id", rallyId);
 
+  const getRalliesOfUser = (userId) =>
+    db("rallies")
+      .innerJoin("rallies_to_users", "rallies.id", "rallies_to_users.rally_id")
+      .where("rallies_to_users.user_id", userId);
+
   const toggleLocation = (userId, locationId, visited) =>
     db("locations_to_users")
       .where("user_id", userId)
@@ -167,7 +172,7 @@ module.exports = (db) => {
   };
 
   const getNotChosenRallies = async (userId) => {
-    const ralliesIdsUserchosen = (await Rallies.getRalliesOfUser(userId)).map(
+    const ralliesIdsUserchosen = (await getRalliesOfUser(userId)).map(
       (rally) => rally.rally_id
     );
     const locations = await Users.getLocationsWithRallyInfo();
