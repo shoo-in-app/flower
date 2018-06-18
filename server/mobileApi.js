@@ -68,7 +68,7 @@ router.patch("/rally/:userId/:rallyId", async (req, res) => {
     const userId = await Users.getUserId(req.params.userId);
     const rallyId = req.params.rallyId;
     const chosen = req.body.chosen;
-    await toggleRally(userId, rallyId, chosen);
+    await Rallies.toggleRally(userId, rallyId, chosen);
     if (chosen === true) {
       res.send("The rally is now chosen.");
     } else if (chosen === false) {
