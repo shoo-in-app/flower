@@ -60,6 +60,12 @@ module.exports = (db) => {
       .where("location_id", locationId)
       .update("visited", visited);
 
+  const getRalliesToUsers = (userId, rallyId) =>
+    db("rallies_to_users").where({
+      user_id: userId,
+      rally_id: rallyId,
+    });
+
   const insertRalliesToUsers = (userId, rallyId) =>
     db("rallies_to_users")
       .insert({
@@ -207,7 +213,9 @@ module.exports = (db) => {
     const locationIds = (await getLocationsOfRally(rallyId)).map(
       (location) => location.id
     );
-    if (chosen === true) {
+    const result = await getRalliesToUsers(userId, rallyId);
+    const wasChosen = result.length !== 0;
+    if (!wasChosen && chosen === true) {
       await insertRalliesToUsers(userId, rallyId);
       const data = locationIds.map((id) => ({
         user_id: userId,
@@ -215,7 +223,7 @@ module.exports = (db) => {
         visited: false,
       }));
       await insertLocationsToUsers(data);
-    } else if (chosen === false) {
+    } else if (wasChosen && chosen === false) {
       await deleteRalliesToUsers(userId, rallyId);
       await deleteLocationsToUsers(userId, locationIds);
     }
