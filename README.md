@@ -11,64 +11,39 @@ Server for butterfly app. This serve CRUD API Server. And data are from PostgreS
 
 ```
 {
-  id: 1000000,
-  id_token:
-    "LBVgfZewKaFZaKqX8vUDXtLGFEE2XDb4w78nXNH4mKANgTCKk6ar9mQne6JwDYp6HCej5xEsW82XZyWbDytRsb9vBh6sw6Z3GaHA2uMVbrPLQud3hqKV6ppbhRZdSpGH",
-  username: "Alex",
+    id: 10001,
+    email: "alex@sample.com",
+    username: "Alex",
 },
 {
-  id: 2000000,
-  id_token:
-    "3qYFuJsxZSUupuCLQmxwjUDV5TSbhzB7kwNr2mpB2YNuMW3CPSGe8CK3hPcZDErDVu5eM83EcT6DmugqmpRFD5tQCped6geXgXYUfZwfQKmUcZ8qtPnQ7ssppVvQaHKX",
-  username: "Taka",
+    id: 10002,
+    email: "taka@sample.com",
+    username: "Taka",
 },
 {
-  id: 3000000,
-  id_token:
-    "R3uHB52jTCExdwNCa2vgDJxY2QWGLdjcze8b722dfuRNE9yYJtLbuEPWGeFWcDzeaVmWvJ55YVtsTJxFk4N9e6mYkSAKgMj5se23LdVrgmTwnjp8MGUR32T2BYYgQ2G3",
-  username: "Yusuke",
-}
+    id: 10003,
+    email: "yusuke@sample.com",
+    username: "Yusuke",
+},
 ```
 
 ## API access points
 
-### post /user
+### mobile-api
+
+#### post /mobile-api/user
 
 Add user.
-post body
+post body. It returns userId.
 
 ```
 {
-  "idToken": "bv4UrqEdJ97gUjS469LPX6zrbDMNcKhW5DqmQmuPP9wEEMK7YewqDRQxfQ9xT669bmHDfpRHSjEUssF8yEcEde2BJHeFgy64q9EKvfPa845pETHvRKuCaUzVtAbJwqAC",
+  "email": "test@test.com",
   "username": "Yusuke"
 }
 ```
 
-### get /rallies
-
-Get all rallies.
-
-```
-[
-  {
-    "id": 1,
-    "title": "Tokyo FamilyMarts",
-    "description": "Go 3 famima!"
-  },
-  {
-    "id": 2,
-    "title": "Wakayama around",
-    "description": "Wakayama famous spots"
-  },
-  {
-    "id": 3,
-    "title": "Yamanote Line",
-    "description": "Go 3 stations"
-  }
-]
-```
-
-### get /rallies/:userID
+### get /mobile-api/rallies/:userId
 
 Get rallies which a user join.
 
@@ -183,61 +158,7 @@ Get rallies which a user join.
 }
 ```
 
-### get /locations/:userID/:rallyID
-
-Get locations history which user visited in one rally.
-
-```
-[
-  {
-    "id": 1,
-    "name": "Motoazabu Sanchoume",
-    "lat": 35.659,
-    "lng": 139.722,
-    "description": "nearest famima to cc",
-    "rally_id": 1,
-    "user_id": 1,
-    "location_id": 1,
-    "visited": true
-  },
-  {
-    "id": 2,
-    "name": "Motoazabu Sanchoume",
-    "lat": 35.659,
-    "lng": 139.722,
-    "description": "nearest famima to cc",
-    "rally_id": 1,
-    "user_id": 1,
-    "location_id": 2,
-    "visited": true
-  },
-  {
-    "id": 3,
-    "name": "Motoazabu Sanchoume",
-    "lat": 35.659,
-    "lng": 139.722,
-    "description": "nearest famima to cc",
-    "rally_id": 1,
-    "user_id": 1,
-    "location_id": 3,
-    "visited": false
-  }
-]
-```
-
-### patch /location/:userID/:locationID
-
-Update location history as visited.
-
-body example
-
-```
-{
-  "visited":true
-}
-```
-
-### patch /rally/:userID/:rallyID
+#### patch /mobile-api/rally/:userId/:rallyId
 
 Choose rally/Unchoose rally.
 
@@ -249,7 +170,32 @@ body example
 }
 ```
 
-### post /rally/
+#### patch /mobile-api/location/:userId/:locationId
+
+Update location history as visited.
+
+body example
+
+```
+{
+  "visited":true
+}
+```
+
+#### patch /mobile-api/exp/:userId
+
+Increase exp (new exp will be `[current exp] + [exp which you send]`).
+body example:
+
+```
+{
+    exp:10
+}
+```
+
+### web-api
+
+#### post /web-api/rally/
 
 Create new rally.
 body example:
@@ -277,14 +223,31 @@ body example:
 }
 ```
 
-### patch /exp/:userID
+#### get /web-api/rallies/
 
-Increase exp (new exp will be `[current exp] + [exp which you send]`).
+Create new rally.
 body example:
 
 ```
 {
-    exp:10
+    "title": "Roppongi",
+    "description": "Good place to visit in Roppongi",
+    "start_datetime": "2018-06-15T00:00:00.000Z",
+    "end_datetime": "2018-07-15T00:00:00.000Z",
+    "locations": [
+        {
+          "name": "Code Chrisalis",
+          "lat": 35.6579975,
+          "lng": 139.7275789,
+          "description": "The Immersive bootcamp"
+        },
+        {
+          "name": "Roppongi Hills",
+          "lat": 35.6604896,
+          "lng": 139.7292863,
+          "description": "Big Building in Roppongi"
+        }
+    ]
 }
 ```
 

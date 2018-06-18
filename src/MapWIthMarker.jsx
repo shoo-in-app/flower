@@ -43,8 +43,8 @@ const MapWithASearchBox = compose(
       this.setState({
         bounds: null,
         center: {
-          lat: 41.9,
-          lng: -87.624,
+          lat: 35.6895,
+          lng: 139.6917,
         },
         markers: [],
         marker: {
@@ -54,17 +54,25 @@ const MapWithASearchBox = compose(
         onMapMounted: (ref) => {
           refs.map = ref;
         },
-        onBoundsChanged: () => {
-          this.setState({
-            bounds: refs.map.getBounds(),
-            center: refs.map.getCenter(),
-          });
-        },
+        onBoundsChanged: _.debounce(
+          () => {
+            this.setState({
+              bounds: refs.map.getBounds(),
+              center: refs.map.getCenter(),
+            });
+            let { onBoundsChange } = this.props;
+            if (onBoundsChange) {
+              onBoundsChange(refs.map);
+            }
+          },
+          100,
+          { maxWait: 500 }
+        ),
         onClick: (e) => {
           console.log(e);
           this.setState({
-            lat: e.pa.x,
-            lng: e.pa.y,
+            lat: e.qa.x,
+            lng: e.qa.y,
           });
         },
         onSearchBoxMounted: (ref) => {
@@ -94,7 +102,6 @@ const MapWithASearchBox = compose(
             center: nextCenter,
             markers: nextMarkers,
           });
-          // refs.map.fitBounds(bounds);
         },
       });
     },
@@ -103,9 +110,8 @@ const MapWithASearchBox = compose(
   withGoogleMap
 )((props) => (
   <GoogleMap
-    onDrag={true}
     ref={props.onMapMounted}
-    defaultZoom={15}
+    defaultZoom={8}
     center={props.center}
     onBoundsChanged={props.onBoundsChanged}
     onClick={props.onClick}
@@ -163,14 +169,23 @@ const MapWithASearchBox = compose(
           </span>
           <br />
           <button
-            onClick={(e) => {
+            onClick={() => {
               const locationData = {
                 name: document.getElementById("name").value,
                 description: document.getElementById("description").value,
                 lat: props.lat,
                 lng: props.lng,
               };
-              props.changeData(locationData);
+              if (
+                props.changeData(locationData.name) &&
+                props.changeData(locationData.description) &&
+                props.changeData(locationData.lat) &&
+                props.changeData(locationData.lng)
+              ) {
+                alert("Show error");
+              } else {
+                props.changeData(locationData);
+              }
             }}
           >
             Add
@@ -217,6 +232,7 @@ export default class CreateNewRally extends Component {
     };
     this.changeData = this.changeData.bind(this);
     this.submit = this.submit.bind(this);
+    this.isDateValid = this.isDateValid.bind(this);
   }
 
   changeData(data) {
@@ -228,15 +244,31 @@ export default class CreateNewRally extends Component {
   submit(period) {
     const rally = period;
     rally["locations"] = this.state.locations;
-    console.log("rallies: ", rally);
+    axios
+      .post("https://cc4-flower-dev.herokuapp.com/web-api/rally/", rally)
+      .then((response) => {
+        console.log("response: ", response);
+      })
+      .catch(function(error) {
+        console.log("Something wrong: ", error);
+      });
   }
   changeDesc(description) {
     this.setState({ description });
   }
+  isDateValid(startDate, endDate) {
+    return startDate > endDate;
+  }
+  isFilledIn(information) {
+    return information.length > 0;
+  }
   render() {
     return (
       <div>
-        <MapWithASearchBox changeData={this.changeData} />
+        <MapWithASearchBox
+          changeData={this.changeData}
+          isFilledIn={this.isFilledIn}
+        />
         {JSON.stringify(this.state.locations)}
         <br />
         <label htmlFor="title">Title: </label>
@@ -262,17 +294,27 @@ export default class CreateNewRally extends Component {
         <br />
         <button
           onClick={() => {
+            const start_datetime = new Date(
+              document.getElementById("start").value
+            ).toISOString();
+            const end_datetime = new Date(
+              document.getElementById("end").value
+            ).toISOString();
             const period = {
               title: document.getElementById("title").value,
               description: this.state.description,
-              start_datetime: new Date(
-                document.getElementById("start").value
-              ).toISOString(),
-              end_datetime: new Date(
-                document.getElementById("end").value
-              ).toISOString(),
+              start_datetime,
+              end_datetime,
             };
+            // if (
+            //   this.isDateValid(start_datetime, end_datetime) ||
+            //   this.isFilledIn(title) ||
+            //   this.isFilledIn(description)
+            // ) {
+            //   alert("Something wrong with your form");
+            // } else {
             return this.submit(period);
+            // }
           }}
         >
           Submit

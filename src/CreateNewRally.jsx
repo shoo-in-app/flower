@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import MapWithMarker from "./MapWithMarker";
+import MapWithMarker from "./MapWIthMarker";
 export default class CreateNewRally extends Component {
   render() {
     return (
