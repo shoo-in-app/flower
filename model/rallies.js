@@ -60,6 +60,12 @@ module.exports = (db) => {
       .where("location_id", locationId)
       .update("visited", visited);
 
+  const getRalliesToUsers = (userId, rallyId) =>
+    db("rallies_to_users").where({
+      user_id: userId,
+      rally_id: rallyId,
+    });
+
   const insertRalliesToUsers = (userId, rallyId) =>
     db("rallies_to_users")
       .insert({
@@ -152,7 +158,6 @@ module.exports = (db) => {
           creator_name: location.username,
           title: location.title,
           description: location.description,
-          complete: chosenLocations.every((location) => location.visited),
           start_datetime: location.start_datetime,
           end_datetime: location.end_datetime,
           user_count: location.user_count,
@@ -168,7 +173,10 @@ module.exports = (db) => {
         visited: location.visited,
       });
     });
-    return Object.values(chosenRallies);
+    return Object.values(chosenRallies).map((obj) => ({
+      ...obj,
+      complete: obj.locations.every((l) => l.visited),
+    }));
   };
 
   const getNotChosenRallies = async (userId) => {
@@ -207,7 +215,9 @@ module.exports = (db) => {
     const locationIds = (await getLocationsOfRally(rallyId)).map(
       (location) => location.id
     );
-    if (chosen === true) {
+    const result = await getRalliesToUsers(userId, rallyId);
+    const wasChosen = result.length !== 0;
+    if (!wasChosen && chosen === true) {
       await insertRalliesToUsers(userId, rallyId);
       const data = locationIds.map((id) => ({
         user_id: userId,
@@ -215,7 +225,7 @@ module.exports = (db) => {
         visited: false,
       }));
       await insertLocationsToUsers(data);
-    } else if (chosen === false) {
+    } else if (wasChosen && chosen === false) {
       await deleteRalliesToUsers(userId, rallyId);
       await deleteLocationsToUsers(userId, locationIds);
     }
@@ -255,7 +265,6 @@ module.exports = (db) => {
           creator_name: location.username,
           title: location.title,
           description: location.description,
-          complete: createdLocations.every((location) => location.visited),
           start_datetime: location.start_datetime,
           end_datetime: location.end_datetime,
           user_count: location.user_count,

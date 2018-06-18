@@ -43,6 +43,10 @@ post body. It returns userId.
 }
 ```
 
+#### delete /mobile-api/user/:userId
+
+Delete user.
+
 ### get /mobile-api/rallies/:userId
 
 Get rallies which a user join.
