@@ -126,6 +126,11 @@ module.exports = (db) => {
       .innerJoin("creators", "rallies.creator_id", "creators.id")
       .where("creators.google_id", creatorId);
 
+  const getCreatorId = (google_id) =>
+    db("users")
+      .where("hash", hash)
+      .then((users) => (users.length > 0 ? users[0].id : null));
+
   const getAllRallies = async () => {
     const locations = await getLocationsWithRallyInfo();
     const rallies = {};
@@ -239,8 +244,9 @@ module.exports = (db) => {
     end_datetime,
     locations
   ) => {
+    const creator_id = await getCreatorId(creatorId);
     const rallyId = await insertRally({
-      google_id: creatorId,
+      creator_id,
       title,
       description,
       start_datetime,
