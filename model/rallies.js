@@ -229,7 +229,7 @@ module.exports = (db) => {
       start_datetime,
       end_datetime,
     });
-    const locations = locations.map((l) => ({
+    locations = locations.map((l) => ({
       rally_id: rallyId,
       ...l,
     }));

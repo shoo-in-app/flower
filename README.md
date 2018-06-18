@@ -29,10 +29,12 @@ Server for butterfly app. This serve CRUD API Server. And data are from PostgreS
 
 ## API access points
 
-### post /user
+### mobile-api
+
+#### post /mobile-api/user
 
 Add user.
-post body. It returns userID.
+post body. It returns userId.
 
 ```
 {
@@ -41,7 +43,7 @@ post body. It returns userID.
 }
 ```
 
-### get /rallies/:userID
+### get /mobile-api/rallies/:userId
 
 Get rallies which a user join.
 
@@ -156,7 +158,7 @@ Get rallies which a user join.
 }
 ```
 
-### patch /rally/:userID/:rallyID
+#### patch /mobile-api/rally/:userId/:rallyId
 
 Choose rally/Unchoose rally.
 
@@ -168,7 +170,7 @@ body example
 }
 ```
 
-### patch /location/:userID/:locationID
+#### patch /mobile-api/location/:userId/:locationId
 
 Update location history as visited.
 
@@ -180,7 +182,20 @@ body example
 }
 ```
 
-### post /rally/
+#### patch /mobile-api/exp/:userId
+
+Increase exp (new exp will be `[current exp] + [exp which you send]`).
+body example:
+
+```
+{
+    exp:10
+}
+```
+
+### web-api
+
+#### post /web-api/rally/
 
 Create new rally.
 body example:
@@ -208,14 +223,31 @@ body example:
 }
 ```
 
-### patch /exp/:userID
+#### get /web-api/rallies/:creatorId
 
-Increase exp (new exp will be `[current exp] + [exp which you send]`).
+Create new rally.
 body example:
 
 ```
 {
-    exp:10
+    "title": "Roppongi",
+    "description": "Good place to visit in Roppongi",
+    "start_datetime": "2018-06-15T00:00:00.000Z",
+    "end_datetime": "2018-07-15T00:00:00.000Z",
+    "locations": [
+        {
+          "name": "Code Chrisalis",
+          "lat": 35.6579975,
+          "lng": 139.7275789,
+          "description": "The Immersive bootcamp"
+        },
+        {
+          "name": "Roppongi Hills",
+          "lat": 35.6604896,
+          "lng": 139.7292863,
+          "description": "Big Building in Roppongi"
+        }
+    ]
 }
 ```
 

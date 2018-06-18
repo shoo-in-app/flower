@@ -17,9 +17,9 @@ router.post("/rally/", async (req, res) => {
   }
 });
 
-router.get("/rallies/", async (req, res) => {
+router.get("/rallies/:creatorId", async (req, res) => {
   try {
-    const rallies = await Rallies.getCreatedRallies(req.body.creatorId);
+    const rallies = await Rallies.getCreatedRallies(req.params.creatorId);
     res.send(rallies);
   } catch (err) {
     console.error("Error getting created rallies!", err);

@@ -15,8 +15,8 @@ export default class App extends Component {
         </TabList>
 
         <TabPanel>
-          <List />
           <Login />
+          <List />
         </TabPanel>
         <TabPanel>
           <CreateNewRally />
