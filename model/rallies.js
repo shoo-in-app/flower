@@ -95,6 +95,26 @@ module.exports = (db) => {
 
   const insertLocations = (locations) => db("locations").insert(locations);
 
+  const getLocationsWithRallyInfoCreatorCreated = (creatorId) =>
+    db("rallies")
+      .select(
+        "locations.rally_id",
+        "rallies.title",
+        "rallies.description",
+        "rallies.start_datetime",
+        "rallies.end_datetime",
+        "rallies.users_count",
+        "creators.username",
+        "locations.id",
+        "locations.name",
+        "locations.description as ldescription",
+        "locations.lat",
+        "locations.lng"
+      )
+      .innerJoin("locations", "rallies.id", "locations.rally_id")
+      .innerJoin("creators", "rallies.creator_id", "creators.id")
+      .where("creators.id", creatorId);
+
   const getAllRallies = async () => {
     const locations = await getLocationsWithRallyInfo();
     const rallies = {};
@@ -219,7 +239,7 @@ module.exports = (db) => {
   const getCreatedRallies = async (creatorId) => {
     const createdRallies = {};
     const createdLocations = await getLocationsWithRallyInfoCreatorCreated(
-      userId
+      creatorId
     );
     createdLocations.forEach((location) => {
       if (!createdRallies.hasOwnProperty(location.rally_id)) {
@@ -241,7 +261,6 @@ module.exports = (db) => {
         description: location.ldescription,
         lat: location.lat,
         lng: location.lng,
-        visited: location.visited,
       });
     });
     return Object.values(createdRallies);
@@ -254,6 +273,6 @@ module.exports = (db) => {
     toggleRally,
     toggleLocation,
     createRally,
-    getCreatedRally,
+    getCreatedRallies,
   };
 };

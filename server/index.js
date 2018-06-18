@@ -4,7 +4,8 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const passport = require("passport");
 const PORT = process.env.PORT || 8000;
-const api = require("./api");
+const mobileApi = require("./mobileApi");
+const webApi = require("./webApi");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const app = express();
 const { Creators } = require("../model");
@@ -52,7 +53,8 @@ app.get(
 app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use("/api/", api);
+app.use("/mobile-api/", mobileApi);
+app.use("/web-api/", webApi);
 app.use(express.static(path.join(__dirname, "../dist")));
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}!`);

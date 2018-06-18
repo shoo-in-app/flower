@@ -1,4 +1,3 @@
-// server/app.js
 const router = require("express").Router();
 const { Users, Rallies } = require("../model");
 
@@ -95,38 +94,6 @@ router.patch("/location/:userId/:locationId", async (req, res) => {
     }
   } catch (err) {
     console.error("Error updating user history!", err);
-    res.status(500).send("Internal server error");
-  }
-});
-
-router.post("/creator/rallies/", async (req, res) => {
-  try {
-    await Rallies.createRally(
-      req.body.title,
-      req.body.description,
-      req.body.start_datetime,
-      req.body.end_datetime,
-      req.body.locations
-    );
-    res.send("The rally is now added.");
-  } catch (err) {
-    console.error("Error adding new rally!", err);
-    res.status(500).send("Internal server error");
-  }
-});
-
-router.get("/creator/rallies/", async (req, res) => {
-  try {
-    await Rallies.createRally(
-      req.body.title,
-      req.body.description,
-      req.body.start_datetime,
-      req.body.end_datetime,
-      req.body.locations
-    );
-    res.send("The rally is now added.");
-  } catch (err) {
-    console.error("Error adding new rally!", err);
     res.status(500).send("Internal server error");
   }
 });

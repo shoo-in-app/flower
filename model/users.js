@@ -11,7 +11,7 @@ module.exports = (db) => {
       .where("hash", hash)
       .del();
 
-  const addUser = (hash, email) =>
+  const insertUser = (hash, email) =>
     db("users")
       .insert({ hash, email })
       .returning("*")
@@ -28,7 +28,7 @@ module.exports = (db) => {
       .update("super secret password")
       .digest("hex");
     let user = await getUser(hash);
-    if (!user) user = await addUser(hash, email);
+    if (!user) user = await insertUser(hash, email);
     return user;
   };
 
