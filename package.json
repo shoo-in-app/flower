@@ -26,6 +26,8 @@
     "crypto": "^1.0.1",
     "css-loader": "^0.28.11",
     "express": "^4.16.3",
+    "html-loader": "^0.5.5",
+    "html-webpack-plugin": "^3.2.0",
     "knex": "^0.14.6",
     "lodash": "^4.17.4",
     "morgan": "^1.9.0",
