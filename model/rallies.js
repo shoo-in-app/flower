@@ -217,6 +217,7 @@ module.exports = (db) => {
   };
 
   const createRally = async (
+    creatorId,
     title,
     description,
     start_datetime,
@@ -224,6 +225,7 @@ module.exports = (db) => {
     locations
   ) => {
     const rallyId = await insertRally({
+      creator_id: creatorId,
       title,
       description,
       start_datetime,

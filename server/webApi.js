@@ -1,9 +1,15 @@
 const router = require("express").Router();
 const { Rallies } = require("../model");
 
-router.post("/rally/", async (req, res) => {
+function isAuthenticated(req, res, next) {
+  if (req.user) return next();
+  res.sendStatus(401);
+}
+
+router.post("/rally/", isAuthenticated, async (req, res) => {
   try {
     await Rallies.createRally(
+      req.user.id,
       req.body.title,
       req.body.description,
       req.body.startDatetime,
@@ -17,9 +23,9 @@ router.post("/rally/", async (req, res) => {
   }
 });
 
-router.get("/rallies/:creatorId", async (req, res) => {
+router.get("/rallies/", isAuthenticated, async (req, res) => {
   try {
-    const rallies = await Rallies.getCreatedRallies(req.params.creatorId);
+    const rallies = await Rallies.getCreatedRallies(req.user.id);
     res.send(rallies);
   } catch (err) {
     console.error("Error getting created rallies!", err);
