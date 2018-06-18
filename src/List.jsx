@@ -39,7 +39,7 @@ export default class List extends Component {
   }
   // After creating GET method, use the below
   // componentDidMount() {
-  //   axios.get(`https://cc4-flower-dev.herokuapp.com/rallies/${userId}`).then(response => {
+  //   axios.get(`https://cc4-flower-dev.herokuapp.com/web-api/rallies/`).then(response => {
   //     return response.json();
   //   })
   //     .then(rallies => this.setState({ rallies }))
