@@ -7,7 +7,7 @@ const {
   lifecycle,
   withStateHandlers,
 } = require("recompose");
-const { InfoBox } = require("react-google-maps/lib/components/addons/InfoBox");
+// const { InfoBox } = require("react-google-maps/lib/components/addons/InfoBox");
 const {
   withScriptjs,
   withGoogleMap,
@@ -23,6 +23,7 @@ const MapWithASearchBox = compose(
     () => ({
       isMarkerShown: false,
       isOpen: false,
+      markerPosition: null,
     }),
     {
       onToggleOpen: ({ isOpen }) => () => ({
@@ -30,10 +31,13 @@ const MapWithASearchBox = compose(
       }),
     },
     {
-      onMapClick: ({ isMarkerShown }) => (e) => ({
-        markerPosition: e.latLng,
-        isMarkerShown: true,
-      }),
+      onMapClick: ({ isMarkerShown }) => (e) => {
+        console.log(e);
+        return {
+          markerPosition: e.latLng,
+          isMarkerShown: true,
+        };
+      },
     }
   ),
   withProps({
@@ -46,7 +50,6 @@ const MapWithASearchBox = compose(
   lifecycle({
     componentWillMount() {
       const refs = {};
-
       this.setState({
         bounds: null,
         center: {
@@ -223,10 +226,6 @@ const MapWithASearchBox = compose(
         onClick={props.onToggleOpen}
       />
     ))}
-    {/* <Marker position={{
-      lat: props.lat,
-      lng: props.lng
-    }} /> */}
     {props.isMarkerShown && <Marker position={props.markerPosition} />}
   </GoogleMap>
 ));
@@ -235,7 +234,6 @@ export default class CreateNewRally extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isMarkerShown: false,
       locations: [],
       description: "",
     };
@@ -274,62 +272,100 @@ export default class CreateNewRally extends Component {
     return information.length > 0;
   }
   render() {
+    const leftStyle = { float: `left` };
+    const rightStyle = {
+      float: `right`,
+      width: `70%`,
+    };
+    const ulStyle = {
+      backgroundClip: ` padding-box`,
+      backgroundColor: ` #fff`,
+      border: ` 1px solid rgba(0,0,0,.12)`,
+      borderRadius: ` 3px`,
+      display: ` block`,
+      listStyle: ` none`,
+      margin: ` 0 0 16px`,
+      padding: ` 0`,
+      height: `200px`,
+      overflow: `scroll`,
+    };
+    const liStyle = {
+      listStyle: `none`,
+      padding: ` 16px 16px 0`,
+      borderTop: `1px solid rgba(0,0,0,.12)`,
+      fontSize: `16px`,
+    };
     return (
       <div>
         <MapWithASearchBox
           changeData={this.changeData}
           isFilledIn={this.isFilledIn}
         />
-        {JSON.stringify(this.state.locations)}
-        <br />
-        <label htmlFor="title">Title: </label>
-        <br />
-        <input type="text" name="title" id="title" />
-        <br />
-        <label htmlFor="description">Description: </label>
-        <br />
-        <input
-          type="text"
-          name="description"
-          id="description"
-          onChange={(e) => this.changeDesc(e.target.value)}
-        />
-        <br />
-        <label htmlFor="start">Start: </label>
-        <br />
-        <input type="datetime-local" name="start" id="start" />
-        <br />
-        <label htmlFor="end">End: </label>
-        <br />
-        <input type="datetime-local" name="end" id="end" />
-        <br />
-        <button
-          onClick={() => {
-            const start_datetime = new Date(
-              document.getElementById("start").value
-            ).toISOString();
-            const end_datetime = new Date(
-              document.getElementById("end").value
-            ).toISOString();
-            const period = {
-              title: document.getElementById("title").value,
-              description: this.state.description,
-              start_datetime,
-              end_datetime,
-            };
-            // if (
-            //   this.isDateValid(start_datetime, end_datetime) ||
-            //   this.isFilledIn(title) ||
-            //   this.isFilledIn(description)
-            // ) {
-            //   alert("Something wrong with your form");
-            // } else {
-            return this.submit(period);
-            // }
-          }}
-        >
-          Submit
-        </button>
+        <div style={rightStyle}>
+          {/* {JSON.stringify(this.state.locations)} */}
+          <ul style={ulStyle}>
+            {this.state.locations.map((location, index) => {
+              return (
+                <li key={index} style={liStyle}>
+                  <p>Name: {location.name}</p>
+                  <p>Description: {location.description}</p>
+                  <p>Lat: {location.lat}</p>
+                  <p>Lng: {location.lng}</p>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+        <div style={leftStyle}>
+          <label htmlFor="title">Title: </label>
+          <br />
+          <input type="text" name="title" id="title" />
+          <br />
+          <label htmlFor="description">Description: </label>
+          <br />
+          <input
+            type="text"
+            name="description"
+            id="description"
+            onChange={(e) => this.changeDesc(e.target.value)}
+          />
+          <br />
+          <label htmlFor="start">Start: </label>
+          <br />
+          <input type="datetime-local" name="start" id="start" />
+          <br />
+          <label htmlFor="end">End: </label>
+          <br />
+          <input type="datetime-local" name="end" id="end" />
+          <br />
+          <button
+            onClick={() => {
+              const start_datetime = new Date(
+                document.getElementById("start").value
+              ).toISOString();
+              const end_datetime = new Date(
+                document.getElementById("end").value
+              ).toISOString();
+              const period = {
+                title: document.getElementById("title").value,
+                description: this.state.description,
+                start_datetime,
+                end_datetime,
+              };
+              // if (
+              //   this.isDateValid(start_datetime, end_datetime) ||
+              //   this.isFilledIn(title) ||
+              //   this.isFilledIn(description)
+              // ) {
+              //   alert("Something wrong with your form");
+              // } else {
+              return this.submit(period);
+              // }
+            }}
+          >
+            Submit
+          </button>
+        </div>
       </div>
     );
   }
