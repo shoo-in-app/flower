@@ -21,11 +21,18 @@ const {
 const MapWithASearchBox = compose(
   withStateHandlers(
     () => ({
+      isMarkerShown: false,
       isOpen: false,
     }),
     {
       onToggleOpen: ({ isOpen }) => () => ({
         isOpen: !isOpen,
+      }),
+    },
+    {
+      onMapClick: ({ isMarkerShown }) => (e) => ({
+        markerPosition: e.latLng,
+        isMarkerShown: true,
       }),
     }
   ),
@@ -70,6 +77,8 @@ const MapWithASearchBox = compose(
         ),
         onClick: (e) => {
           console.log(e);
+          console.log(this.state);
+          // marker = JSON.stringify(<Marker position={{ lat, lng }} />);
           this.setState({
             lat: e.qa.x,
             lng: e.qa.y,
@@ -219,6 +228,11 @@ const MapWithASearchBox = compose(
         )}
       </Marker>
     ))}
+    {/* <Marker position={{
+      lat: props.lat,
+      lng: props.lng
+    }} /> */}
+    {props.isMarkerShown && <Marker position={props.markerPosition} />}
   </GoogleMap>
 ));
 
@@ -244,8 +258,10 @@ export default class CreateNewRally extends Component {
   submit(period) {
     const rally = period;
     rally["locations"] = this.state.locations;
+    console.log("rally: ", rally);
     axios
-      .post("https://cc4-flower-dev.herokuapp.com/web-api/rally/", rally)
+      // .post("https://cc4-flower-dev.herokuapp.com/web-api/rally/", rally)
+      .post("http://localhost:8000/web-api/rally/", rally)
       .then((response) => {
         console.log("response: ", response);
       })

@@ -12,8 +12,8 @@ router.post("/rally/", isAuthenticated, async (req, res) => {
       req.user,
       req.body.title,
       req.body.description,
-      req.body.startDatetime,
-      req.body.endDatetime,
+      req.body.start_datetime,
+      req.body.end_datetime,
       req.body.locations
     );
     res.send("The rally is now added.");
