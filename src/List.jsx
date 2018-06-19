@@ -43,8 +43,7 @@ export default class List extends Component {
       .get(`http://localhost:8000/web-api/rallies/`)
       .then((response) => {
         // axios.get(`https://cc4-flower-dev.herokuapp.com/web-api/rallies/`).then(response => {
-        console.log(response);
-        return response;
+        return response.data;
       })
       .then((rallies) => this.setState({ rallies }))
       .catch((err) => {
@@ -73,7 +72,6 @@ export default class List extends Component {
       rallies = (
         <ul>
           {this.state.rallies.map((rally, index) => {
-            console.log(rally);
             return (
               <li key={index} style={liStyle}>
                 <h3 style={titleStyle}>{rally.title}</h3>
