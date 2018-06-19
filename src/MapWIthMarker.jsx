@@ -120,115 +120,112 @@ const MapWithASearchBox = compose(
   }),
   withScriptjs,
   withGoogleMap
-)((props) => (
-  <GoogleMap
-    ref={props.onMapMounted}
-    defaultZoom={8}
-    center={props.center}
-    onBoundsChanged={props.onBoundsChanged}
-    onClick={props.onClick}
-    defaultOptions={{ mapTypeControl: false }}
-  >
-    <div
-      style={{
-        position: `absolute`,
-        left: `0`,
-      }}
+)((props) => {
+  const infoWindow = { position: `absolute`, left: `0` };
+  const infoWindowBackground = {
+    backgroundColor: `#A61414`,
+    zIndex: `1`,
+    padding: `0 10px 10px`,
+  };
+  const infoWindowInput = {
+    boxSizing: `border-box`,
+    border: `1px solid transparent`,
+    width: `240px`,
+    height: `32px`,
+    marginTop: `10px`,
+    padding: `0 12px`,
+    borderRadius: `3px`,
+    boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
+    fontSize: `14px`,
+    outline: `none`,
+    textOverflow: `ellipses`,
+  };
+  const locationInfo = {
+    backgroundColor: "#fff",
+    boxSizing: `border-box`,
+    border: `1px solid transparent`,
+    width: `240px`,
+    height: `150px`,
+    marginTop: `10px`,
+    padding: `0 12px`,
+    borderRadius: `3px`,
+    boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
+    fontSize: `14px`,
+    outline: `none`,
+    textOverflow: `ellipses`,
+  };
+  return (
+    <GoogleMap
+      ref={props.onMapMounted}
+      defaultZoom={8}
+      center={props.center}
+      onBoundsChanged={props.onBoundsChanged}
+      onClick={props.onMapClick}
+      defaultOptions={{ mapTypeControl: false }}
     >
-      <SearchBox
-        ref={props.onSearchBoxMounted}
-        bounds={props.bounds}
-        controlPosition={google.maps.ControlPosition.TOP_LEFT}
-        onPlacesChanged={props.onPlacesChanged}
-      >
-        <div
-          style={{
-            backgroundColor: `#A61414`,
-            zIndex: `1`,
-            padding: `0 10px 10px`,
-          }}
+      <div style={infoWindow}>
+        <SearchBox
+          ref={props.onSearchBoxMounted}
+          bounds={props.bounds}
+          controlPosition={google.maps.ControlPosition.TOP_LEFT}
+          onPlacesChanged={props.onPlacesChanged}
         >
-          <input
-            type="text"
-            placeholder="Customized your placeholder"
-            style={{
-              boxSizing: `border-box`,
-              border: `1px solid transparent`,
-              width: `240px`,
-              height: `32px`,
-              marginTop: `10px`,
-              padding: `0 12px`,
-              borderRadius: `3px`,
-              boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
-              fontSize: `14px`,
-              outline: `none`,
-              textOverflow: `ellipses`,
-            }}
-          />
-          <div
-            style={{
-              backgroundColor: "#fff",
-              boxSizing: `border-box`,
-              border: `1px solid transparent`,
-              width: `240px`,
-              height: `150px`,
-              marginTop: `10px`,
-              padding: `0 12px`,
-              borderRadius: `3px`,
-              boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
-              fontSize: `14px`,
-              outline: `none`,
-              textOverflow: `ellipses`,
-            }}
-          >
-            <label htmlFor="name">Name: </label>
-            <br />
-            <input type="text" name="" id="name" />
-            <br />
-            <label htmlFor="description">Description: </label>
-            <br />
-            <textarea type="text" name="" id="description" />
-            <br />
-            <span>
-              Lat: {props.lat} <br /> Lng: {props.lng}
-            </span>
-            <br />
-            <button
-              onClick={() => {
-                const locationData = {
-                  name: document.getElementById("name").value,
-                  description: document.getElementById("description").value,
-                  lat: props.lat,
-                  lng: props.lng,
-                };
-                if (
-                  props.changeData(locationData.name) &&
-                  props.changeData(locationData.description) &&
-                  props.changeData(locationData.lat) &&
-                  props.changeData(locationData.lng)
-                ) {
-                  alert("Show error");
-                } else {
-                  props.changeData(locationData);
-                }
-              }}
-            >
-              Add
-            </button>
+          <div style={infoWindowBackground}>
+            <input
+              type="text"
+              placeholder="Customized your placeholder"
+              style={infoWindowInput}
+            />
+            <div style={locationInfo}>
+              <label htmlFor="name">Name: </label>
+              <br />
+              <input type="text" name="" id="name" />
+              <br />
+              <label htmlFor="description">Description: </label>
+              <br />
+              <textarea type="text" name="" id="description" />
+              <br />
+              <span>
+                Lat: {props.lat} <br /> Lng: {props.lng}
+              </span>
+              <br />
+              <button
+                onClick={() => {
+                  const locationData = {
+                    name: document.getElementById("name").value,
+                    description: document.getElementById("description").value,
+                    lat: props.lat,
+                    lng: props.lng,
+                  };
+                  if (
+                    props.changeData(locationData.name) &&
+                    props.changeData(locationData.description) &&
+                    props.changeData(locationData.lat) &&
+                    props.changeData(locationData.lng)
+                  ) {
+                    alert("Show error");
+                  } else {
+                    props.changeData(locationData);
+                  }
+                }}
+              >
+                Add
+              </button>
+            </div>
           </div>
-        </div>
-      </SearchBox>
-    </div>
-    {props.markers.map((marker, index) => (
-      <Marker
-        key={index}
-        position={marker.position}
-        onClick={props.onToggleOpen}
-      />
-    ))}
-    {props.isMarkerShown && <Marker position={props.markerPosition} />}
-  </GoogleMap>
-));
+        </SearchBox>
+      </div>
+      {props.markers.map((marker, index) => (
+        <Marker
+          key={index}
+          position={marker.position}
+          onClick={props.onToggleOpen}
+        />
+      ))}
+      {props.isMarkerShown && <Marker position={props.markerPosition} />}
+    </GoogleMap>
+  );
+});
 
 export default class CreateNewRally extends Component {
   constructor(props) {
@@ -272,11 +269,8 @@ export default class CreateNewRally extends Component {
     return information.length > 0;
   }
   render() {
-    const leftStyle = { float: `left` };
-    const rightStyle = {
-      float: `right`,
-      width: `70%`,
-    };
+    // const leftStyle = { float: `left` };
+    const rightStyle = { float: `right`, width: `70%` };
     const ulStyle = {
       backgroundClip: ` padding-box`,
       backgroundColor: ` #fff`,
@@ -298,6 +292,7 @@ export default class CreateNewRally extends Component {
     return (
       <div>
         <MapWithASearchBox
+          isMarkerShown={this.state.isMarkerShown}
           changeData={this.changeData}
           isFilledIn={this.isFilledIn}
         />
@@ -316,7 +311,7 @@ export default class CreateNewRally extends Component {
             })}
           </ul>
         </div>
-        <div style={leftStyle}>
+        <div className="leftStyle" style={leftStyle}>
           <label htmlFor="title">Title: </label>
           <br />
           <input type="text" name="title" id="title" />
