@@ -124,84 +124,98 @@ const MapWithASearchBox = compose(
     center={props.center}
     onBoundsChanged={props.onBoundsChanged}
     onClick={props.onClick}
+    defaultOptions={{ mapTypeControl: false }}
   >
-    <SearchBox
-      ref={props.onSearchBoxMounted}
-      bounds={props.bounds}
-      controlPosition={google.maps.ControlPosition.TOP_LEFT}
-      onPlacesChanged={props.onPlacesChanged}
+    <div
+      style={{
+        position: `absolute`,
+        left: `0`,
+      }}
     >
-      <div>
-        <input
-          type="text"
-          placeholder="Customized your placeholder"
-          style={{
-            boxSizing: `border-box`,
-            border: `1px solid transparent`,
-            width: `240px`,
-            height: `32px`,
-            marginTop: `27px`,
-            padding: `0 12px`,
-            borderRadius: `3px`,
-            boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
-            fontSize: `14px`,
-            outline: `none`,
-            textOverflow: `ellipses`,
-          }}
-        />
+      <SearchBox
+        ref={props.onSearchBoxMounted}
+        bounds={props.bounds}
+        controlPosition={google.maps.ControlPosition.TOP_LEFT}
+        onPlacesChanged={props.onPlacesChanged}
+      >
         <div
           style={{
-            backgroundColor: "#fff",
-            boxSizing: `border-box`,
-            border: `1px solid transparent`,
-            width: `240px`,
-            height: `150px`,
-            marginTop: `27px`,
-            padding: `0 12px`,
-            borderRadius: `3px`,
-            boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
-            fontSize: `14px`,
-            outline: `none`,
-            textOverflow: `ellipses`,
+            backgroundColor: `#A61414`,
+            zIndex: `1`,
+            padding: `0 10px 10px`,
           }}
         >
-          <label htmlFor="name">Name: </label>
-          <br />
-          <input type="text" name="" id="name" />
-          <br />
-          <label htmlFor="description">Description: </label>
-          <br />
-          <textarea type="text" name="" id="description" />
-          <br />
-          <span>
-            Lat: {props.lat} <br /> Lng: {props.lng}
-          </span>
-          <br />
-          <button
-            onClick={() => {
-              const locationData = {
-                name: document.getElementById("name").value,
-                description: document.getElementById("description").value,
-                lat: props.lat,
-                lng: props.lng,
-              };
-              if (
-                props.changeData(locationData.name) &&
-                props.changeData(locationData.description) &&
-                props.changeData(locationData.lat) &&
-                props.changeData(locationData.lng)
-              ) {
-                alert("Show error");
-              } else {
-                props.changeData(locationData);
-              }
+          <input
+            type="text"
+            placeholder="Customized your placeholder"
+            style={{
+              boxSizing: `border-box`,
+              border: `1px solid transparent`,
+              width: `240px`,
+              height: `32px`,
+              marginTop: `10px`,
+              padding: `0 12px`,
+              borderRadius: `3px`,
+              boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
+              fontSize: `14px`,
+              outline: `none`,
+              textOverflow: `ellipses`,
+            }}
+          />
+          <div
+            style={{
+              backgroundColor: "#fff",
+              boxSizing: `border-box`,
+              border: `1px solid transparent`,
+              width: `240px`,
+              height: `150px`,
+              marginTop: `10px`,
+              padding: `0 12px`,
+              borderRadius: `3px`,
+              boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
+              fontSize: `14px`,
+              outline: `none`,
+              textOverflow: `ellipses`,
             }}
           >
-            Add
-          </button>
+            <label htmlFor="name">Name: </label>
+            <br />
+            <input type="text" name="" id="name" />
+            <br />
+            <label htmlFor="description">Description: </label>
+            <br />
+            <textarea type="text" name="" id="description" />
+            <br />
+            <span>
+              Lat: {props.lat} <br /> Lng: {props.lng}
+            </span>
+            <br />
+            <button
+              onClick={() => {
+                const locationData = {
+                  name: document.getElementById("name").value,
+                  description: document.getElementById("description").value,
+                  lat: props.lat,
+                  lng: props.lng,
+                };
+                if (
+                  props.changeData(locationData.name) &&
+                  props.changeData(locationData.description) &&
+                  props.changeData(locationData.lat) &&
+                  props.changeData(locationData.lng)
+                ) {
+                  alert("Show error");
+                } else {
+                  props.changeData(locationData);
+                }
+              }}
+            >
+              Add
+            </button>
+          </div>
         </div>
-      </div>
-    </SearchBox>
+      </SearchBox>
+    </div>
     {props.markers.map((marker, index) => (
       <Marker
         key={index}
