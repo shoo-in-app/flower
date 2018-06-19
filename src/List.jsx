@@ -52,6 +52,9 @@ export default class List extends Component {
   }
   render() {
     let rallies;
+    const bodyStyle = {
+      backgroundColor: `#fafafa`,
+    };
     if (this.state.rallies.length > 0) {
       const titleStyle = {
         fontSize: "13px",
@@ -59,6 +62,16 @@ export default class List extends Component {
         lineHeight: "1.6",
         letterSpacing: "-.02em",
         wordSpacing: ".1em",
+      };
+      const ulStyle = {
+        backgroundClip: ` padding-box`,
+        backgroundColor: ` #fff`,
+        border: ` 1px solid rgba(0,0,0,.12)`,
+        borderRadius: ` 3px`,
+        display: ` block`,
+        listStyle: ` none`,
+        margin: ` 0 0 16px`,
+        padding: ` 0`,
       };
       const liStyle = {
         fontFamily: '"Graphik Meetup",helvetica,arial,sans-serif',
@@ -70,14 +83,15 @@ export default class List extends Component {
         listStyle: "none",
       };
       rallies = (
-        <ul>
+        <ul style={ulStyle}>
           {this.state.rallies.map((rally, index) => {
             return (
               <li key={index} style={liStyle}>
-                <h3 style={titleStyle}>{rally.title}</h3>
-                <p>{rally.description}</p>
-                <p>{JSON.stringify(rally.locations)}</p>
+                <p style={titleStyle}>Title: {rally.title}</p>
+                <p>Description: {rally.description}</p>
+                <p>Locations: {JSON.stringify(rally.locations)}</p>
                 <span>
+                  Period:
                   {rally.start_datetime} ~ {rally.end_datetime}
                 </span>
               </li>
@@ -90,6 +104,6 @@ export default class List extends Component {
 
       rallies = <p>You have not created any rallies yet.</p>;
     }
-    return <div>{rallies}</div>;
+    return <div style={bodyStyle}>{rallies}</div>;
   }
 }
