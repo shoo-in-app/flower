@@ -207,26 +207,7 @@ const MapWithASearchBox = compose(
         key={index}
         position={marker.position}
         onClick={props.onToggleOpen}
-      >
-        {props.isOpen && (
-          <InfoBox
-            onCloseClick={props.onToggleOpen}
-            options={{ closeBoxURL: ``, enableEventPropagation: true }}
-          >
-            <div
-              style={{
-                backgroundColor: `yellow`,
-                opacity: 0.75,
-                padding: `12px`,
-              }}
-            >
-              <span>
-                Lat: {props.lat} <br /> Lng: {props.lng}
-              </span>
-            </div>
-          </InfoBox>
-        )}
-      </Marker>
+      />
     ))}
     {/* <Marker position={{
       lat: props.lat,
