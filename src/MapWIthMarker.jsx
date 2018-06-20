@@ -23,7 +23,6 @@ const MapWithASearchBox = compose(
     () => ({
       isMarkerShown: false,
       isOpen: false,
-      markerPosition: null,
     }),
     {
       onToggleOpen: ({ isOpen }) => () => ({
@@ -69,21 +68,22 @@ const MapWithASearchBox = compose(
           100,
           { maxWait: 500 }
         ),
-        onClick: (e) => {
-          console.log(e);
-          console.log(this.state);
-          // marker = JSON.stringify(<Marker position={{ lat, lng }} />);
+        // onClick: (e) => {
+        //   console.log(e);
+        //   console.log(this.state);
+        //   // marker = JSON.stringify(<Marker position={{ lat, lng }} />);
+        //   this.setState({
+        //     lat: e.qa.x,
+        //     lng: e.qa.y,
+        //   });
+        // },
+        onMapClick: (e) => {
           this.setState({
+            isMarkerShown: true,
             lat: e.qa.x,
             lng: e.qa.y,
-          });
-        },
-        onMapClick: (e) => {
-          console.log(e.latLng);
-          return {
             markerPosition: e.latLng,
-            isMarkerShown: true,
-          };
+          });
         },
         onSearchBoxMounted: (ref) => {
           refs.searchBox = ref;
@@ -158,7 +158,7 @@ const MapWithASearchBox = compose(
       defaultZoom={8}
       center={props.center}
       onBoundsChanged={props.onBoundsChanged}
-      onClick={props.onClick}
+      onClick={props.onMapClick}
       defaultOptions={{ mapTypeControl: false }}
     >
       <div style={infoWindow}>
