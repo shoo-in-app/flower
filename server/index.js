@@ -59,6 +59,10 @@ app.get(
     res.redirect("/");
   }
 );
+app.get("/logout", (req, res) => {
+  req.logout();
+  res.redirect("/");
+});
 app.use("/mobile-api", mobileApi);
 app.use("/web-api", webApi);
 app.use(express.static(path.join(__dirname, "../dist")));

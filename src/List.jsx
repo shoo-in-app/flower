@@ -11,7 +11,7 @@ export default class List extends Component {
   // After creating GET method, use the below
   componentDidMount() {
     axios
-      .get(`${process.env.URL}/web-api/rallies/`)
+      .get(process.env.URL + "/web-api/rallies/")
       .then((response) => {
         return response.data;
       })

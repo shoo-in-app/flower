@@ -248,7 +248,7 @@ export default class CreateNewRally extends Component {
     rally["locations"] = this.state.locations;
     console.log("rally: ", rally);
     axios
-      .post(`${process.env.URL}/web-api/rally/`, rally)
+      .post(process.env.URL + "/web-api/rally/", rally)
       .then((response) => {
         console.log("response: ", response);
       })
