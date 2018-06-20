@@ -3,7 +3,6 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import List from "./List";
 import Login from "./Login";
 import CreateNewRally from "./CreateNewRally";
-import "react-tabs/style/react-tabs.css";
 
 export default class App extends Component {
   render() {
