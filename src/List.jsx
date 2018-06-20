@@ -39,10 +39,12 @@ export default class List extends Component {
   }
   // After creating GET method, use the below
   componentDidMount() {
+    // axios
+    //   .get(`http://localhost:8000/web-api/rallies/`)
+    //   .then((response) => {
     axios
-      .get(`http://localhost:8000/web-api/rallies/`)
+      .get(`https://cc4-flower-dev.herokuapp.com/web-api/rallies/`)
       .then((response) => {
-        // axios.get(`https://cc4-flower-dev.herokuapp.com/web-api/rallies/`).then(response => {
         return response.data;
       })
       .then((rallies) => this.setState({ rallies }))
