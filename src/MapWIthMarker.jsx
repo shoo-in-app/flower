@@ -29,15 +29,6 @@ const MapWithASearchBox = compose(
       onToggleOpen: ({ isOpen }) => () => ({
         isOpen: !isOpen,
       }),
-    },
-    {
-      onMapClick: ({ isMarkerShown }) => (e) => {
-        console.log(e);
-        return {
-          markerPosition: e.latLng,
-          isMarkerShown: true,
-        };
-      },
     }
   ),
   withProps({
@@ -86,6 +77,13 @@ const MapWithASearchBox = compose(
             lat: e.qa.x,
             lng: e.qa.y,
           });
+        },
+        onMapClick: (e) => {
+          console.log(e.latLng);
+          return {
+            markerPosition: e.latLng,
+            isMarkerShown: true,
+          };
         },
         onSearchBoxMounted: (ref) => {
           refs.searchBox = ref;
@@ -160,7 +158,7 @@ const MapWithASearchBox = compose(
       defaultZoom={8}
       center={props.center}
       onBoundsChanged={props.onBoundsChanged}
-      onClick={props.onMapClick}
+      onClick={props.onClick}
       defaultOptions={{ mapTypeControl: false }}
     >
       <div style={infoWindow}>
@@ -269,7 +267,7 @@ export default class CreateNewRally extends Component {
     return information.length > 0;
   }
   render() {
-    // const leftStyle = { float: `left` };
+    const leftStyle = { float: `left` };
     const rightStyle = { float: `right`, width: `70%` };
     const ulStyle = {
       backgroundClip: ` padding-box`,
@@ -292,7 +290,6 @@ export default class CreateNewRally extends Component {
     return (
       <div>
         <MapWithASearchBox
-          isMarkerShown={this.state.isMarkerShown}
           changeData={this.changeData}
           isFilledIn={this.isFilledIn}
         />
@@ -311,7 +308,7 @@ export default class CreateNewRally extends Component {
             })}
           </ul>
         </div>
-        <div className="leftStyle" style={leftStyle}>
+        <div style={leftStyle}>
           <label htmlFor="title">Title: </label>
           <br />
           <input type="text" name="title" id="title" />
