@@ -43,7 +43,7 @@ export default class List extends Component {
     //   .get(`http://localhost:8000/web-api/rallies/`)
     //   .then((response) => {
     axios
-      .get(`https://cc4-flower-dev.herokuapp.com/web-api/rallies/`)
+      .get(`https://cc4-flower.herokuapp.com/web-api/rallies/`)
       .then((response) => {
         return response.data;
       })
