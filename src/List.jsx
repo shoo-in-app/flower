@@ -5,45 +5,13 @@ export default class List extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      rallies: [
-        // {
-        //   title: "test",
-        //   description: "test",
-        //   start_datetime: "2018-06-19T14:59:00.000Z",
-        //   end_datetime: "2018-06-21T13:56:00.000Z",
-        //   locations: [
-        //     {
-        //       name: "test",
-        //       description: "test",
-        //       lat: 227.4066325,
-        //       lng: 100.47180978252506,
-        //     },
-        //   ],
-        // },
-        // {
-        //   title: "test",
-        //   description: "test",
-        //   start_datetime: "2018-06-19T14:59:00.000Z",
-        //   end_datetime: "2018-06-21T13:56:00.000Z",
-        //   locations: [
-        //     {
-        //       name: "test",
-        //       description: "test",
-        //       lat: 227.4066325,
-        //       lng: 100.47180978252506,
-        //     },
-        //   ],
-        // },
-      ],
+      rallies: [],
     };
   }
   // After creating GET method, use the below
   componentDidMount() {
-    // axios
-    //   .get(`http://localhost:8000/web-api/rallies/`)
-    //   .then((response) => {
     axios
-      .get(`https://cc4-flower-dev.herokuapp.com/web-api/rallies/`)
+      .get(process.env.URL + "/web-api/rallies/")
       .then((response) => {
         return response.data;
       })

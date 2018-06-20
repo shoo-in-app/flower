@@ -181,6 +181,12 @@ module.exports = (db) => {
     return Object.values(chosenRallies).map((obj) => ({
       ...obj,
       complete: obj.locations.every((l) => l.visited),
+      lat:
+        obj.locations.reduce((prev, current) => prev.lat + current, 0) /
+        obj.locations.length,
+      lng:
+        obj.locations.reduce((prev, current) => prev.lng + current, 0) /
+        obj.locations.length,
     }));
   };
 
