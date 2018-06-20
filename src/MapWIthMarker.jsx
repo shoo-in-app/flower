@@ -70,21 +70,15 @@ const MapWithASearchBox = compose(
           { maxWait: 500 }
         ),
         onClick: (e) => {
-          console.log(e);
-          console.log(this.state);
-          // marker = JSON.stringify(<Marker position={{ lat, lng }} />);
           this.setState({
             lat: e.qa.x,
             lng: e.qa.y,
           });
         },
-        onMapClick: (e) => {
-          console.log(e.latLng);
-          return {
-            markerPosition: e.latLng,
-            isMarkerShown: true,
-          };
-        },
+        onMapClick: (e) => ({
+          markerPosition: e.latLng,
+          isMarkerShown: true,
+        }),
         onSearchBoxMounted: (ref) => {
           refs.searchBox = ref;
         },
@@ -246,25 +240,23 @@ export default class CreateNewRally extends Component {
   submit(period) {
     const rally = period;
     rally["locations"] = this.state.locations;
-    console.log("rally: ", rally);
-    axios
-      .post(process.env.URL + "/web-api/rally/", rally)
-      .then((response) => {
-        console.log("response: ", response);
-      })
-      .catch(function(error) {
-        console.log("Something wrong: ", error);
-      });
+    axios.post(process.env.URL + "/web-api/rally/", rally).catch((err) => {
+      console.log("Something wrong: ", err);
+    });
   }
+
   changeDesc(description) {
     this.setState({ description });
   }
+
   isDateValid(startDate, endDate) {
     return startDate > endDate;
   }
+
   isFilledIn(information) {
     return information.length > 0;
   }
+
   render() {
     const leftStyle = { float: `left` };
     const rightStyle = { float: `right`, width: `70%` };
@@ -293,7 +285,6 @@ export default class CreateNewRally extends Component {
           isFilledIn={this.isFilledIn}
         />
         <div style={rightStyle}>
-          {/* {JSON.stringify(this.state.locations)} */}
           <ul style={ulStyle}>
             {this.state.locations.map((location, index) => {
               return (

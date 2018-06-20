@@ -13,6 +13,7 @@ export default class App extends Component {
       isAuthenticated: false,
     };
   }
+
   componentDidMount() {
     axios
       .get(process.env.URL + "/id")
@@ -22,10 +23,10 @@ export default class App extends Component {
         } else {
           this.setState({ isAuthenticated: false });
         }
-        console.log(res.data);
       })
       .catch((err) => console.log(err));
   }
+
   render() {
     return (
       <Tabs>
@@ -36,7 +37,7 @@ export default class App extends Component {
 
         <TabPanel>
           <Login isAuthenticated={this.state.isAuthenticated} />
-          <List />
+          <List isAuthenticated={this.state.isAuthenticated} />
         </TabPanel>
         <TabPanel>
           <CreateNewRally />

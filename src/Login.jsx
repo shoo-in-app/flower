@@ -8,7 +8,7 @@ const Login = (props) => (
       </a>
     ) : (
       <a href="/auth/google">
-        <button>Log In with Google to see more</button>
+        <button>Log In with Google</button>
       </a>
     )}
   </div>
