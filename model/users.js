@@ -6,10 +6,18 @@ module.exports = (db) => {
       .where("hash", hash)
       .then((users) => (users.length > 0 ? users[0] : null));
 
-  const deleteUser = (hash) =>
-    db("users")
-      .where("hash", hash)
+  const deleteUser = async (hash) => {
+    const userId = await getUserId(hash);
+    db("locations_to_users")
+      .where("user_id", userId)
       .del();
+    db("rallies_to_users")
+      .where("user_id", userId)
+      .del();
+    db("users")
+      .where("id", userId)
+      .del();
+  };
 
   const insertUser = (hash, email) =>
     db("users")

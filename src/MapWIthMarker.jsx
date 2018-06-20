@@ -7,7 +7,7 @@ const {
   lifecycle,
   withStateHandlers,
 } = require("recompose");
-const { InfoBox } = require("react-google-maps/lib/components/addons/InfoBox");
+// const { InfoBox } = require("react-google-maps/lib/components/addons/InfoBox");
 const {
   withScriptjs,
   withGoogleMap,
@@ -21,7 +21,9 @@ const {
 const MapWithASearchBox = compose(
   withStateHandlers(
     () => ({
+      isMarkerShown: false,
       isOpen: false,
+      markerPosition: null,
     }),
     {
       onToggleOpen: ({ isOpen }) => () => ({
@@ -39,7 +41,6 @@ const MapWithASearchBox = compose(
   lifecycle({
     componentWillMount() {
       const refs = {};
-
       this.setState({
         bounds: null,
         center: {
@@ -70,10 +71,19 @@ const MapWithASearchBox = compose(
         ),
         onClick: (e) => {
           console.log(e);
+          console.log(this.state);
+          // marker = JSON.stringify(<Marker position={{ lat, lng }} />);
           this.setState({
             lat: e.qa.x,
             lng: e.qa.y,
           });
+        },
+        onMapClick: (e) => {
+          console.log(e.latLng);
+          return {
+            markerPosition: e.latLng,
+            isMarkerShown: true,
+          };
         },
         onSearchBoxMounted: (ref) => {
           refs.searchBox = ref;
@@ -108,125 +118,117 @@ const MapWithASearchBox = compose(
   }),
   withScriptjs,
   withGoogleMap
-)((props) => (
-  <GoogleMap
-    ref={props.onMapMounted}
-    defaultZoom={8}
-    center={props.center}
-    onBoundsChanged={props.onBoundsChanged}
-    onClick={props.onClick}
-  >
-    <SearchBox
-      ref={props.onSearchBoxMounted}
-      bounds={props.bounds}
-      controlPosition={google.maps.ControlPosition.TOP_LEFT}
-      onPlacesChanged={props.onPlacesChanged}
+)((props) => {
+  const infoWindow = { position: `absolute`, left: `0` };
+  const infoWindowBackground = {
+    backgroundColor: `#A61414`,
+    zIndex: `1`,
+    padding: `0 10px 10px`,
+  };
+  const infoWindowInput = {
+    boxSizing: `border-box`,
+    border: `1px solid transparent`,
+    width: `240px`,
+    height: `32px`,
+    marginTop: `10px`,
+    padding: `0 12px`,
+    borderRadius: `3px`,
+    boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
+    fontSize: `14px`,
+    outline: `none`,
+    textOverflow: `ellipses`,
+  };
+  const locationInfo = {
+    backgroundColor: "#fff",
+    boxSizing: `border-box`,
+    border: `1px solid transparent`,
+    width: `240px`,
+    height: `150px`,
+    marginTop: `10px`,
+    padding: `0 12px`,
+    borderRadius: `3px`,
+    boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
+    fontSize: `14px`,
+    outline: `none`,
+    textOverflow: `ellipses`,
+  };
+  return (
+    <GoogleMap
+      ref={props.onMapMounted}
+      defaultZoom={8}
+      center={props.center}
+      onBoundsChanged={props.onBoundsChanged}
+      onClick={props.onClick}
+      defaultOptions={{ mapTypeControl: false }}
     >
-      <div>
-        <input
-          type="text"
-          placeholder="Customized your placeholder"
-          style={{
-            boxSizing: `border-box`,
-            border: `1px solid transparent`,
-            width: `240px`,
-            height: `32px`,
-            marginTop: `27px`,
-            padding: `0 12px`,
-            borderRadius: `3px`,
-            boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
-            fontSize: `14px`,
-            outline: `none`,
-            textOverflow: `ellipses`,
-          }}
-        />
-        <div
-          style={{
-            backgroundColor: "#fff",
-            boxSizing: `border-box`,
-            border: `1px solid transparent`,
-            width: `240px`,
-            height: `150px`,
-            marginTop: `27px`,
-            padding: `0 12px`,
-            borderRadius: `3px`,
-            boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
-            fontSize: `14px`,
-            outline: `none`,
-            textOverflow: `ellipses`,
-          }}
+      <div style={infoWindow}>
+        <SearchBox
+          ref={props.onSearchBoxMounted}
+          bounds={props.bounds}
+          controlPosition={google.maps.ControlPosition.TOP_LEFT}
+          onPlacesChanged={props.onPlacesChanged}
         >
-          <label htmlFor="name">Name: </label>
-          <br />
-          <input type="text" name="" id="name" />
-          <br />
-          <label htmlFor="description">Description: </label>
-          <br />
-          <textarea type="text" name="" id="description" />
-          <br />
-          <span>
-            Lat: {props.lat} <br /> Lng: {props.lng}
-          </span>
-          <br />
-          <button
-            onClick={() => {
-              const locationData = {
-                name: document.getElementById("name").value,
-                description: document.getElementById("description").value,
-                lat: props.lat,
-                lng: props.lng,
-              };
-              if (
-                props.changeData(locationData.name) &&
-                props.changeData(locationData.description) &&
-                props.changeData(locationData.lat) &&
-                props.changeData(locationData.lng)
-              ) {
-                alert("Show error");
-              } else {
-                props.changeData(locationData);
-              }
-            }}
-          >
-            Add
-          </button>
-        </div>
-      </div>
-    </SearchBox>
-    {props.markers.map((marker, index) => (
-      <Marker
-        key={index}
-        position={marker.position}
-        onClick={props.onToggleOpen}
-      >
-        {props.isOpen && (
-          <InfoBox
-            onCloseClick={props.onToggleOpen}
-            options={{ closeBoxURL: ``, enableEventPropagation: true }}
-          >
-            <div
-              style={{
-                backgroundColor: `yellow`,
-                opacity: 0.75,
-                padding: `12px`,
-              }}
-            >
+          <div style={infoWindowBackground}>
+            <input
+              type="text"
+              placeholder="Customized your placeholder"
+              style={infoWindowInput}
+            />
+            <div style={locationInfo}>
+              <label htmlFor="name">Name: </label>
+              <br />
+              <input type="text" name="" id="name" />
+              <br />
+              <label htmlFor="description">Description: </label>
+              <br />
+              <textarea type="text" name="" id="description" />
+              <br />
               <span>
                 Lat: {props.lat} <br /> Lng: {props.lng}
               </span>
+              <br />
+              <button
+                onClick={() => {
+                  const locationData = {
+                    name: document.getElementById("name").value,
+                    description: document.getElementById("description").value,
+                    lat: props.lat,
+                    lng: props.lng,
+                  };
+                  if (
+                    props.changeData(locationData.name) &&
+                    props.changeData(locationData.description) &&
+                    props.changeData(locationData.lat) &&
+                    props.changeData(locationData.lng)
+                  ) {
+                    alert("Show error");
+                  } else {
+                    props.changeData(locationData);
+                  }
+                }}
+              >
+                Add
+              </button>
             </div>
-          </InfoBox>
-        )}
-      </Marker>
-    ))}
-  </GoogleMap>
-));
+          </div>
+        </SearchBox>
+      </div>
+      {props.markers.map((marker, index) => (
+        <Marker
+          key={index}
+          position={marker.position}
+          onClick={props.onToggleOpen}
+        />
+      ))}
+      {props.isMarkerShown && <Marker position={props.markerPosition} />}
+    </GoogleMap>
+  );
+});
 
 export default class CreateNewRally extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isMarkerShown: false,
       locations: [],
       description: "",
     };
@@ -244,8 +246,10 @@ export default class CreateNewRally extends Component {
   submit(period) {
     const rally = period;
     rally["locations"] = this.state.locations;
+    console.log("rally: ", rally);
     axios
       .post("https://cc4-flower-dev.herokuapp.com/web-api/rally/", rally)
+      // .post("http://localhost:8000/web-api/rally/", rally)
       .then((response) => {
         console.log("response: ", response);
       })
@@ -263,62 +267,97 @@ export default class CreateNewRally extends Component {
     return information.length > 0;
   }
   render() {
+    const leftStyle = { float: `left` };
+    const rightStyle = { float: `right`, width: `70%` };
+    const ulStyle = {
+      backgroundClip: ` padding-box`,
+      backgroundColor: ` #fff`,
+      border: ` 1px solid rgba(0,0,0,.12)`,
+      borderRadius: ` 3px`,
+      display: ` block`,
+      listStyle: ` none`,
+      margin: ` 0 0 16px`,
+      padding: ` 0`,
+      height: `200px`,
+      overflow: `scroll`,
+    };
+    const liStyle = {
+      listStyle: `none`,
+      padding: ` 16px 16px 0`,
+      borderTop: `1px solid rgba(0,0,0,.12)`,
+      fontSize: `16px`,
+    };
     return (
       <div>
         <MapWithASearchBox
           changeData={this.changeData}
           isFilledIn={this.isFilledIn}
         />
-        {JSON.stringify(this.state.locations)}
-        <br />
-        <label htmlFor="title">Title: </label>
-        <br />
-        <input type="text" name="title" id="title" />
-        <br />
-        <label htmlFor="description">Description: </label>
-        <br />
-        <input
-          type="text"
-          name="description"
-          id="description"
-          onChange={(e) => this.changeDesc(e.target.value)}
-        />
-        <br />
-        <label htmlFor="start">Start: </label>
-        <br />
-        <input type="datetime-local" name="start" id="start" />
-        <br />
-        <label htmlFor="end">End: </label>
-        <br />
-        <input type="datetime-local" name="end" id="end" />
-        <br />
-        <button
-          onClick={() => {
-            const start_datetime = new Date(
-              document.getElementById("start").value
-            ).toISOString();
-            const end_datetime = new Date(
-              document.getElementById("end").value
-            ).toISOString();
-            const period = {
-              title: document.getElementById("title").value,
-              description: this.state.description,
-              start_datetime,
-              end_datetime,
-            };
-            // if (
-            //   this.isDateValid(start_datetime, end_datetime) ||
-            //   this.isFilledIn(title) ||
-            //   this.isFilledIn(description)
-            // ) {
-            //   alert("Something wrong with your form");
-            // } else {
-            return this.submit(period);
-            // }
-          }}
-        >
-          Submit
-        </button>
+        <div style={rightStyle}>
+          {/* {JSON.stringify(this.state.locations)} */}
+          <ul style={ulStyle}>
+            {this.state.locations.map((location, index) => {
+              return (
+                <li key={index} style={liStyle}>
+                  <p>Name: {location.name}</p>
+                  <p>Description: {location.description}</p>
+                  <p>Lat: {location.lat}</p>
+                  <p>Lng: {location.lng}</p>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+        <div style={leftStyle}>
+          <label htmlFor="title">Title: </label>
+          <br />
+          <input type="text" name="title" id="title" />
+          <br />
+          <label htmlFor="description">Description: </label>
+          <br />
+          <input
+            type="text"
+            name="description"
+            id="description"
+            onChange={(e) => this.changeDesc(e.target.value)}
+          />
+          <br />
+          <label htmlFor="start">Start: </label>
+          <br />
+          <input type="datetime-local" name="start" id="start" />
+          <br />
+          <label htmlFor="end">End: </label>
+          <br />
+          <input type="datetime-local" name="end" id="end" />
+          <br />
+          <button
+            onClick={() => {
+              const start_datetime = new Date(
+                document.getElementById("start").value
+              ).toISOString();
+              const end_datetime = new Date(
+                document.getElementById("end").value
+              ).toISOString();
+              const period = {
+                title: document.getElementById("title").value,
+                description: this.state.description,
+                start_datetime,
+                end_datetime,
+              };
+              // if (
+              //   this.isDateValid(start_datetime, end_datetime) ||
+              //   this.isFilledIn(title) ||
+              //   this.isFilledIn(description)
+              // ) {
+              //   alert("Something wrong with your form");
+              // } else {
+              return this.submit(period);
+              // }
+            }}
+          >
+            Submit
+          </button>
+        </div>
       </div>
     );
   }
