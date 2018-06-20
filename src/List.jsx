@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { get } from "https";
 export default class List extends Component {
   constructor(props) {
     super(props);
@@ -12,9 +11,7 @@ export default class List extends Component {
   componentDidMount() {
     axios
       .get(process.env.URL + "/web-api/rallies/")
-      .then((response) => {
-        return response.data;
-      })
+      .then((res) => res.data)
       .then((rallies) => this.setState({ rallies }))
       .catch((err) => {
         console.log("Something wrong: ", err);

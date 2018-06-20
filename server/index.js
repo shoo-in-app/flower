@@ -48,6 +48,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(passport.initialize());
 app.use(passport.session());
+app.get("/id", (req, res) => {
+  res.send(req.user);
+});
 app.get(
   "/auth/google",
   passport.authenticate("google", { scope: ["profile"] })

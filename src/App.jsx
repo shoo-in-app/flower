@@ -15,10 +15,16 @@ export default class App extends Component {
   }
   componentDidMount() {
     axios
-      .get(process.env.URL + "/web-api/rallies/")
-      .then((response) => response.data)
-      .then((data) => this.setState({ isAuthenticated: true }))
-      .catch((err) => this.setState({ isAuthenticated: false }));
+      .get(process.env.URL + "/id")
+      .then((res) => {
+        if (res.data) {
+          this.setState({ isAuthenticated: true });
+        } else {
+          this.setState({ isAuthenticated: false });
+        }
+        console.log(res.data);
+      })
+      .catch((err) => console.log(err));
   }
   render() {
     return (
