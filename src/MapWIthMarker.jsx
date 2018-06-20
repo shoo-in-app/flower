@@ -68,15 +68,6 @@ const MapWithASearchBox = compose(
           100,
           { maxWait: 500 }
         ),
-        // onClick: (e) => {
-        //   console.log(e);
-        //   console.log(this.state);
-        //   // marker = JSON.stringify(<Marker position={{ lat, lng }} />);
-        //   this.setState({
-        //     lat: e.qa.x,
-        //     lng: e.qa.y,
-        //   });
-        // },
         onMapClick: (e) => {
           this.setState({
             isMarkerShown: true,
