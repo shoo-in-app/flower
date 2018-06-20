@@ -151,6 +151,15 @@ module.exports = (db) => {
         lng: location.lng,
       });
     });
+    return Object.values(rallies).map((obj) => ({
+      ...obj,
+      lat:
+        obj.locations.reduce((prev, current) => prev + current.lat, 0) /
+        obj.locations.length,
+      lng:
+        obj.locations.reduce((prev, current) => prev + current.lng, 0) /
+        obj.locations.length,
+    }));
   };
 
   const getChoosenRallies = async (userId) => {
@@ -181,6 +190,12 @@ module.exports = (db) => {
     return Object.values(chosenRallies).map((obj) => ({
       ...obj,
       complete: obj.locations.every((l) => l.visited),
+      lat:
+        obj.locations.reduce((prev, current) => prev + current.lat, 0) /
+        obj.locations.length,
+      lng:
+        obj.locations.reduce((prev, current) => prev + current.lng, 0) /
+        obj.locations.length,
     }));
   };
 
@@ -213,7 +228,15 @@ module.exports = (db) => {
           lng: location.lng,
         });
       });
-    return Object.values(notChosenRallies);
+    return Object.values(notChosenRallies).map((obj) => ({
+      ...obj,
+      lat:
+        obj.locations.reduce((prev, current) => prev + current.lat, 0) /
+        obj.locations.length,
+      lng:
+        obj.locations.reduce((prev, current) => prev + current.lng, 0) /
+        obj.locations.length,
+    }));
   };
 
   const toggleRally = async (userId, rallyId, chosen) => {
