@@ -323,11 +323,23 @@ export default class CreateNewRally extends Component {
           <br />
           <label htmlFor="start">Start: </label>
           <br />
-          <input type="datetime-local" name="start" id="start" />
+          <input
+            type="datetime-local"
+            name="start"
+            id="start"
+            defaultValue={new Date().toISOString().slice(0, -5)}
+          />
           <br />
           <label htmlFor="end">End: </label>
           <br />
-          <input type="datetime-local" name="end" id="end" />
+          <input
+            type="datetime-local"
+            name="end"
+            id="end"
+            value={new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000)
+              .toISOString()
+              .slice(0, -5)}
+          />
           <br />
           <button
             onClick={() => {
