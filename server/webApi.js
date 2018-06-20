@@ -1,10 +1,10 @@
 const router = require("express").Router();
 const { Rallies } = require("../model");
 
-function isAuthenticated(req, res, next) {
+const isAuthenticated = (req, res, next) => {
   if (req.user) return next();
   res.sendStatus(401);
-}
+};
 
 router.post("/rally/", isAuthenticated, async (req, res) => {
   try {
