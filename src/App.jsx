@@ -16,7 +16,7 @@ export default class App extends Component {
 
   componentDidMount() {
     axios
-      .get(process.env.URL + "/id")
+      .get("/id")
       .then((res) => {
         if (res.data) {
           this.setState({ isAuthenticated: true });
