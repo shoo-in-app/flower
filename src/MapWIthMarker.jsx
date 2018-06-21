@@ -214,6 +214,11 @@ const MapWithASearchBox = compose(
       {/* Searched result locations */}
       {props.markers.map((marker, index) => (
         <Marker
+          icon={{
+            path: google.maps.SymbolPath.CIRCLE,
+            strokeColor: "red",
+            scale: 5,
+          }}
           key={index}
           position={marker.position}
           onClick={props.onToggleOpen}
@@ -221,12 +226,27 @@ const MapWithASearchBox = compose(
       ))}
       {/* Clicked location on the map */}
       {props.isMarkerShown && (
-        <Marker position={{ lat: props.lat, lng: props.lng }} />
+        <Marker
+          icon={{
+            path: google.maps.SymbolPath.CIRCLE,
+            strokeColor: "green",
+            scale: 5,
+          }}
+          position={{ lat: props.lat, lng: props.lng }}
+        />
       )}
       {/* Show selected locations */}
       {props.selectedMarkers.map((marker, index) => {
         return (
-          <Marker key={index} position={{ lat: marker.lat, lng: marker.lng }} />
+          <Marker
+            icon={{
+              path: google.maps.SymbolPath.CIRCLE,
+              strokeColor: "blue",
+              scale: 5,
+            }}
+            key={index}
+            position={{ lat: marker.lat, lng: marker.lng }}
+          />
         );
       })}
     </GoogleMap>
