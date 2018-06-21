@@ -69,6 +69,12 @@ const MapWithASearchBox = compose(
             lng: myLatLng.lng(),
           });
         },
+        onSearchedMarkerClick: (location) => {
+          this.setState({
+            lat: location.position.lat(),
+            lng: location.position.lng(),
+          });
+        },
         AddMarkers: (lat, lng) => {
           const selectedMarkers = this.state.selectedMarkers.slice();
           selectedMarkers.push({ lat, lng });
@@ -213,7 +219,7 @@ const MapWithASearchBox = compose(
           }}
           key={index}
           position={marker.position}
-          onClick={props.onToggleOpen}
+          onClick={() => props.onSearchedMarkerClick(marker)}
         />
       ))}
       {/* Clicked location on the map */}
