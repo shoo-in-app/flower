@@ -23,12 +23,12 @@ const MapWithASearchBox = compose(
     () => ({
       isMarkerShown: false,
       isOpen: false,
-    }),
-    {
-      onToggleOpen: ({ isOpen }) => () => ({
-        isOpen: !isOpen,
-      }),
-    }
+    })
+    // {
+    //   onToggleOpen: ({ isOpen }) => () => ({
+    //     isOpen: !isOpen,
+    //   }),
+    // }
   ),
   withProps({
     googleMapURL:
@@ -47,6 +47,7 @@ const MapWithASearchBox = compose(
           lng: 139.6917,
         },
         markers: [],
+        selectedMarkers: [],
         marker: {
           lat: 0,
           lng: 0,
@@ -69,12 +70,19 @@ const MapWithASearchBox = compose(
           { maxWait: 500 }
         ),
         onMapClick: (e) => {
+          console.log(e.qa);
           this.setState({
             isMarkerShown: true,
             lat: e.qa.x,
             lng: e.qa.y,
             markerPosition: e.latLng,
           });
+        },
+        AddMarkers: (lat, lng) => {
+          console.log(82, lat, lng);
+          const selectedMarkers = this.state.selectedMarkers.slice();
+          selectedMarkers.push({ lat, lng });
+          this.setState({ isMarkerShown: true, selectedMarkers });
         },
         onSearchBoxMounted: (ref) => {
           refs.searchBox = ref;
@@ -195,6 +203,7 @@ const MapWithASearchBox = compose(
                     alert("Show error");
                   } else {
                     props.changeData(locationData);
+                    props.AddMarkers(locationData.lat, locationData.lng);
                   }
                 }}
               >
@@ -204,14 +213,25 @@ const MapWithASearchBox = compose(
           </div>
         </SearchBox>
       </div>
-      {props.markers.map((marker, index) => (
+      {/* Searched result locations */}
+      {/* {props.markers.map((marker, index) => (
         <Marker
           key={index}
           position={marker.position}
           onClick={props.onToggleOpen}
         />
-      ))}
-      {props.isMarkerShown && <Marker position={props.markerPosition} />}
+      ))} */}
+      {/* Clicked location on the map */}
+      {/* {props.isMarkerShown && <Marker position={props.markerPosition} />} */}
+      {/* Show selected locations */}
+      <br />
+      {JSON.stringify(props.selectedMarkers)}
+      <br />
+      <br />
+      {props.selectedMarkers.map((marker, index) => {
+        console.log(237, marker, props.selectedMarkers);
+        return <Marker key={index} position={marker} />;
+      })}
     </GoogleMap>
   );
 });
@@ -223,9 +243,15 @@ export default class CreateNewRally extends Component {
       locations: [],
       description: "",
     };
+    this.AddMarkers = this.AddMarkers.bind(this);
     this.changeData = this.changeData.bind(this);
     this.submit = this.submit.bind(this);
     this.isDateValid = this.isDateValid.bind(this);
+  }
+  AddMarkers(data) {
+    const locations = this.state.locations.slice();
+    locations.push(data);
+    this.setState({ locations });
   }
 
   changeData(data) {
@@ -280,6 +306,7 @@ export default class CreateNewRally extends Component {
     return (
       <div>
         <MapWithASearchBox
+          AddMarkers={this.AddMarkers}
           changeData={this.changeData}
           isFilledIn={this.isFilledIn}
         />
