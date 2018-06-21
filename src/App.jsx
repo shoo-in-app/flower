@@ -10,13 +10,13 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isAuthenticated: false,
+      isAuthenticated: null,
     };
   }
 
   componentDidMount() {
     axios
-      .get(process.env.URL + "/id")
+      .get("/id")
       .then((res) => {
         if (res.data) {
           this.setState({ isAuthenticated: true });
@@ -27,22 +27,34 @@ export default class App extends Component {
       .catch((err) => console.log(err));
   }
 
-  render() {
+  get main() {
     return (
       <Tabs>
         <TabList>
           <Tab>List of Rallies</Tab>
           <Tab>Create New Rally</Tab>
+          <a href="/logout">
+            <button>Log out</button>
+          </a>
         </TabList>
-
         <TabPanel>
-          <Login isAuthenticated={this.state.isAuthenticated} />
-          <List isAuthenticated={this.state.isAuthenticated} />
+          <List />
         </TabPanel>
         <TabPanel>
           <CreateNewRally />
         </TabPanel>
       </Tabs>
     );
+  }
+
+  render() {
+    switch (this.state.isAuthenticated) {
+      case null:
+        return <div>LOADING</div>;
+      case false:
+        return <Login />;
+      case true:
+        return this.main;
+    }
   }
 }

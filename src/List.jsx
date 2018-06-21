@@ -11,7 +11,7 @@ export default class List extends Component {
   // After creating GET method, use the below
   componentDidMount() {
     axios
-      .get(process.env.URL + "/web-api/rallies/")
+      .get("/web-api/rallies/")
       .then((res) => res.data)
       .then((rallies) => this.setState({ rallies }))
       .catch((err) => {
@@ -20,70 +20,56 @@ export default class List extends Component {
   }
 
   get rallies() {
-    let rallies;
-    if (this.state.rallies.length > 0) {
-      const titleStyle = {
-        fontSize: "13px",
-        fontWeight: "600",
-        lineHeight: "1.6",
-        letterSpacing: "-.02em",
-        wordSpacing: ".1em",
-      };
-      const ulStyle = {
-        backgroundClip: ` padding-box`,
-        backgroundColor: ` #fff`,
-        border: ` 1px solid rgba(0,0,0,.12)`,
-        borderRadius: ` 3px`,
-        display: ` block`,
-        listStyle: ` none`,
-        margin: ` 0 0 16px`,
-        padding: ` 0`,
-      };
-      const liStyle = {
-        fontFamily: '"Graphik Meetup",helvetica,arial,sans-serif',
-        color: "#333",
-        margin: "10px",
-        padding: "16px 16px 0",
-        borderBottom: "1px solid rgba(0, 0, 0, .12)",
-        fontSize: "16px",
-        listStyle: "none",
-      };
-
-      rallies = (
-        <ul style={ulStyle}>
-          {this.state.rallies.map((rally, index) => {
-            return (
-              <li key={index} style={liStyle}>
-                <p style={titleStyle}>Title: {rally.title}</p>
-                <p>Description: {rally.description}</p>
-                <p>Locations: {JSON.stringify(rally.locations)}</p>
-                <span>
-                  Period:
-                  {rally.start_datetime} ~ {rally.end_datetime}
-                </span>
-              </li>
-            );
-          })}
-        </ul>
-      );
-    } else {
-      rallies = <p>You have not created any rallies yet.</p>;
-    }
-    return rallies;
+    const titleStyle = {
+      fontSize: "13px",
+      fontWeight: "600",
+      lineHeight: "1.6",
+      letterSpacing: "-.02em",
+      wordSpacing: ".1em",
+    };
+    const ulStyle = {
+      backgroundClip: " padding-box",
+      backgroundColor: " #fff",
+      border: " 1px solid rgba(0,0,0,.12)",
+      borderRadius: " 3px",
+      display: " block",
+      listStyle: " none",
+      margin: " 0 0 16px",
+      padding: " 0",
+    };
+    const liStyle = {
+      fontFamily: '"Graphik Meetup",helvetica,arial,sans-serif',
+      color: "#333",
+      margin: "10px",
+      padding: "16px 16px 0",
+      borderBottom: "1px solid rgba(0, 0, 0, .12)",
+      fontSize: "16px",
+      listStyle: "none",
+    };
+    return (
+      <ul style={ulStyle}>
+        {this.state.rallies.map((rally, index) => (
+          <li key={index} style={liStyle}>
+            <p style={titleStyle}>Title: {rally.title}</p>
+            <p>Description: {rally.description}</p>
+            <p>Locations: {JSON.stringify(rally.locations)}</p>
+            <span>
+              Period:
+              {rally.start_datetime} ~ {rally.end_datetime}
+            </span>
+          </li>
+        ))}
+      </ul>
+    );
   }
 
   render() {
-    const bodyStyle = {
-      backgroundColor: `#fafafa`,
-    };
-    if (this.props.isAuthenticated) {
-      return <div style={bodyStyle}>{this.rallies}</div>;
+    let content;
+    if (this.state.rallies.length > 0) {
+      content = this.rallies;
     } else {
-      return (
-        <div style={bodyStyle}>
-          <p>You are not logged in yet.</p>
-        </div>
-      );
+      content = <p>You have not created any rallies yet.</p>;
     }
+    return <div style={{ backgroundColor: "#fafafa" }}>{content}</div>;
   }
 }
