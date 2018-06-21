@@ -70,16 +70,14 @@ const MapWithASearchBox = compose(
           { maxWait: 500 }
         ),
         onMapClick: (e) => {
-          console.log(e.qa);
+          var myLatLng = e.latLng;
           this.setState({
             isMarkerShown: true,
-            lat: e.qa.x,
-            lng: e.qa.y,
-            markerPosition: e.latLng,
+            lat: myLatLng.lat(),
+            lng: myLatLng.lng(),
           });
         },
         AddMarkers: (lat, lng) => {
-          console.log(82, lat, lng);
           const selectedMarkers = this.state.selectedMarkers.slice();
           selectedMarkers.push({ lat, lng });
           this.setState({ isMarkerShown: true, selectedMarkers });
@@ -214,23 +212,22 @@ const MapWithASearchBox = compose(
         </SearchBox>
       </div>
       {/* Searched result locations */}
-      {/* {props.markers.map((marker, index) => (
+      {props.markers.map((marker, index) => (
         <Marker
           key={index}
           position={marker.position}
           onClick={props.onToggleOpen}
         />
-      ))} */}
+      ))}
       {/* Clicked location on the map */}
-      {/* {props.isMarkerShown && <Marker position={props.markerPosition} />} */}
+      {props.isMarkerShown && (
+        <Marker position={{ lat: props.lat, lng: props.lng }} />
+      )}
       {/* Show selected locations */}
-      <br />
-      {JSON.stringify(props.selectedMarkers)}
-      <br />
-      <br />
       {props.selectedMarkers.map((marker, index) => {
-        console.log(237, marker, props.selectedMarkers);
-        return <Marker key={index} position={marker} />;
+        return (
+          <Marker key={index} position={{ lat: marker.lat, lng: marker.lng }} />
+        );
       })}
     </GoogleMap>
   );
@@ -243,15 +240,9 @@ export default class CreateNewRally extends Component {
       locations: [],
       description: "",
     };
-    this.AddMarkers = this.AddMarkers.bind(this);
     this.changeData = this.changeData.bind(this);
     this.submit = this.submit.bind(this);
     this.isDateValid = this.isDateValid.bind(this);
-  }
-  AddMarkers(data) {
-    const locations = this.state.locations.slice();
-    locations.push(data);
-    this.setState({ locations });
   }
 
   changeData(data) {
@@ -304,7 +295,6 @@ export default class CreateNewRally extends Component {
     return (
       <div>
         <MapWithASearchBox
-          AddMarkers={this.AddMarkers}
           changeData={this.changeData}
           isFilledIn={this.isFilledIn}
         />
