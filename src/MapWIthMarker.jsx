@@ -7,7 +7,6 @@ const {
   lifecycle,
   withStateHandlers,
 } = require("recompose");
-// const { InfoBox } = require("react-google-maps/lib/components/addons/InfoBox");
 const {
   withScriptjs,
   withGoogleMap,
@@ -19,17 +18,10 @@ const {
 } = require("react-google-maps/lib/components/places/SearchBox");
 
 const MapWithASearchBox = compose(
-  withStateHandlers(
-    () => ({
-      isMarkerShown: false,
-      isOpen: false,
-    })
-    // {
-    //   onToggleOpen: ({ isOpen }) => () => ({
-    //     isOpen: !isOpen,
-    //   }),
-    // }
-  ),
+  withStateHandlers(() => ({
+    isMarkerShown: false,
+    isOpen: false,
+  })),
   withProps({
     googleMapURL:
       "https://maps.googleapis.com/maps/api/js?key=AIzaSyDe-SSvqZrjeDeD3clObxGng67gPOB76aQ&v=3.exp&libraries=geometry,drawing,places",
