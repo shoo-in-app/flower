@@ -278,6 +278,8 @@ module.exports = (db) => {
     locations = locations.map((l) => ({
       rally_id: rallyId,
       ...l,
+      lat: parseFloat(l.lat),
+      lng: parseFloat(l.lng),
     }));
     await insertLocations(locations);
   };

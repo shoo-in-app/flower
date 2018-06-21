@@ -33,9 +33,9 @@ const MapWithASearchBox = compose(
   withProps({
     googleMapURL:
       "https://maps.googleapis.com/maps/api/js?key=AIzaSyDe-SSvqZrjeDeD3clObxGng67gPOB76aQ&v=3.exp&libraries=geometry,drawing,places",
-    loadingElement: <div style={{ height: `100%` }} />,
-    containerElement: <div style={{ height: `400px` }} />,
-    mapElement: <div style={{ height: `100%` }} />,
+    loadingElement: <div style={{ height: "100%" }} />,
+    containerElement: <div style={{ height: "400px" }} />,
+    mapElement: <div style={{ height: "100%" }} />,
   }),
   lifecycle({
     componentWillMount() {
@@ -118,38 +118,38 @@ const MapWithASearchBox = compose(
   withScriptjs,
   withGoogleMap
 )((props) => {
-  const infoWindow = { position: `absolute`, left: `0` };
+  const infoWindow = { position: "absolute", left: "0" };
   const infoWindowBackground = {
-    backgroundColor: `#A61414`,
-    zIndex: `1`,
-    padding: `0 10px 10px`,
+    backgroundColor: "#A61414",
+    zIndex: "1",
+    padding: "0 10px 10px",
   };
   const infoWindowInput = {
-    boxSizing: `border-box`,
-    border: `1px solid transparent`,
-    width: `240px`,
-    height: `32px`,
-    marginTop: `10px`,
-    padding: `0 12px`,
-    borderRadius: `3px`,
-    boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
-    fontSize: `14px`,
-    outline: `none`,
-    textOverflow: `ellipses`,
+    boxSizing: "border-box",
+    border: "1px solid transparent",
+    width: "240px",
+    height: "32px",
+    marginTop: "10px",
+    padding: "0 12px",
+    borderRadius: "3px",
+    boxShadow: "0 2px 6px rgba(0, 0, 0, 0.3)",
+    fontSize: "14px",
+    outline: "none",
+    textOverflow: "ellipses",
   };
   const locationInfo = {
     backgroundColor: "#fff",
-    boxSizing: `border-box`,
-    border: `1px solid transparent`,
-    width: `240px`,
-    height: `150px`,
-    marginTop: `10px`,
-    padding: `0 12px`,
-    borderRadius: `3px`,
-    boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
-    fontSize: `14px`,
-    outline: `none`,
-    textOverflow: `ellipses`,
+    boxSizing: "border-box",
+    border: "1px solid transparent",
+    width: "240px",
+    height: "150px",
+    marginTop: "10px",
+    padding: "0 12px",
+    borderRadius: "3px",
+    boxShadow: "0 2px 6px rgba(0, 0, 0, 0.3)",
+    fontSize: "14px",
+    outline: "none",
+    textOverflow: "ellipses",
   };
   return (
     <GoogleMap
@@ -263,45 +263,43 @@ export default class CreateNewRally extends Component {
   submit(period) {
     const rally = period;
     rally["locations"] = this.state.locations;
-    console.log("rally: ", rally);
-    axios
-      .post(process.env.URL + "/web-api/rally/", rally)
-      .then((response) => {
-        console.log("response: ", response);
-      })
-      .catch(function(error) {
-        console.log("Something wrong: ", error);
-      });
+    axios.post("/web-api/rally/", rally).catch((err) => {
+      console.log("Something wrong: ", err);
+    });
   }
+
   changeDesc(description) {
     this.setState({ description });
   }
+
   isDateValid(startDate, endDate) {
     return startDate > endDate;
   }
+
   isFilledIn(information) {
     return information.length > 0;
   }
+
   render() {
-    const leftStyle = { float: `left` };
-    const rightStyle = { float: `right`, width: `70%` };
+    const leftStyle = { float: "left" };
+    const rightStyle = { float: "right", width: "70%" };
     const ulStyle = {
-      backgroundClip: ` padding-box`,
-      backgroundColor: ` #fff`,
-      border: ` 1px solid rgba(0,0,0,.12)`,
-      borderRadius: ` 3px`,
-      display: ` block`,
-      listStyle: ` none`,
-      margin: ` 0 0 16px`,
-      padding: ` 0`,
-      height: `200px`,
-      overflow: `scroll`,
+      backgroundClip: " padding-box",
+      backgroundColor: " #fff",
+      border: " 1px solid rgba(0,0,0,.12)",
+      borderRadius: " 3px",
+      display: " block",
+      listStyle: " none",
+      margin: " 0 0 16px",
+      padding: " 0",
+      height: "200px",
+      overflow: "scroll",
     };
     const liStyle = {
-      listStyle: `none`,
-      padding: ` 16px 16px 0`,
-      borderTop: `1px solid rgba(0,0,0,.12)`,
-      fontSize: `16px`,
+      listStyle: "none",
+      padding: " 16px 16px 0",
+      borderTop: "1px solid rgba(0,0,0,.12)",
+      fontSize: "16px",
     };
     return (
       <div>
@@ -311,7 +309,6 @@ export default class CreateNewRally extends Component {
           isFilledIn={this.isFilledIn}
         />
         <div style={rightStyle}>
-          {/* {JSON.stringify(this.state.locations)} */}
           <ul style={ulStyle}>
             {this.state.locations.map((location, index) => {
               return (
