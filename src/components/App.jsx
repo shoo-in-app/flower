@@ -5,6 +5,25 @@ import Login from "./Login";
 import CreateNewRally from "./CreateNewRally";
 import axios from "axios";
 import "react-tabs/style/react-tabs.css";
+import { createMuiTheme } from "@material-ui/core/styles";
+import { MuiThemeProvider } from "@material-ui/core/styles";
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      light: "#757ce8",
+      main: "#3f50b5",
+      dark: "#002884",
+      contrastText: "#fff",
+    },
+    secondary: {
+      light: "#ff7961",
+      main: "#f44336",
+      dark: "#ba000d",
+      contrastText: "#000",
+    },
+  },
+});
 
 export default class App extends Component {
   constructor(props) {
@@ -48,13 +67,18 @@ export default class App extends Component {
   }
 
   render() {
+    let content;
     switch (this.state.isAuthenticated) {
       case null:
-        return <div>LOADING</div>;
+        content = <div>LOADING</div>;
+        break;
       case false:
-        return <Login />;
+        content = <Login />;
+        break;
       case true:
-        return this.main;
+        content = this.main;
+        break;
     }
+    return <MuiThemeProvider theme={theme}>{content}</MuiThemeProvider>;
   }
 }

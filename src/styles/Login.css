@@ -3,7 +3,7 @@
   width: 347px;
   text-align: center;
   padding: 40px;
-  background-color: #a61414;
+  background-color: #a61414 !important;
 }
 
 .button {
@@ -13,4 +13,8 @@
   width: 270px;
   font-size: 1.2em;
   cursor: pointer;
+}
+
+.download {
+  width: 200px;
 }
