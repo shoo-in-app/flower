@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import style from "../styles/List.css";
 export default class List extends Component {
   constructor(props) {
     super(props);
@@ -20,37 +21,11 @@ export default class List extends Component {
   }
 
   get rallies() {
-    const titleStyle = {
-      fontSize: "13px",
-      fontWeight: "600",
-      lineHeight: "1.6",
-      letterSpacing: "-.02em",
-      wordSpacing: ".1em",
-    };
-    const ulStyle = {
-      backgroundClip: " padding-box",
-      backgroundColor: " #fff",
-      border: " 1px solid rgba(0,0,0,.12)",
-      borderRadius: " 3px",
-      display: " block",
-      listStyle: " none",
-      margin: " 0 0 16px",
-      padding: " 0",
-    };
-    const liStyle = {
-      fontFamily: '"Graphik Meetup",helvetica,arial,sans-serif',
-      color: "#333",
-      margin: "10px",
-      padding: "16px 16px 0",
-      borderBottom: "1px solid rgba(0, 0, 0, .12)",
-      fontSize: "16px",
-      listStyle: "none",
-    };
     return (
-      <ul style={ulStyle}>
+      <ul className={style.ul}>
         {this.state.rallies.map((rally, index) => (
-          <li key={index} style={liStyle}>
-            <p style={titleStyle}>Title: {rally.title}</p>
+          <li key={index} className={style.li}>
+            <p className={style.title}>Title: {rally.title}</p>
             <p>Description: {rally.description}</p>
             <p>Locations: {JSON.stringify(rally.locations)}</p>
             <span>
