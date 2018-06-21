@@ -249,6 +249,10 @@ const MapWithASearchBox = compose(
           />
         );
       })}
+      <Marker
+        icon={{ url: "user.svg" }}
+        position={{ lat: props.userLat, lng: props.userLng }}
+      />
     </GoogleMap>
   );
 });
@@ -259,10 +263,13 @@ export default class CreateNewRally extends Component {
     this.state = {
       locations: [],
       description: "",
+      userLat: null,
+      userLng: null,
     };
     this.changeData = this.changeData.bind(this);
     this.submit = this.submit.bind(this);
     this.isDateValid = this.isDateValid.bind(this);
+    this.success = this.success.bind(this);
   }
 
   changeData(data) {
@@ -291,7 +298,13 @@ export default class CreateNewRally extends Component {
     return information.length > 0;
   }
 
+  success(pos) {
+    const crd = pos.coords;
+    this.setState({ userLat: crd.latitude, userLng: crd.longitude });
+  }
+
   render() {
+    navigator.geolocation.getCurrentPosition(this.success);
     const leftStyle = { float: "left" };
     const rightStyle = { float: "right", width: "70%" };
     const ulStyle = {
@@ -317,6 +330,8 @@ export default class CreateNewRally extends Component {
         <MapWithASearchBox
           changeData={this.changeData}
           isFilledIn={this.isFilledIn}
+          userLat={this.state.userLat}
+          userLng={this.state.userLng}
         />
         <div style={rightStyle}>
           <ul style={ulStyle}>
