@@ -172,11 +172,17 @@ const MapWithASearchBox = compose(
             <div style={locationInfo}>
               <label htmlFor="name">Name: </label>
               <br />
-              <input type="text" name="" id="name" />
+              <input type="text" name="" id="name" size="32" />
               <br />
               <label htmlFor="description">Description: </label>
               <br />
-              <textarea type="text" name="" id="description" />
+              <textarea
+                type="text"
+                name=""
+                id="description"
+                rows="2"
+                cols="30"
+              />
               <br />
               <span>
                 Lat: {props.lat} <br /> Lng: {props.lng}
@@ -303,7 +309,7 @@ export default class CreateNewRally extends Component {
 
   render() {
     navigator.geolocation.getCurrentPosition(this.success);
-    const leftStyle = { float: "left" };
+    const leftStyle = { padding: `10px` };
     const rightStyle = { float: "right", width: "70%" };
     const ulStyle = {
       backgroundClip: " padding-box",
@@ -348,14 +354,16 @@ export default class CreateNewRally extends Component {
         <div style={leftStyle}>
           <label htmlFor="title">Title: </label>
           <br />
-          <input type="text" name="title" id="title" />
+          <input type="text" name="title" id="title" size="32" />
           <br />
           <label htmlFor="description">Description: </label>
           <br />
-          <input
+          <textarea
             type="text"
             name="description"
             id="description"
+            rows="4"
+            cols="30"
             onChange={(e) => this.changeDesc(e.target.value)}
           />
           <br />
