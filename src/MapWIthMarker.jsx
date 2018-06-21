@@ -62,11 +62,21 @@ const MapWithASearchBox = compose(
           { maxWait: 500 }
         ),
         onMapClick: (e) => {
-          var myLatLng = e.latLng;
+          const myLatLng = e.latLng;
           this.setState({
             isMarkerShown: true,
             lat: myLatLng.lat(),
             lng: myLatLng.lng(),
+          });
+        },
+        setCenter: (e) => {
+          const myLatLng = e.latLng;
+          this.setState({
+            zoom: 11,
+            center: {
+              lat: myLatLng.lat(),
+              lng: myLatLng.lng(),
+            },
           });
         },
         onSearchedMarkerClick: (location) => {
@@ -151,9 +161,13 @@ const MapWithASearchBox = compose(
     <GoogleMap
       ref={props.onMapMounted}
       defaultZoom={8}
+      zoom={props.zoom}
       center={props.center}
       onBoundsChanged={props.onBoundsChanged}
-      onClick={props.onMapClick}
+      onClick={function(e) {
+        props.setCenter(e);
+        props.onMapClick(e);
+      }}
       defaultOptions={{ mapTypeControl: false }}
     >
       <div style={infoWindow}>
@@ -225,7 +239,10 @@ const MapWithASearchBox = compose(
           }}
           key={index}
           position={marker.position}
-          onClick={() => props.onSearchedMarkerClick(marker)}
+          onClick={function(e) {
+            props.setCenter(e);
+            props.onSearchedMarkerClick(marker);
+          }}
         />
       ))}
       {/* Clicked location on the map */}
