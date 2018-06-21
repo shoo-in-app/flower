@@ -6,15 +6,18 @@ module.exports = (db) => {
       .where("hash", hash)
       .then((users) => (users.length > 0 ? users[0] : null));
 
+  const getUserId = (hash) =>
+    getUser(hash).then((user) => (user ? user.id : null));
+
   const deleteUser = async (hash) => {
     const userId = await getUserId(hash);
-    db("locations_to_users")
+    await db("locations_to_users")
       .where("user_id", userId)
       .del();
-    db("rallies_to_users")
+    await db("rallies_to_users")
       .where("user_id", userId)
       .del();
-    db("users")
+    await db("users")
       .where("id", userId)
       .del();
   };
@@ -39,9 +42,6 @@ module.exports = (db) => {
     if (!user) user = await insertUser(hash, email);
     return user;
   };
-
-  const getUserId = (hash) =>
-    getUser(hash).then((user) => (user ? user.id : null));
 
   return {
     getUserId,
