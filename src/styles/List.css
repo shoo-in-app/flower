@@ -1,0 +1,28 @@
+.title {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.6;
+  letter-spacing: -0.02em;
+  word-spacing: 0.1em;
+}
+
+.ul {
+  background-clip: padding-box;
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 3px;
+  display: block;
+  list-style: none;
+  margin: 0 0 16px;
+  padding: 0;
+}
+
+.li {
+  font-family: "Graphik Meetup;helvetica;arial;sans-serif";
+  color: #333;
+  margin: 10px;
+  padding: 16px 16px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  font-size: 16px;
+  list-style: none;
+}

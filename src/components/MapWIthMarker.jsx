@@ -7,7 +7,6 @@ const {
   lifecycle,
   withStateHandlers,
 } = require("recompose");
-// const { InfoBox } = require("react-google-maps/lib/components/addons/InfoBox");
 const {
   withScriptjs,
   withGoogleMap,
@@ -19,18 +18,10 @@ const {
 } = require("react-google-maps/lib/components/places/SearchBox");
 
 const MapWithASearchBox = compose(
-  withStateHandlers(
-    () => ({
-      isMarkerShown: false,
-      isOpen: false,
-      markerPosition: null,
-    }),
-    {
-      onToggleOpen: ({ isOpen }) => () => ({
-        isOpen: !isOpen,
-      }),
-    }
-  ),
+  withStateHandlers(() => ({
+    isMarkerShown: false,
+    isOpen: false,
+  })),
   withProps({
     googleMapURL:
       "https://maps.googleapis.com/maps/api/js?key=AIzaSyDe-SSvqZrjeDeD3clObxGng67gPOB76aQ&v=3.exp&libraries=geometry,drawing,places",
@@ -42,12 +33,14 @@ const MapWithASearchBox = compose(
     componentWillMount() {
       const refs = {};
       this.setState({
+        zoom: 8,
         bounds: null,
         center: {
           lat: 35.6895,
           lng: 139.6917,
         },
         markers: [],
+        selectedMarkers: [],
         marker: {
           lat: 0,
           lng: 0,
@@ -69,16 +62,35 @@ const MapWithASearchBox = compose(
           100,
           { maxWait: 500 }
         ),
-        onClick: (e) => {
+        onMapClick: (e) => {
+          const myLatLng = e.latLng;
           this.setState({
-            lat: e.qa.x,
-            lng: e.qa.y,
+            isMarkerShown: true,
+            lat: myLatLng.lat(),
+            lng: myLatLng.lng(),
           });
         },
-        onMapClick: (e) => ({
-          markerPosition: e.latLng,
-          isMarkerShown: true,
-        }),
+        setCenter: (e) => {
+          const myLatLng = e.latLng;
+          this.setState({
+            zoom: 11,
+            center: {
+              lat: myLatLng.lat(),
+              lng: myLatLng.lng(),
+            },
+          });
+        },
+        onSearchedMarkerClick: (location) => {
+          this.setState({
+            lat: location.position.lat(),
+            lng: location.position.lng(),
+          });
+        },
+        AddMarkers: (lat, lng) => {
+          const selectedMarkers = this.state.selectedMarkers.slice();
+          selectedMarkers.push({ lat, lng });
+          this.setState({ isMarkerShown: true, selectedMarkers });
+        },
         onSearchBoxMounted: (ref) => {
           refs.searchBox = ref;
         },
@@ -150,9 +162,13 @@ const MapWithASearchBox = compose(
     <GoogleMap
       ref={props.onMapMounted}
       defaultZoom={8}
+      zoom={props.zoom}
       center={props.center}
       onBoundsChanged={props.onBoundsChanged}
-      onClick={props.onClick}
+      onClick={function(e) {
+        props.setCenter(e);
+        props.onMapClick(e);
+      }}
       defaultOptions={{ mapTypeControl: false }}
     >
       <div style={infoWindow}>
@@ -171,11 +187,17 @@ const MapWithASearchBox = compose(
             <div style={locationInfo}>
               <label htmlFor="name">Name: </label>
               <br />
-              <input type="text" name="" id="name" />
+              <input type="text" name="" id="name" size="32" />
               <br />
               <label htmlFor="description">Description: </label>
               <br />
-              <textarea type="text" name="" id="description" />
+              <textarea
+                type="text"
+                name=""
+                id="description"
+                rows="2"
+                cols="30"
+              />
               <br />
               <span>
                 Lat: {props.lat} <br /> Lng: {props.lng}
@@ -198,6 +220,7 @@ const MapWithASearchBox = compose(
                     alert("Show error");
                   } else {
                     props.changeData(locationData);
+                    props.AddMarkers(locationData.lat, locationData.lng);
                   }
                 }}
               >
@@ -207,14 +230,51 @@ const MapWithASearchBox = compose(
           </div>
         </SearchBox>
       </div>
+      {/* Searched result locations */}
       {props.markers.map((marker, index) => (
         <Marker
+          icon={{
+            path: google.maps.SymbolPath.CIRCLE,
+            strokeColor: "red",
+            scale: 5,
+          }}
           key={index}
           position={marker.position}
-          onClick={props.onToggleOpen}
+          onClick={function(e) {
+            props.setCenter(e);
+            props.onSearchedMarkerClick(marker);
+          }}
         />
       ))}
-      {props.isMarkerShown && <Marker position={props.markerPosition} />}
+      {/* Clicked location on the map */}
+      {props.isMarkerShown && (
+        <Marker
+          icon={{
+            path: google.maps.SymbolPath.CIRCLE,
+            strokeColor: "green",
+            scale: 5,
+          }}
+          position={{ lat: props.lat, lng: props.lng }}
+        />
+      )}
+      {/* Show selected locations */}
+      {props.selectedMarkers.map((marker, index) => {
+        return (
+          <Marker
+            icon={{
+              path: google.maps.SymbolPath.CIRCLE,
+              strokeColor: "blue",
+              scale: 5,
+            }}
+            key={index}
+            position={{ lat: marker.lat, lng: marker.lng }}
+          />
+        );
+      })}
+      <Marker
+        icon={{ url: "user.svg" }}
+        position={{ lat: props.userLat, lng: props.userLng }}
+      />
     </GoogleMap>
   );
 });
@@ -225,10 +285,13 @@ export default class CreateNewRally extends Component {
     this.state = {
       locations: [],
       description: "",
+      userLat: null,
+      userLng: null,
     };
     this.changeData = this.changeData.bind(this);
     this.submit = this.submit.bind(this);
     this.isDateValid = this.isDateValid.bind(this);
+    this.success = this.success.bind(this);
   }
 
   changeData(data) {
@@ -257,8 +320,14 @@ export default class CreateNewRally extends Component {
     return information.length > 0;
   }
 
+  success(pos) {
+    const crd = pos.coords;
+    this.setState({ userLat: crd.latitude, userLng: crd.longitude });
+  }
+
   render() {
-    const leftStyle = { float: "left" };
+    navigator.geolocation.getCurrentPosition(this.success);
+    const leftStyle = { padding: `10px` };
     const rightStyle = { float: "right", width: "70%" };
     const ulStyle = {
       backgroundClip: " padding-box",
@@ -283,6 +352,8 @@ export default class CreateNewRally extends Component {
         <MapWithASearchBox
           changeData={this.changeData}
           isFilledIn={this.isFilledIn}
+          userLat={this.state.userLat}
+          userLng={this.state.userLng}
         />
         <div style={rightStyle}>
           <ul style={ulStyle}>
@@ -301,14 +372,16 @@ export default class CreateNewRally extends Component {
         <div style={leftStyle}>
           <label htmlFor="title">Title: </label>
           <br />
-          <input type="text" name="title" id="title" />
+          <input type="text" name="title" id="title" size="32" />
           <br />
           <label htmlFor="description">Description: </label>
           <br />
-          <input
+          <textarea
             type="text"
             name="description"
             id="description"
+            rows="4"
+            cols="30"
             onChange={(e) => this.changeDesc(e.target.value)}
           />
           <br />
@@ -346,15 +419,7 @@ export default class CreateNewRally extends Component {
                 start_datetime,
                 end_datetime,
               };
-              // if (
-              //   this.isDateValid(start_datetime, end_datetime) ||
-              //   this.isFilledIn(title) ||
-              //   this.isFilledIn(description)
-              // ) {
-              //   alert("Something wrong with your form");
-              // } else {
               return this.submit(period);
-              // }
             }}
           >
             Submit
