@@ -33,6 +33,7 @@ const MapWithASearchBox = compose(
     componentWillMount() {
       const refs = {};
       this.setState({
+        zoom: 8,
         bounds: null,
         center: {
           lat: 35.6895,
