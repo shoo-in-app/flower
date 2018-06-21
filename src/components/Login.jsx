@@ -10,8 +10,8 @@ const Login = (props) => {
       <h1 style={{ color: "white" }}>Shoo-in</h1>
       <p style={{ color: "white" }}>Welcome to the rally creation page</p>
 
-      <a href="/auth/google" style={{ decolation: "none" }}>
-        <GoogleButton style={{ margin: "auto" }} type="light" />
+      <a href="/auth/google" style={{ textDecoration: "none" }}>
+        <GoogleButton style={{ margin: "auto" }} type="dark" />
       </a>
 
       <p style={{ color: "white" }}>Download mobile App</p>
