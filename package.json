@@ -34,7 +34,6 @@
     "react-google-button": "^0.5.3",
     "react-google-maps": "^9.4.5",
     "react-scripts": "^1.1.4",
-    "react-tabs": "^2.2.2",
     "react-tap-event-plugin": "^3.0.3"
   },
   "devDependencies": {
@@ -55,7 +54,7 @@
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "file-loader": "^1.1.11",
     "html-loader": "^0.5.5",
-    "html-webpack-plugin": "^3.2.0",
+    "html-webpack-plugin": "^4.0.0-alpha",
     "husky": "^0.14.3",
     "jest": "^22.4.3",
     "json-loader": "^0.5.7",
