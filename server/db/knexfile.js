@@ -6,14 +6,14 @@ module.exports = {
     `postgres://${process.env.USER}@127.0.0.1:5432/flower`,
   pool: {
     min: 2,
-    max: 10
+    max: 10,
   },
   migrations: {
     directory: path.join(__dirname, "migrations"),
-    tableName: "knex_migrations"
+    tableName: "knex_migrations",
   },
   seeds: {
-    directory: path.join(__dirname, "seeds")
+    directory: path.join(__dirname, "seeds"),
   },
-  searchPath: "public"
+  searchPath: "public",
 };

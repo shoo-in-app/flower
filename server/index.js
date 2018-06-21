@@ -7,9 +7,9 @@ const cookieParser = require("cookie-parser");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const session = require("express-session");
 
-const mobileApi = require("./mobileApi");
-const webApi = require("./webApi");
-const { Creators } = require("../model");
+const mobileApi = require("./routers/mobileApi");
+const webApi = require("./routers/webApi");
+const { Creators } = require("./model");
 
 const app = express();
 const PORT = process.env.PORT || 8000;
