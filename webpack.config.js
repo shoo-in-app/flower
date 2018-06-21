@@ -6,6 +6,7 @@ const htmlWebPackPlugin = new HtmlWebPackPlugin({
   template: "./index.html",
   filename: "./index.html",
 });
+const Dotenv = require("dotenv-webpack");
 
 module.exports = {
   entry: [
@@ -43,6 +44,7 @@ module.exports = {
     new OpenBrowserPlugin({ url: "http://localhost:8080" }),
     new webpack.HotModuleReplacementPlugin(),
     htmlWebPackPlugin,
+    new Dotenv(),
   ],
   resolve: {
     extensions: [".webpack.js", ".js", ".jsx"],

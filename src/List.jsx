@@ -1,62 +1,26 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { get } from "https";
 export default class List extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      rallies: [
-        // {
-        //   title: "test",
-        //   description: "test",
-        //   start_datetime: "2018-06-19T14:59:00.000Z",
-        //   end_datetime: "2018-06-21T13:56:00.000Z",
-        //   locations: [
-        //     {
-        //       name: "test",
-        //       description: "test",
-        //       lat: 227.4066325,
-        //       lng: 100.47180978252506,
-        //     },
-        //   ],
-        // },
-        // {
-        //   title: "test",
-        //   description: "test",
-        //   start_datetime: "2018-06-19T14:59:00.000Z",
-        //   end_datetime: "2018-06-21T13:56:00.000Z",
-        //   locations: [
-        //     {
-        //       name: "test",
-        //       description: "test",
-        //       lat: 227.4066325,
-        //       lng: 100.47180978252506,
-        //     },
-        //   ],
-        // },
-      ],
+      rallies: [],
     };
   }
+
   // After creating GET method, use the below
   componentDidMount() {
-    // axios
-    //   .get(`http://localhost:8000/web-api/rallies/`)
-    //   .then((response) => {
     axios
-      .get(`https://cc4-flower.herokuapp.com/web-api/rallies/`)
-      .then((response) => {
-        return response.data;
-      })
+      .get(process.env.URL + "/web-api/rallies/")
+      .then((res) => res.data)
       .then((rallies) => this.setState({ rallies }))
       .catch((err) => {
         console.log("Something wrong: ", err);
       });
   }
-  render() {
+
+  get rallies() {
     let rallies;
-    const bodyStyle = {
-      backgroundColor: `#fafafa`,
-    };
     if (this.state.rallies.length > 0) {
       const titleStyle = {
         fontSize: "13px",
@@ -84,6 +48,7 @@ export default class List extends Component {
         fontSize: "16px",
         listStyle: "none",
       };
+
       rallies = (
         <ul style={ulStyle}>
           {this.state.rallies.map((rally, index) => {
@@ -102,10 +67,23 @@ export default class List extends Component {
         </ul>
       );
     } else {
-      console.log("no rallies", this.state.rallies);
-
       rallies = <p>You have not created any rallies yet.</p>;
     }
-    return <div style={bodyStyle}>{rallies}</div>;
+    return rallies;
+  }
+
+  render() {
+    const bodyStyle = {
+      backgroundColor: `#fafafa`,
+    };
+    if (this.props.isAuthenticated) {
+      return <div style={bodyStyle}>{this.rallies}</div>;
+    } else {
+      return (
+        <div style={bodyStyle}>
+          <p>You are not logged in yet.</p>
+        </div>
+      );
+    }
   }
 }
