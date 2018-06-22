@@ -251,7 +251,9 @@ const MapWithASearchBox = compose(
       {/* Clicked location on the map */}
       {props.isMarkerShown && (
         <Marker
-          icon="../images/stamp-uncollected-small.png"
+          icon={{
+            url: "./stamp-uncollected-small.png",
+          }}
           position={{ lat: props.lat, lng: props.lng }}
         />
       )}
@@ -259,7 +261,9 @@ const MapWithASearchBox = compose(
       {props.selectedMarkers.map((marker, index) => {
         return (
           <Marker
-            icon="../images/stamp-collected-small.png"
+            icon={{
+              url: "./stamp-collected-small.png",
+            }}
             key={index}
             position={{ lat: marker.lat, lng: marker.lng }}
           />
