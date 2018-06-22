@@ -13,7 +13,8 @@
     "rollback": "knex migrate:rollback --knexfile server/db/knexfile.js",
     "seed": "knex seed:run --knexfile server/db/knexfile.js",
     "initdb": "yarn rollback && yarn migrate && yarn seed",
-    "precommit": "pretty-quick --staged"
+    "precommit": "pretty-quick --staged",
+    "postinstall": "yarn webpack && yarn initdb"
   },
   "dependencies": {
     "@material-ui/core": "^1.2.3",
