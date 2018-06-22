@@ -384,14 +384,26 @@ export default class CreateNewRally extends Component {
             }}
           />
           <br />
-          <label htmlFor="description">Description: </label>
-          <br />
-          <textarea
+          {/* <label htmlFor="description">Description: </label> */}
+          {/* <br /> */}
+          {/* <textarea
             type="text"
             name="description"
             id="description"
             rows="4"
             cols="30"
+            onChange={(e) => this.changeDesc(e.target.value)}
+          /> */}
+
+          <TextField
+            required
+            label="description"
+            name="description"
+            id="description"
+            hintText=""
+            multiLine={true}
+            rows={4}
+            rowsMax={4}
             onChange={(e) => this.changeDesc(e.target.value)}
           />
           <br />
