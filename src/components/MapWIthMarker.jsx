@@ -234,10 +234,6 @@ const MapWithASearchBox = compose(
       {/* Searched result locations */}
       {props.markers.map((marker, index) => (
         <Marker
-          icon={{
-            strokeColor: "red",
-            scale: 5,
-          }}
           key={index}
           position={marker.position}
             onClick={function (e) {
@@ -271,7 +267,8 @@ const MapWithASearchBox = compose(
       {/* Current user location */}
       <Marker
         icon={{
-          url: "http://mt.google.com/vt/icon?psize=27&font=fonts/Roboto-Bold.ttf&color=ff17135c&name=icons/spotlight/spotlight-waypoint-blue.png&ax=43&ay=50&text=%E2%80%A2&scale=1",
+          url:
+            "http://mt.google.com/vt/icon?psize=27&font=fonts/Roboto-Bold.ttf&color=ff17135c&name=icons/spotlight/spotlight-waypoint-blue.png&ax=43&ay=50&text=%E2%80%A2&scale=1",
         }}
         position={{ lat: props.userLat, lng: props.userLng }}
       />
@@ -370,9 +367,22 @@ export default class CreateNewRally extends Component {
           </ul>
         </div>
         <div style={leftStyle}>
-          <label htmlFor="title">Title: </label>
+          {/* <label htmlFor="title">Title: </label>
           <br />
-          <input type="text" name="title" id="title" size="32" />
+          <input type="text" name="title" id="title" size="32" /> */}
+
+          <TextField
+            required
+            label="title"
+            margin="normal"
+            name="title"
+            id="title"
+            size="32"
+            defaultValue=""
+            style={{
+              width: 200,
+            }}
+          />
           <br />
           <label htmlFor="description">Description: </label>
           <br />
