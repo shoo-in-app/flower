@@ -108,6 +108,7 @@ const MapWithASearchBox = compose(
               bounds.extend(place.geometry.location);
             }
           });
+          refs.map.fitBounds(bounds);
           const nextMarkers = places.map((place) => ({
             position: place.geometry.location,
           }));
