@@ -1,1 +1,1 @@
-web: yarn webpack && yarn initdb && yarn start
+web: yarn start
