@@ -152,7 +152,7 @@ const MapWithASearchBox = compose(
     boxSizing: "border-box",
     border: "1px solid transparent",
     width: "240px",
-    height: "150px",
+    height: "175px",
     marginTop: "10px",
     padding: "0 12px",
     borderRadius: "3px",
@@ -209,6 +209,7 @@ const MapWithASearchBox = compose(
                 rowsMax={4}
                 onChange={(e) => this.changeDesc(e.target.value)}
               />
+              <br />
               <span>
                 Lat: {props.lat} <br /> Lng: {props.lng}
               </span>
