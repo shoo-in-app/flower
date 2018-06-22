@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
+import logstampCollectedSmall from "../images/stamp-collected-small.png";
+import logstampUncollectedSmall from "../images/stamp-uncollected-small.png";
+
 const _ = require("lodash");
 const {
   compose,
@@ -234,7 +237,6 @@ const MapWithASearchBox = compose(
       {props.markers.map((marker, index) => (
         <Marker
           icon={{
-            path: google.maps.SymbolPath.CIRCLE,
             strokeColor: "red",
             scale: 5,
           }}
@@ -249,11 +251,7 @@ const MapWithASearchBox = compose(
       {/* Clicked location on the map */}
       {props.isMarkerShown && (
         <Marker
-          icon={{
-            path: google.maps.SymbolPath.CIRCLE,
-            strokeColor: "green",
-            scale: 5,
-          }}
+          icon="../images/stamp-uncollected-small.png"
           position={{ lat: props.lat, lng: props.lng }}
         />
       )}
@@ -261,18 +259,19 @@ const MapWithASearchBox = compose(
       {props.selectedMarkers.map((marker, index) => {
         return (
           <Marker
-            icon={{
-              path: google.maps.SymbolPath.CIRCLE,
-              strokeColor: "blue",
-              scale: 5,
-            }}
+            icon="../images/stamp-collected-small.png"
             key={index}
             position={{ lat: marker.lat, lng: marker.lng }}
           />
         );
       })}
+
+      {/* Current user location */}
       <Marker
-        icon={{ url: "user.svg" }}
+        icon={{
+          strokeColor: "blue",
+          scale: 5,
+        }}
         position={{ lat: props.userLat, lng: props.userLng }}
       />
     </GoogleMap>
