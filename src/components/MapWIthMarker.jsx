@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-import logstampCollectedSmall from "../images/stamp-collected-small.png";
-import logstampUncollectedSmall from "../images/stamp-uncollected-small.png";
+import TextField from "@material-ui/core/TextField";
 
 const _ = require("lodash");
 const {
@@ -169,7 +168,7 @@ const MapWithASearchBox = compose(
       zoom={props.zoom}
       center={props.center}
       onBoundsChanged={props.onBoundsChanged}
-      onClick={e => props.onMapClick(e)}
+      onClick={(e) => props.onMapClick(e)}
       defaultOptions={{ mapTypeControl: false }}
     >
       <div style={infoWindow}>
@@ -186,20 +185,30 @@ const MapWithASearchBox = compose(
               style={infoWindowInput}
             />
             <div style={locationInfo}>
-              <label htmlFor="name">Name: </label>
-              <br />
-              <input type="text" name="" id="name" size="32" />
-              <br />
-              <label htmlFor="description">Description: </label>
-              <br />
-              <textarea
-                type="text"
-                name=""
-                id="description"
-                rows="2"
-                cols="30"
+              <TextField
+                required
+                label="name"
+                margin="normal"
+                name="name"
+                id="name"
+                size="32"
+                defaultValue=""
+                style={{
+                  width: 200,
+                }}
               />
-              <br />
+
+              <TextField
+                required
+                label="description"
+                name="description"
+                id="description"
+                hintText=""
+                multiLine={true}
+                rows={4}
+                rowsMax={4}
+                onChange={(e) => this.changeDesc(e.target.value)}
+              />
               <span>
                 Lat: {props.lat} <br /> Lng: {props.lng}
               </span>
@@ -236,7 +245,7 @@ const MapWithASearchBox = compose(
         <Marker
           key={index}
           position={marker.position}
-            onClick={function (e) {
+          onClick={function(e) {
             props.setCenter(e);
             props.onSearchedMarkerClick(marker);
           }}
@@ -367,10 +376,6 @@ export default class CreateNewRally extends Component {
           </ul>
         </div>
         <div style={leftStyle}>
-          {/* <label htmlFor="title">Title: </label>
-          <br />
-          <input type="text" name="title" id="title" size="32" /> */}
-
           <TextField
             required
             label="title"
@@ -383,17 +388,6 @@ export default class CreateNewRally extends Component {
               width: 200,
             }}
           />
-          <br />
-          {/* <label htmlFor="description">Description: </label> */}
-          {/* <br /> */}
-          {/* <textarea
-            type="text"
-            name="description"
-            id="description"
-            rows="4"
-            cols="30"
-            onChange={(e) => this.changeDesc(e.target.value)}
-          /> */}
 
           <TextField
             required
@@ -415,6 +409,13 @@ export default class CreateNewRally extends Component {
             id="start"
             defaultValue={new Date().toISOString().slice(0, -5)}
           />
+          {/* <DateTimePicker
+            name="start"
+            id="start"
+            DatePicker={DatePickerDialog}
+            TimePicker={TimePickerDialog}
+          /> */}
+
           <br />
           <label htmlFor="end">End: </label>
           <br />
