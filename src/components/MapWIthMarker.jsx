@@ -418,15 +418,7 @@ export default class CreateNewRally extends Component {
                 start_datetime,
                 end_datetime,
               };
-              // if (
-              //   this.isDateValid(start_datetime, end_datetime) ||
-              //   this.isFilledIn(title) ||
-              //   this.isFilledIn(description)
-              // ) {
-              //   alert("Something wrong with your form");
-              // } else {
               return this.submit(period);
-              // }
             }}
           >
             Submit
