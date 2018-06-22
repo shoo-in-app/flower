@@ -169,10 +169,7 @@ const MapWithASearchBox = compose(
       zoom={props.zoom}
       center={props.center}
       onBoundsChanged={props.onBoundsChanged}
-      onClick={function(e) {
-        props.setCenter(e);
-        props.onMapClick(e);
-      }}
+      onClick={e => props.onMapClick(e)}
       defaultOptions={{ mapTypeControl: false }}
     >
       <div style={infoWindow}>
@@ -243,7 +240,7 @@ const MapWithASearchBox = compose(
           }}
           key={index}
           position={marker.position}
-          onClick={function(e) {
+            onClick={function (e) {
             props.setCenter(e);
             props.onSearchedMarkerClick(marker);
           }}
