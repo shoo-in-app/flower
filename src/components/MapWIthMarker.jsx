@@ -273,8 +273,7 @@ const MapWithASearchBox = compose(
       {/* Current user location */}
       <Marker
         icon={{
-          strokeColor: "blue",
-          scale: 5,
+          url: "http://mt.google.com/vt/icon?psize=27&font=fonts/Roboto-Bold.ttf&color=ff17135c&name=icons/spotlight/spotlight-waypoint-blue.png&ax=43&ay=50&text=%E2%80%A2&scale=1",
         }}
         position={{ lat: props.userLat, lng: props.userLng }}
       />
