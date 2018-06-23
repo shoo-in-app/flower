@@ -1,28 +1,22 @@
-.title {
-  font-size: 13px;
-  font-weight: 600;
-  line-height: 1.6;
-  letter-spacing: -0.02em;
-  word-spacing: 0.1em;
+.myRrallies {
+  display: flex;
+  margin: 0 20px;
 }
 
-.ul {
-  background-clip: padding-box;
-  background-color: #fff;
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  border-radius: 3px;
-  display: block;
-  list-style: none;
-  margin: 0 0 16px;
-  padding: 0;
+.rallyList {
+  min-width: 400px;
+  width: 50%;
+  background-color: #ffffff;
 }
 
-.li {
-  font-family: "Graphik Meetup;helvetica;arial;sans-serif";
-  color: #333;
-  margin: 10px;
-  padding: 16px 16px 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-  font-size: 16px;
-  list-style: none;
+.rally {
+  display: flex;
+  flex-direction: column;
+}
+
+.locationList {
+  background-color: #eee;
+  min-width: 400px;
+  width: 50%;
+  padding: 0 10px;
 }
