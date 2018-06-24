@@ -45,19 +45,15 @@ export default class MyRallies extends Component {
       .catch((err) => console.log("Something wrong: ", err));
   }
 
-  choseRally(index) {
-    this.setState({ chosenRally: index });
-  }
-
   get rallies() {
     return (
-      <Paper className={style.myRrallies} elevation={4}>
-        <List className={style.rallyList}>
+      <Paper style={{ display: "flex", margin: "0 20px" }} elevation={4}>
+        <List style={{ minWidth: "400px", width: "50%" }}>
           {this.state.rallies.map((rally, index) => (
             <ListItem
               button
-              className={style.rally}
-              onClick={() => this.choseRally(index)}
+              style={{ display: "flex", flexDirection: "column" }}
+              onClick={() => this.setState({ chosenRally: index })}
               style={
                 index === this.state.chosenRally
                   ? { backgroundColor: "#eee" }

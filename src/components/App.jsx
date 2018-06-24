@@ -1,13 +1,13 @@
 import React, { Component } from "react";
-import MyRallies from "./MyRallies";
-import Login from "./Login";
-import CreateNewRally from "./CreateNewRally";
 import axios from "axios";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import MyRallies from "./MyRallies";
+import Login from "./Login";
+import CreateNewRally from "./CreateNewRally";
 
 const theme = createMuiTheme({
   palette: {
@@ -38,16 +38,12 @@ export default class App extends Component {
       .catch((err) => console.log(err));
   }
 
-  handleChange(event, value) {
-    this.setState({ value });
-  }
-
   get main() {
     const { value } = this.state;
     return (
       <div>
         <AppBar position="static">
-          <Tabs value={value} onChange={(e, v) => this.handleChange(e, v)}>
+          <Tabs value={value} onChange={(e, value) => this.setState({ value })}>
             <Tab label="My Rallies" />
             <Tab label="Create New Rally" />
             <Tab
