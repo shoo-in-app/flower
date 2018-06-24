@@ -1,4 +1,6 @@
-import React from "react";
+import React, { Component } from "react";
+import logstampCollectedSmall from "../images/stamp-collected-small.png";
+import logstampUncollectedSmall from "../images/stamp-uncollected-small.png";
 const _ = require("lodash");
 const {
   compose,
@@ -16,114 +18,99 @@ const {
   SearchBox,
 } = require("react-google-maps/lib/components/places/SearchBox");
 
-const MapWithASearchBox = compose(
-  withStateHandlers(() => ({
-    isMarkerShown: false,
-    isOpen: false,
-  })),
-  withProps({
-    googleMapURL:
-      "https://maps.googleapis.com/maps/api/js?key=AIzaSyDe-SSvqZrjeDeD3clObxGng67gPOB76aQ&v=3.exp&libraries=geometry,drawing,places",
-    loadingElement: <div style={{ height: "100%" }} />,
-    containerElement: <div style={{ height: "400px" }} />,
-    mapElement: <div style={{ height: "100%" }} />,
-  }),
-  lifecycle({
-    componentWillMount() {
-      const refs = {};
-      this.setState({
-        zoom: 8,
-        bounds: null,
-        center: {
-          lat: 35.6895,
-          lng: 139.6917,
-        },
-        markers: [],
-        selectedMarkers: [],
-        marker: {
-          lat: 0,
-          lng: 0,
-        },
-        onMapMounted: (ref) => {
-          refs.map = ref;
-        },
-        onBoundsChanged: _.debounce(
-          () => {
-            this.setState({
-              bounds: refs.map.getBounds(),
-              center: refs.map.getCenter(),
-            });
-            let { onBoundsChange } = this.props;
-            if (onBoundsChange) {
-              onBoundsChange(refs.map);
-            }
-          },
-          100,
-          { maxWait: 500 }
-        ),
-        onMapClick: (e) => {
-          const myLatLng = e.latLng;
+const myLyfecycle = lifecycle({
+  componentWillMount() {
+    const refs = {};
+    this.setState({
+      zoom: 8,
+      bounds: null,
+      center: {
+        lat: 35.6895,
+        lng: 139.6917,
+      },
+      markers: [],
+      selectedMarkers: [],
+      marker: {
+        lat: 0,
+        lng: 0,
+      },
+      onMapMounted: (ref) => {
+        refs.map = ref;
+      },
+      onBoundsChanged: _.debounce(
+        () => {
           this.setState({
-            isMarkerShown: true,
+            bounds: refs.map.getBounds(),
+            center: refs.map.getCenter(),
+          });
+          let { onBoundsChange } = this.props;
+          if (onBoundsChange) {
+            onBoundsChange(refs.map);
+          }
+        },
+        100,
+        { maxWait: 500 }
+      ),
+      onMapClick: (e) => {
+        const myLatLng = e.latLng;
+        this.setState({
+          isMarkerShown: true,
+          lat: myLatLng.lat(),
+          lng: myLatLng.lng(),
+        });
+      },
+      setCenter: (e) => {
+        const myLatLng = e.latLng;
+        this.setState({
+          zoom: 11,
+          center: {
             lat: myLatLng.lat(),
             lng: myLatLng.lng(),
-          });
-        },
-        setCenter: (e) => {
-          const myLatLng = e.latLng;
-          this.setState({
-            zoom: 11,
-            center: {
-              lat: myLatLng.lat(),
-              lng: myLatLng.lng(),
-            },
-          });
-        },
-        onSearchedMarkerClick: (location) => {
-          this.setState({
-            lat: location.position.lat(),
-            lng: location.position.lng(),
-          });
-        },
-        AddMarkers: (lat, lng) => {
-          const selectedMarkers = this.state.selectedMarkers.slice();
-          selectedMarkers.push({ lat, lng });
-          this.setState({ isMarkerShown: true, selectedMarkers });
-        },
-        onSearchBoxMounted: (ref) => {
-          refs.searchBox = ref;
-        },
-        onPlacesChanged: () => {
-          const places = refs.searchBox.getPlaces();
-          const bounds = new google.maps.LatLngBounds();
+          },
+        });
+      },
+      onSearchedMarkerClick: (location) => {
+        this.setState({
+          lat: location.position.lat(),
+          lng: location.position.lng(),
+        });
+      },
+      AddMarkers: (lat, lng) => {
+        const selectedMarkers = this.state.selectedMarkers.slice();
+        selectedMarkers.push({ lat, lng });
+        this.setState({ isMarkerShown: true, selectedMarkers });
+      },
+      onSearchBoxMounted: (ref) => {
+        refs.searchBox = ref;
+      },
+      onPlacesChanged: () => {
+        const places = refs.searchBox.getPlaces();
+        const bounds = new google.maps.LatLngBounds();
 
-          places.forEach((place) => {
-            if (place.geometry.viewport) {
-              bounds.union(place.geometry.viewport);
-            } else {
-              bounds.extend(place.geometry.location);
-            }
-          });
-          const nextMarkers = places.map((place) => ({
-            position: place.geometry.location,
-          }));
-          const nextCenter = _.get(
-            nextMarkers,
-            "0.position",
-            this.state.center
-          );
+        places.forEach((place) => {
+          if (place.geometry.viewport) {
+            bounds.union(place.geometry.viewport);
+          } else {
+            bounds.extend(place.geometry.location);
+          }
+        });
 
-          this.setState({
-            center: nextCenter,
-            markers: nextMarkers,
-          });
-        },
-      });
-    },
-  }),
-  withScriptjs,
-  withGoogleMap
-)((props) => {
+        const nextMarkers = places.map((place) => ({
+          position: place.geometry.location,
+        }));
+
+        const nextCenter = _.get(nextMarkers, "0.position", this.state.center);
+
+        this.setState({
+          center: nextCenter,
+          markers: nextMarkers,
+        });
+      },
+    });
+  },
+});
+
+const myMap = (props) => {
   const infoWindow = { position: "absolute", left: "0" };
   const infoWindowBackground = {
     backgroundColor: "#A61414",
@@ -164,10 +151,7 @@ const MapWithASearchBox = compose(
       zoom={props.zoom}
       center={props.center}
       onBoundsChanged={props.onBoundsChanged}
-      onClick={function(e) {
-        props.setCenter(e);
-        props.onMapClick(e);
-      }}
+      onClick={(e) => props.onMapClick(e)}
       defaultOptions={{ mapTypeControl: false }}
     >
       <div style={infoWindow}>
@@ -229,53 +213,66 @@ const MapWithASearchBox = compose(
           </div>
         </SearchBox>
       </div>
+
       {/* Searched result locations */}
       {props.markers.map((marker, index) => (
         <Marker
           icon={{
-            path: google.maps.SymbolPath.CIRCLE,
             strokeColor: "red",
             scale: 5,
           }}
           key={index}
           position={marker.position}
-          onClick={function(e) {
-            props.setCenter(e);
-            props.onSearchedMarkerClick(marker);
-          }}
+          onClick={() => props.onSearchedMarkerClick(marker)}
         />
       ))}
+
       {/* Clicked location on the map */}
       {props.isMarkerShown && (
         <Marker
-          icon={{
-            path: google.maps.SymbolPath.CIRCLE,
-            strokeColor: "green",
-            scale: 5,
-          }}
+          icon={logstampUncollectedSmall}
           position={{ lat: props.lat, lng: props.lng }}
         />
       )}
+
       {/* Show selected locations */}
       {props.selectedMarkers.map((marker, index) => {
         return (
           <Marker
-            icon={{
-              path: google.maps.SymbolPath.CIRCLE,
-              strokeColor: "blue",
-              scale: 5,
-            }}
+            icon={logstampCollectedSmall}
             key={index}
             position={{ lat: marker.lat, lng: marker.lng }}
           />
         );
       })}
+
+      {/* Current user location */}
       <Marker
-        icon={{ url: "user.svg" }}
+        icon={{
+          strokeColor: "blue",
+          scale: 5,
+        }}
         position={{ lat: props.userLat, lng: props.userLng }}
       />
     </GoogleMap>
   );
-});
+};
 
-export default MapWithASearchBox;
+const Map = compose(
+  withStateHandlers(() => ({
+    isMarkerShown: false,
+    isOpen: false,
+  })),
+  withProps({
+    googleMapURL:
+      "https://maps.googleapis.com/maps/api/js?key=AIzaSyDe-SSvqZrjeDeD3clObxGng67gPOB76aQ&v=3.exp&libraries=geometry,drawing,places",
+    loadingElement: <div style={{ height: "100%" }} />,
+    containerElement: <div style={{ height: "400px" }} />,
+    mapElement: <div style={{ height: "100%" }} />,
+  }),
+  myLyfecycle,
+  withScriptjs,
+  withGoogleMap
+)(myMap);
+
+export default Map;

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import Map from "./Map";
 export default class CreateNewRally extends Component {
   constructor(props) {
     super(props);
@@ -70,7 +71,7 @@ export default class CreateNewRally extends Component {
     };
     return (
       <div>
-        <MapWithASearchBox
+        <Map
           changeData={this.changeData}
           isFilledIn={this.isFilledIn}
           userLat={this.state.userLat}
