@@ -9,12 +9,14 @@ const {
   lifecycle,
   withStateHandlers,
 } = require("recompose");
+
 const {
   withScriptjs,
   withGoogleMap,
   GoogleMap,
   Marker,
 } = require("react-google-maps");
+
 const {
   SearchBox,
 } = require("react-google-maps/lib/components/places/SearchBox");
@@ -23,21 +25,17 @@ const myLyfecycle = lifecycle({
   componentWillMount() {
     const refs = {};
     this.setState({
-      zoom: 8,
+      zoom: 13,
       bounds: null,
-      center: {
-        lat: 35.6895,
-        lng: 139.6917,
-      },
+      center: { lat: 35.6895, lng: 139.6917 },
+      user: { lat: null, lng: null },
       markers: [],
       selectedMarkers: [],
-      marker: {
-        lat: 0,
-        lng: 0,
-      },
+      marker: { lat: 0, lng: 0 },
       onMapMounted: (ref) => {
         refs.map = ref;
       },
+
       onBoundsChanged: _.debounce(
         () => {
           this.setState({
@@ -45,13 +43,12 @@ const myLyfecycle = lifecycle({
             center: refs.map.getCenter(),
           });
           let { onBoundsChange } = this.props;
-          if (onBoundsChange) {
-            onBoundsChange(refs.map);
-          }
+          if (onBoundsChange) onBoundsChange(refs.map);
         },
         100,
         { maxWait: 500 }
       ),
+
       onMapClick: (e) => {
         const myLatLng = e.latLng;
         this.setState({
@@ -60,24 +57,31 @@ const myLyfecycle = lifecycle({
           lng: myLatLng.lng(),
         });
       },
+
+      setCenter: (lat, lng, zoom = 13) => {
+        this.setState({ zoom, center: { lat, lng }, user: { lat, lng } });
+      },
+
       onSearchedMarkerClick: (location) => {
         this.setState({
           lat: location.position.lat(),
           lng: location.position.lng(),
         });
       },
+
       AddMarkers: (lat, lng) => {
         const selectedMarkers = this.state.selectedMarkers.slice();
         selectedMarkers.push({ lat, lng });
         this.setState({ isMarkerShown: true, selectedMarkers });
       },
+
       onSearchBoxMounted: (ref) => {
         refs.searchBox = ref;
       },
+
       onPlacesChanged: () => {
         const places = refs.searchBox.getPlaces();
         const bounds = new google.maps.LatLngBounds();
-
         places.forEach((place) => {
           if (place.geometry.viewport) {
             bounds.union(place.geometry.viewport);
@@ -85,136 +89,131 @@ const myLyfecycle = lifecycle({
             bounds.extend(place.geometry.location);
           }
         });
-
         const nextMarkers = places.map((place) => ({
           position: place.geometry.location,
         }));
-
         const nextCenter = _.get(nextMarkers, "0.position", this.state.center);
-
-        this.setState({
-          center: nextCenter,
-          markers: nextMarkers,
-        });
+        this.setState({ center: nextCenter, markers: nextMarkers });
       },
     });
   },
 });
 
-const myMap = (props) => {
-  return (
-    <GoogleMap
-      ref={props.onMapMounted}
-      defaultZoom={8}
-      zoom={props.zoom}
-      center={props.center}
-      onBoundsChanged={props.onBoundsChanged}
-      onClick={(e) => props.onMapClick(e)}
-      defaultOptions={{ mapTypeControl: false }}
-    >
-      <div className={style.infoWindow}>
-        <SearchBox
-          ref={props.onSearchBoxMounted}
-          bounds={props.bounds}
-          controlPosition={google.maps.ControlPosition.TOP_LEFT}
-          onPlacesChanged={props.onPlacesChanged}
-        >
-          <div className={style.infoWindowBackground}>
-            <input
-              type="text"
-              placeholder="Search locations"
-              className={style.infoWindowInput}
-            />
-            <div className={style.locationInfo}>
-              <label htmlFor="name">Name: </label>
-              <br />
-              <input type="text" name="" id="name" size="32" />
-              <br />
-              <label htmlFor="description">Description: </label>
-              <br />
-              <textarea
+class myMap extends Component {
+  render() {
+    navigator.geolocation.getCurrentPosition((pos) => {
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
+      this.props.setCenter(lat, lng);
+    });
+    return (
+      <GoogleMap
+        ref={this.props.onMapMounted}
+        defaultZoom={13}
+        zoom={this.props.zoom}
+        center={this.props.center}
+        onBoundsChanged={this.props.onBoundsChanged}
+        onClick={(e) => this.props.onMapClick(e)}
+        defaultOptions={{ mapTypeControl: false }}
+      >
+        <div className={style.infoWindow}>
+          <SearchBox
+            ref={this.props.onSearchBoxMounted}
+            bounds={this.props.bounds}
+            controlPosition={google.maps.ControlPosition.TOP_LEFT}
+            onPlacesChanged={this.props.onPlacesChanged}
+          >
+            <div className={style.infoWindowBackground}>
+              <input
                 type="text"
-                name=""
-                id="description"
-                rows="2"
-                cols="30"
+                placeholder="Search locations"
+                className={style.infoWindowInput}
               />
-              <br />
-              <span>
-                Lat: {props.lat} <br /> Lng: {props.lng}
-              </span>
-              <br />
-              <button
-                onClick={() => {
-                  const locationData = {
-                    name: document.getElementById("name").value,
-                    description: document.getElementById("description").value,
-                    lat: props.lat,
-                    lng: props.lng,
-                  };
-                  if (
-                    props.changeData(locationData.name) &&
-                    props.changeData(locationData.description) &&
-                    props.changeData(locationData.lat) &&
-                    props.changeData(locationData.lng)
-                  ) {
-                    alert("Show error");
-                  } else {
-                    props.changeData(locationData);
-                    props.AddMarkers(locationData.lat, locationData.lng);
-                  }
-                }}
-              >
-                Add
-              </button>
+              <div className={style.locationInfo}>
+                <label htmlFor="name">Name: </label>
+                <br />
+                <input type="text" name="" id="name" size="32" />
+                <br />
+                <label htmlFor="description">Description: </label>
+                <br />
+                <textarea
+                  type="text"
+                  name=""
+                  id="description"
+                  rows="2"
+                  cols="30"
+                />
+                <br />
+                <span>
+                  Lat: {this.props.lat} <br /> Lng: {this.props.lng}
+                </span>
+                <br />
+                <button
+                  onClick={() => {
+                    const locationData = {
+                      name: document.getElementById("name").value,
+                      description: document.getElementById("description").value,
+                      lat: this.props.lat,
+                      lng: this.props.lng,
+                    };
+                    if (
+                      this.props.changeData(locationData.name) &&
+                      this.props.changeData(locationData.description) &&
+                      this.props.changeData(locationData.lat) &&
+                      this.props.changeData(locationData.lng)
+                    ) {
+                      alert("Show error");
+                    } else {
+                      this.props.changeData(locationData);
+                      this.props.AddMarkers(locationData.lat, locationData.lng);
+                    }
+                  }}
+                >
+                  Add
+                </button>
+              </div>
             </div>
-          </div>
-        </SearchBox>
-      </div>
+          </SearchBox>
+        </div>
 
-      {/* Searched result locations */}
-      {props.markers.map((marker, index) => (
-        <Marker
-          icon={{
-            strokeColor: "red",
-            scale: 5,
-          }}
-          key={index}
-          position={marker.position}
-          onClick={() => props.onSearchedMarkerClick(marker)}
-        />
-      ))}
-
-      {/* Clicked location on the map */}
-      {props.isMarkerShown && (
-        <Marker
-          icon={logstampUncollectedSmall}
-          position={{ lat: props.lat, lng: props.lng }}
-        />
-      )}
-
-      {/* Show selected locations */}
-      {props.selectedMarkers.map((marker, index) => {
-        return (
+        {/* Searched result locations */}
+        {this.props.markers.map((marker, index) => (
           <Marker
-            icon={logstampCollectedSmall}
+            icon={{ strokeColor: "red", scale: 5 }}
             key={index}
-            position={{ lat: marker.lat, lng: marker.lng }}
+            position={marker.position}
+            onClick={() => this.props.onSearchedMarkerClick(marker)}
           />
-        );
-      })}
+        ))}
 
-      {/* Current user location */}
-      <Marker
-        icon={{
-          strokeColor: "blue",
-          scale: 5,
-        }}
-        position={{ lat: props.userLat, lng: props.userLng }}
-      />
-    </GoogleMap>
-  );
-};
+        {/* Clicked location on the map */}
+        {this.props.isMarkerShown && (
+          <Marker
+            icon={logstampUncollectedSmall}
+            position={{ lat: this.props.lat, lng: this.props.lng }}
+          />
+        )}
+
+        {/* Show selected locations */}
+        {this.props.selectedMarkers.map((marker, index) => {
+          return (
+            <Marker
+              icon={logstampCollectedSmall}
+              key={index}
+              position={{ lat: marker.lat, lng: marker.lng }}
+            />
+          );
+        })}
+
+        {/* Current user location */}
+        <Marker
+          icon={{ strokeColor: "blue", scale: 5 }}
+          position={{ lat: this.props.user.lat, lng: this.props.user.lng }}
+        />
+      </GoogleMap>
+    );
+  }
+}
 
 const Map = compose(
   withStateHandlers(() => ({
