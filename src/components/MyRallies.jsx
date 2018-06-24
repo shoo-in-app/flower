@@ -11,9 +11,9 @@ const RallyDetail = (props) => (
     <h2>{props.rally.title}</h2>
     <p>Description: {props.rally.description}</p>
     <p>
-      Start: {props.rally.start_datetime}
+      Start: {new Date(props.rally.start_datetime).toString()}
       <br />
-      End: {props.rally.end_datetime}
+      End: {new Date(props.rally.end_datetime).toString()}
     </p>
     <List subheader={<ListSubheader component="div">Locations</ListSubheader>}>
       {props.rally.locations.map((l) => (

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import style from "../styles/Map.css";
 import logstampCollectedSmall from "../images/stamp-collected-small.png";
 import logstampUncollectedSmall from "../images/stamp-uncollected-small.png";
 const _ = require("lodash");
@@ -59,16 +60,6 @@ const myLyfecycle = lifecycle({
           lng: myLatLng.lng(),
         });
       },
-      setCenter: (e) => {
-        const myLatLng = e.latLng;
-        this.setState({
-          zoom: 11,
-          center: {
-            lat: myLatLng.lat(),
-            lng: myLatLng.lng(),
-          },
-        });
-      },
       onSearchedMarkerClick: (location) => {
         this.setState({
           lat: location.position.lat(),
@@ -111,39 +102,6 @@ const myLyfecycle = lifecycle({
 });
 
 const myMap = (props) => {
-  const infoWindow = { position: "absolute", left: "0" };
-  const infoWindowBackground = {
-    backgroundColor: "#A61414",
-    zIndex: "1",
-    padding: "0 10px 10px",
-  };
-  const infoWindowInput = {
-    boxSizing: "border-box",
-    border: "1px solid transparent",
-    width: "240px",
-    height: "32px",
-    marginTop: "10px",
-    padding: "0 12px",
-    borderRadius: "3px",
-    boxShadow: "0 2px 6px rgba(0, 0, 0, 0.3)",
-    fontSize: "14px",
-    outline: "none",
-    textOverflow: "ellipses",
-  };
-  const locationInfo = {
-    backgroundColor: "#fff",
-    boxSizing: "border-box",
-    border: "1px solid transparent",
-    width: "240px",
-    height: "150px",
-    marginTop: "10px",
-    padding: "0 12px",
-    borderRadius: "3px",
-    boxShadow: "0 2px 6px rgba(0, 0, 0, 0.3)",
-    fontSize: "14px",
-    outline: "none",
-    textOverflow: "ellipses",
-  };
   return (
     <GoogleMap
       ref={props.onMapMounted}
@@ -154,20 +112,20 @@ const myMap = (props) => {
       onClick={(e) => props.onMapClick(e)}
       defaultOptions={{ mapTypeControl: false }}
     >
-      <div style={infoWindow}>
+      <div className={style.infoWindow}>
         <SearchBox
           ref={props.onSearchBoxMounted}
           bounds={props.bounds}
           controlPosition={google.maps.ControlPosition.TOP_LEFT}
           onPlacesChanged={props.onPlacesChanged}
         >
-          <div style={infoWindowBackground}>
+          <div className={style.infoWindowBackground}>
             <input
               type="text"
-              placeholder="Customized your placeholder"
-              style={infoWindowInput}
+              placeholder="Search locations"
+              className={style.infoWindowInput}
             />
-            <div style={locationInfo}>
+            <div className={style.locationInfo}>
               <label htmlFor="name">Name: </label>
               <br />
               <input type="text" name="" id="name" size="32" />
