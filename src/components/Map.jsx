@@ -4,6 +4,9 @@ import style from "../styles/Map.css";
 import logstampCollectedSmall from "../images/stamp-collected-small.png";
 import logstampUncollectedSmall from "../images/stamp-uncollected-small.png";
 import Button from "@material-ui/core/Button";
+import Paper from "@material-ui/core/Paper";
+import Typography from "@material-ui/core/Typography";
+
 const _ = require("lodash");
 const {
   compose,
@@ -126,7 +129,8 @@ class myMap extends Component {
             controlPosition={google.maps.ControlPosition.TOP_LEFT}
             onPlacesChanged={this.props.onPlacesChanged}
           >
-            <div className={style.infoWindowBackground}>
+            <Paper className={style.infoWindowBackground} elevation={4}>
+              {/* <div className={style.infoWindowBackground}> */}
               <input
                 type="text"
                 placeholder="Search locations"
@@ -158,9 +162,9 @@ class myMap extends Component {
                   onChange={(e) => this.changeDesc(e.target.value)}
                 />
                 <br />
-                <span>
+                <Typography component="p">
                   Lat: {this.props.lat} <br /> Lng: {this.props.lng}
-                </span>
+                </Typography>
                 <br />
                 <Button
                   variant="contained"
@@ -190,7 +194,8 @@ class myMap extends Component {
                   Add
                 </Button>
               </div>
-            </div>
+              {/* </div> */}
+            </Paper>
           </SearchBox>
         </div>
 
