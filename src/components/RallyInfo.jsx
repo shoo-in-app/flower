@@ -10,7 +10,7 @@ import CardContent from "@material-ui/core/CardContent";
 export class RallyInfoInput extends Component {
   submit(period) {
     const rally = period;
-    rally["locations"] = this.state.locations;
+    rally["locations"] = this.props.locations;
     axios
       .post("/web-api/rally/", rally)
       .catch((err) => console.log("Something wrong: ", err));

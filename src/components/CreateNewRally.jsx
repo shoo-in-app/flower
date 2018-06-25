@@ -22,7 +22,7 @@ export default class CreateNewRally extends Component {
           isFilledIn={(info) => info.length > 0}
         />
         <LocationList locations={this.state.locations} />
-        <RallyInfoInput />
+        <RallyInfoInput locations={this.state.locations} />
       </div>
     );
   }
