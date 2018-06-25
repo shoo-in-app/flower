@@ -389,7 +389,7 @@ export default class CreateNewRally extends Component {
               width: 200,
             }}
           />
-
+          <br />
           <TextField
             required
             label="description"
@@ -402,29 +402,31 @@ export default class CreateNewRally extends Component {
             onChange={(e) => this.changeDesc(e.target.value)}
           />
           <br />
-          <label htmlFor="start">Start: </label>
-          <br />
-          <input
-            type="datetime-local"
+          <TextField
+            required
+            label="start"
             name="start"
             id="start"
+            type="datetime-local"
+            hintText=""
+            multiLine={true}
+            size="32"
             defaultValue={new Date().toISOString().slice(0, -5)}
           />
-          {/* <DateTimePicker
-            name="start"
-            id="start"
-            DatePicker={DatePickerDialog}
-            TimePicker={TimePickerDialog}
-          /> */}
 
           <br />
-          <label htmlFor="end">End: </label>
-          <br />
-          <input
-            type="datetime-local"
+          <TextField
+            required
+            label="end"
             name="end"
             id="end"
-            value={new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000)
+            type="datetime-local"
+            hintText=""
+            multiLine={true}
+            size="32"
+            defaultValue={new Date(
+              new Date().getTime() + 7 * 24 * 60 * 60 * 1000
+            )
               .toISOString()
               .slice(0, -5)}
           />
