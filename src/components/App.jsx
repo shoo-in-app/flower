@@ -8,6 +8,7 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import MyRallies from "./MyRallies";
 import Login from "./Login";
 import CreateNewRally from "./CreateNewRally";
+import { withStyles } from "@material-ui/core/styles";
 
 const theme = createMuiTheme({
   palette: {
@@ -16,13 +17,14 @@ const theme = createMuiTheme({
   },
 });
 
+// const appBarStyle = {
+//   typography: { fontFamily: "myFont" },
+// };
+
 export default class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      isAuthenticated: null,
-      value: 0,
-    };
+    this.state = { isAuthenticated: null, value: 0 };
   }
 
   componentDidMount() {
@@ -44,12 +46,18 @@ export default class App extends Component {
       <div>
         <AppBar position="static">
           <Tabs value={value} onChange={(e, value) => this.setState({ value })}>
-            <Tab label="My Rallies" />
-            <Tab label="Create New Rally" />
+            <Tab
+              label="My Rallies"
+              style={{ fontFamily: "myFont", fontSize: "1.6em" }}
+            />
+            <Tab
+              label="Create New Rally"
+              style={{ fontFamily: "myFont", fontSize: "1.6em" }}
+            />
             <Tab
               label="Log out"
               href="/logout"
-              style={{ marginLeft: "auto" }}
+              style={{ marginLeft: "auto", fontFamily: "myFont" }}
             />
           </Tabs>
         </AppBar>

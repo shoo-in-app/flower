@@ -55,11 +55,15 @@ const myLyfecycle = lifecycle({
       ),
 
       onMapClick: (e) => {
-        const myLatLng = e.latLng;
+        const lat = e.latLng.lat();
+        const lng = e.latLng.lng();
+        this.setState({ zoom: 16 });
         this.setState({
           isMarkerShown: true,
-          lat: myLatLng.lat(),
-          lng: myLatLng.lng(),
+          lat: lat,
+          lng: lng,
+          zoom: 15,
+          center: { lat, lng },
         });
       },
 
