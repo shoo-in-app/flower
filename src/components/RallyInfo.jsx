@@ -43,7 +43,6 @@ class RallyInfoInput extends Component {
               label="description"
               name="description"
               id="description"
-              hintText=""
               multiLine={true}
               rows={4}
               rowsMax={4}
@@ -55,7 +54,6 @@ class RallyInfoInput extends Component {
               name="start"
               id="start"
               type="datetime-local"
-              hintText=""
               multiLine={true}
               size="32"
               defaultValue={new Date().toISOString().slice(0, -5)}
@@ -68,7 +66,6 @@ class RallyInfoInput extends Component {
               name="end"
               id="end"
               type="datetime-local"
-              hintText=""
               multiLine={true}
               size="32"
               defaultValue={new Date(

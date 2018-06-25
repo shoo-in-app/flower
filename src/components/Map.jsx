@@ -153,7 +153,6 @@ class myMap extends Component {
                   label="description"
                   name="locationDescription"
                   id="location-description"
-                  hintText=""
                   multiLine={true}
                   rows={4}
                   rowsMax={4}
