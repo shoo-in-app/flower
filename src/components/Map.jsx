@@ -1,7 +1,9 @@
 import React, { Component } from "react";
+import TextField from "@material-ui/core/TextField";
 import style from "../styles/Map.css";
 import logstampCollectedSmall from "../images/stamp-collected-small.png";
 import logstampUncollectedSmall from "../images/stamp-uncollected-small.png";
+import Button from "@material-ui/core/Button";
 const _ = require("lodash");
 const {
   compose,
@@ -89,6 +91,7 @@ const myLyfecycle = lifecycle({
             bounds.extend(place.geometry.location);
           }
         });
+        refs.map.fitBounds(bounds);
         const nextMarkers = places.map((place) => ({
           position: place.geometry.location,
         }));
@@ -130,25 +133,37 @@ class myMap extends Component {
                 className={style.infoWindowInput}
               />
               <div className={style.locationInfo}>
-                <label htmlFor="name">Name: </label>
-                <br />
-                <input type="text" name="" id="name" size="32" />
-                <br />
-                <label htmlFor="description">Description: </label>
-                <br />
-                <textarea
-                  type="text"
-                  name=""
+                <TextField
+                  required
+                  label="name"
+                  margin="normal"
+                  name="name"
+                  id="name"
+                  size="32"
+                  defaultValue=""
+                  style={{
+                    width: 200,
+                  }}
+                />
+
+                <TextField
+                  required
+                  label="description"
+                  name="description"
                   id="description"
-                  rows="2"
-                  cols="30"
+                  hintText=""
+                  multiLine={true}
+                  rows={4}
+                  rowsMax={4}
+                  onChange={(e) => this.changeDesc(e.target.value)}
                 />
                 <br />
                 <span>
                   Lat: {this.props.lat} <br /> Lng: {this.props.lng}
                 </span>
                 <br />
-                <button
+                <Button
+                  color="primary"
                   onClick={() => {
                     const locationData = {
                       name: document.getElementById("name").value,
@@ -170,7 +185,7 @@ class myMap extends Component {
                   }}
                 >
                   Add
-                </button>
+                </Button>
               </div>
             </div>
           </SearchBox>
@@ -207,7 +222,10 @@ class myMap extends Component {
 
         {/* Current user location */}
         <Marker
-          icon={{ strokeColor: "blue", scale: 5 }}
+          icon={{
+            url:
+              "http://mt.google.com/vt/icon?psize=27&font=fonts/Roboto-Bold.ttf&color=ff17135c&name=icons/spotlight/spotlight-waypoint-blue.png&ax=43&ay=50&text=%E2%80%A2&scale=1",
+          }}
           position={{ lat: this.props.user.lat, lng: this.props.user.lng }}
         />
       </GoogleMap>

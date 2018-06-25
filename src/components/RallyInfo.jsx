@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
 import axios from "axios";
 import style from "../styles/RallyInfo.css";
 
@@ -14,41 +16,60 @@ export class RallyInfoInput extends Component {
   render() {
     return (
       <div style={{ padding: "10px" }}>
-        <label htmlFor="title">Title: </label>
+        <TextField
+          required
+          label="title"
+          margin="normal"
+          name="title"
+          id="title"
+          size="32"
+          defaultValue=""
+          style={{
+            width: 200,
+          }}
+        />
         <br />
-        <input type="text" name="title" id="title" size="32" />
-        <br />
-        <label htmlFor="description">Description: </label>
-        <br />
-        <textarea
-          type="text"
+        <TextField
+          required
+          label="description"
           name="description"
           id="description"
-          rows="4"
-          cols="30"
+          hintText=""
+          multiLine={true}
+          rows={4}
+          rowsMax={4}
+          onChange={(e) => this.changeDesc(e.target.value)}
         />
         <br />
-        <label htmlFor="start">Start: </label>
-        <br />
-        <input
-          type="datetime-local"
+        <TextField
+          required
+          label="start"
           name="start"
           id="start"
+          type="datetime-local"
+          hintText=""
+          multiLine={true}
+          size="32"
           defaultValue={new Date().toISOString().slice(0, -5)}
         />
+
         <br />
-        <label htmlFor="end">End: </label>
-        <br />
-        <input
-          type="datetime-local"
+        <TextField
+          required
+          label="end"
           name="end"
           id="end"
-          value={new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000)
+          type="datetime-local"
+          hintText=""
+          multiLine={true}
+          size="32"
+          defaultValue={new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000)
             .toISOString()
             .slice(0, -5)}
         />
         <br />
-        <button
+        <Button
+          color="primary"
           onClick={() => {
             const start_datetime = new Date(
               document.getElementById("start").value
@@ -66,7 +87,7 @@ export class RallyInfoInput extends Component {
           }}
         >
           Submit
-        </button>
+        </Button>
       </div>
     );
   }
