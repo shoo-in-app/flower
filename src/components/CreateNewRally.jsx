@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Map from "./Map";
-import { RallyInfoInput, LocationList } from "./RallyInfo";
+import RallyInfo from "./RallyInfo";
 
 export default class CreateNewRally extends Component {
   constructor(props) {
@@ -8,9 +8,9 @@ export default class CreateNewRally extends Component {
     this.state = { locations: [] };
   }
 
-  changeData(data) {
+  addLocation(location) {
     const locations = this.state.locations.slice();
-    locations.push(data);
+    locations.push(location);
     this.setState({ locations });
   }
 
@@ -18,11 +18,10 @@ export default class CreateNewRally extends Component {
     return (
       <div>
         <Map
-          changeData={(data) => this.changeData(data)}
+          addLocation={(location) => this.addLocation(location)}
           isFilledIn={(info) => info.length > 0}
         />
-        <LocationList locations={this.state.locations} />
-        <RallyInfoInput />
+        <RallyInfo locations={this.state.locations} />
       </div>
     );
   }
