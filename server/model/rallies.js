@@ -28,6 +28,7 @@ module.exports = (db) => {
         "rallies.start_datetime",
         "rallies.end_datetime",
         "rallies.users_count",
+        "rallies.reward_points",
         "creators.username",
         "locations.id",
         "locations.name",
@@ -116,6 +117,7 @@ module.exports = (db) => {
         "rallies.start_datetime",
         "rallies.end_datetime",
         "rallies.users_count",
+        "rallies.reward_points",
         "creators.username",
         "locations.id",
         "locations.name",
@@ -223,7 +225,7 @@ module.exports = (db) => {
             description: location.description,
             start_datetime: location.start_datetime,
             end_datetime: location.end_datetime,
-            user_count: location.user_count,
+            users_count: location.users_count,
             reward_points: location.reward_points,
             locations: [],
           };
@@ -306,7 +308,8 @@ module.exports = (db) => {
           description: location.description,
           start_datetime: location.start_datetime,
           end_datetime: location.end_datetime,
-          user_count: location.user_count,
+          users_count: location.users_count,
+          reward_points: location.reward_points,
           locations: [],
         };
       }

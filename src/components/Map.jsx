@@ -4,6 +4,9 @@ import style from "../styles/Map.css";
 import logstampCollectedSmall from "../images/stamp-collected-small.png";
 import logstampUncollectedSmall from "../images/stamp-uncollected-small.png";
 import Button from "@material-ui/core/Button";
+import Paper from "@material-ui/core/Paper";
+import Typography from "@material-ui/core/Typography";
+
 const _ = require("lodash");
 const {
   compose,
@@ -126,7 +129,8 @@ class myMap extends Component {
             controlPosition={google.maps.ControlPosition.TOP_LEFT}
             onPlacesChanged={this.props.onPlacesChanged}
           >
-            <div className={style.infoWindowBackground}>
+            <Paper className={style.infoWindowBackground} elevation={4}>
+              {/* <div className={style.infoWindowBackground}> */}
               <input
                 type="text"
                 placeholder="Search locations"
@@ -141,53 +145,46 @@ class myMap extends Component {
                   id="name"
                   size="32"
                   defaultValue=""
-                  style={{
-                    width: 200,
-                  }}
+                  style={{ width: 200 }}
                 />
 
                 <TextField
                   required
                   label="description"
-                  name="description"
-                  id="description"
+                  name="locationDescription"
+                  id="location-description"
                   hintText=""
                   multiLine={true}
                   rows={4}
                   rowsMax={4}
-                  onChange={(e) => this.changeDesc(e.target.value)}
                 />
                 <br />
-                <span>
+                <Typography component="p">
                   Lat: {this.props.lat} <br /> Lng: {this.props.lng}
-                </span>
+                </Typography>
                 <br />
                 <Button
+                  variant="contained"
+                  size="small"
                   color="primary"
+                  style={{ margin: `2px 0` }}
                   onClick={() => {
                     const locationData = {
                       name: document.getElementById("name").value,
-                      description: document.getElementById("description").value,
+                      description: document.getElementById(
+                        "location-description"
+                      ).value,
                       lat: this.props.lat,
                       lng: this.props.lng,
                     };
-                    if (
-                      this.props.changeData(locationData.name) &&
-                      this.props.changeData(locationData.description) &&
-                      this.props.changeData(locationData.lat) &&
-                      this.props.changeData(locationData.lng)
-                    ) {
-                      alert("Show error");
-                    } else {
-                      this.props.changeData(locationData);
-                      this.props.AddMarkers(locationData.lat, locationData.lng);
-                    }
+                    this.props.addLocation(locationData);
+                    this.props.AddMarkers(locationData.lat, locationData.lng);
                   }}
                 >
                   Add
                 </Button>
               </div>
-            </div>
+            </Paper>
           </SearchBox>
         </div>
 
