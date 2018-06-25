@@ -3,6 +3,9 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
 import style from "../styles/RallyInfo.css";
+import Card from "@material-ui/core/Card";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
 
 export class RallyInfoInput extends Component {
   submit(period) {
@@ -16,78 +19,87 @@ export class RallyInfoInput extends Component {
   render() {
     return (
       <div style={{ padding: "10px" }}>
-        <TextField
-          required
-          label="title"
-          margin="normal"
-          name="title"
-          id="title"
-          size="32"
-          defaultValue=""
-          style={{
-            width: 200,
-          }}
-        />
-        <br />
-        <TextField
-          required
-          label="description"
-          name="description"
-          id="description"
-          hintText=""
-          multiLine={true}
-          rows={4}
-          rowsMax={4}
-          onChange={(e) => this.changeDesc(e.target.value)}
-        />
-        <br />
-        <TextField
-          required
-          label="start"
-          name="start"
-          id="start"
-          type="datetime-local"
-          hintText=""
-          multiLine={true}
-          size="32"
-          defaultValue={new Date().toISOString().slice(0, -5)}
-        />
+        <Card>
+          <CardContent>
+            <TextField
+              required
+              label="title"
+              margin="normal"
+              name="title"
+              id="title"
+              size="32"
+              defaultValue=""
+              style={{
+                width: 200,
+              }}
+            />
+            <br />
+            <TextField
+              required
+              label="description"
+              name="description"
+              id="description"
+              hintText=""
+              multiLine={true}
+              rows={4}
+              rowsMax={4}
+              onChange={(e) => this.changeDesc(e.target.value)}
+            />
+            <br />
+            <TextField
+              required
+              label="start"
+              name="start"
+              id="start"
+              type="datetime-local"
+              hintText=""
+              multiLine={true}
+              size="32"
+              defaultValue={new Date().toISOString().slice(0, -5)}
+            />
 
-        <br />
-        <TextField
-          required
-          label="end"
-          name="end"
-          id="end"
-          type="datetime-local"
-          hintText=""
-          multiLine={true}
-          size="32"
-          defaultValue={new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000)
-            .toISOString()
-            .slice(0, -5)}
-        />
-        <br />
-        <Button
-          color="primary"
-          onClick={() => {
-            const start_datetime = new Date(
-              document.getElementById("start").value
-            ).toISOString();
-            const end_datetime = new Date(
-              document.getElementById("end").value
-            ).toISOString();
-            const period = {
-              title: document.getElementById("title").value,
-              description: document.getElementById("description").value,
-              start_datetime,
-              end_datetime,
-            };
-            return this.submit(period);
-          }}
-        >
-          Submit
-        </Button>
+            <br />
+            <TextField
+              required
+              label="end"
+              name="end"
+              id="end"
+              type="datetime-local"
+              hintText=""
+              multiLine={true}
+              size="32"
+              defaultValue={new Date(
+                new Date().getTime() + 7 * 24 * 60 * 60 * 1000
+              )
+                .toISOString()
+                .slice(0, -5)}
+            />
+            <br />
+            <Button
+              variant="contained"
+              size="small"
+              color="primary"
+              style={{ margin: `3px 0` }}
+              onClick={() => {
+                const start_datetime = new Date(
+                  document.getElementById("start").value
+                ).toISOString();
+                const end_datetime = new Date(
+                  document.getElementById("end").value
+                ).toISOString();
+                const period = {
+                  title: document.getElementById("title").value,
+                  description: document.getElementById("description").value,
+                  start_datetime,
+                  end_datetime,
+                };
+                return this.submit(period);
+              }}
+            >
+              Submit
+            </Button>
+          </CardContent>
+        </Card>
       </div>
     );
   }

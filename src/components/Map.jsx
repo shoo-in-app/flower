@@ -163,7 +163,10 @@ class myMap extends Component {
                 </span>
                 <br />
                 <Button
+                  variant="contained"
+                  size="small"
                   color="primary"
+                  style={{ margin: `2px 0` }}
                   onClick={() => {
                     const locationData = {
                       name: document.getElementById("name").value,
