@@ -5,6 +5,7 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import Paper from "@material-ui/core/Paper";
+import Divider from "@material-ui/core/Divider";
 
 const RallyDetail = (props) => (
   <div className={style.locationList}>
@@ -17,16 +18,19 @@ const RallyDetail = (props) => (
     </p>
     <List subheader={<ListSubheader component="div">Locations</ListSubheader>}>
       {props.rally.locations.map((l) => (
-        <ListItem style={{ display: "grid" }}>
-          <h3 style={{ gridColumn: "1 / 2", gridRow: "1", margin: "0" }}>
-            {l.name}
-          </h3>
-          <div style={{ gridColumn: "1 / 3", gridRow: "2" }}>
-            {l.description}
-          </div>
-          <div style={{ gridColumn: "2", gridRow: "3" }}>lat:{l.lat} </div>
-          <div style={{ gridColumn: "3", gridRow: "3" }}>lng:{l.lng} </div>
-        </ListItem>
+        <div>
+          <ListItem style={{ display: "grid" }}>
+            <h3 style={{ gridColumn: "1 / 2", gridRow: "1", margin: "0" }}>
+              {l.name}
+            </h3>
+            <div style={{ gridColumn: "1 / 3", gridRow: "2" }}>
+              {l.description}
+            </div>
+            <div style={{ gridColumn: "2", gridRow: "3" }}>lat:{l.lat} </div>
+            <div style={{ gridColumn: "3", gridRow: "3" }}>lng:{l.lng} </div>
+          </ListItem>
+          <Divider />
+        </div>
       ))}
     </List>
   </div>
@@ -62,6 +66,7 @@ export default class MyRallies extends Component {
             >
               <h3 style={{ fontSize: "1.5em", margin: "0" }}>{rally.title}</h3>
               {/* <p style={{ margin: "0" }}>{rally.description}</p> */}
+              <Divider />
             </ListItem>
           ))}
         </List>
