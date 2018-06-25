@@ -1,11 +1,20 @@
 import React, { Component } from "react";
-import List from "./List";
-import Login from "./Login";
-import CreateNewRally from "./CreateNewRally";
 import axios from "axios";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
+import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import MyRallies from "./MyRallies";
+import Login from "./Login";
+import CreateNewRally from "./CreateNewRally";
+
+const theme = createMuiTheme({
+  palette: {
+    primary: { main: "#a61414" },
+    secondary: { main: "#ffffff" },
+  },
+});
 
 export default class App extends Component {
   constructor(props) {
@@ -29,17 +38,13 @@ export default class App extends Component {
       .catch((err) => console.log(err));
   }
 
-  handleChange(event, value) {
-    this.setState({ value });
-  }
-
   get main() {
     const { value } = this.state;
     return (
       <div>
-        <AppBar position="static" style={{ backgroundColor: "#a61414" }}>
-          <Tabs value={value} onChange={(e, v) => this.handleChange(e, v)}>
-            <Tab label="List of Rallies" />
+        <AppBar position="static">
+          <Tabs value={value} onChange={(e, value) => this.setState({ value })}>
+            <Tab label="My Rallies" />
             <Tab label="Create New Rally" />
             <Tab
               label="Log out"
@@ -48,20 +53,25 @@ export default class App extends Component {
             />
           </Tabs>
         </AppBar>
-        {value === 0 && <List />}
+        {value === 0 && <MyRallies />}
         {value === 1 && <CreateNewRally />}
       </div>
     );
   }
 
   render() {
+    let content = null;
     switch (this.state.isAuthenticated) {
       case null:
-        return <div>LOADING</div>;
+        content = <LinearProgress />;
+        break;
       case false:
-        return <Login />;
+        content = <Login />;
+        break;
       case true:
-        return this.main;
+        content = this.main;
+        break;
     }
+    return <MuiThemeProvider theme={theme}>{content}</MuiThemeProvider>;
   }
 }

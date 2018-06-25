@@ -4,7 +4,8 @@ import Card from "@material-ui/core/Card";
 import GoogleButton from "react-google-button";
 import android from "../images/android.png";
 import ios from "../images/ios.svg";
-const Login = (props) => {
+
+const Login = () => {
   return (
     <Card className={style.login}>
       <h1 style={{ color: "white" }}>Shoo-in</h1>
