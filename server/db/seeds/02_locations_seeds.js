@@ -57,7 +57,7 @@ exports.seed = function(knex, Promise) {
           id: 10007,
           name: "CoCo Guest House",
           lat: 33.5917687,
-          lng: 135.6256614,
+          lng: 135.6256561,
           description: "The place Felix visited.",
           rally_id: 10002,
         },
