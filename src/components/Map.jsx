@@ -27,7 +27,7 @@ const myLyfecycle = lifecycle({
   componentWillMount() {
     const refs = {};
     this.setState({
-      zoom: 14,
+      zoom: 13,
       bounds: null,
       center: { lat: 35.6895, lng: 139.6917 },
       user: { lat: null, lng: null },
@@ -60,7 +60,7 @@ const myLyfecycle = lifecycle({
         });
       },
 
-      setCenter: (lat, lng, zoom = 14) => {
+      setCenter: (lat, lng, zoom = 13) => {
         this.setState({ zoom, center: { lat, lng }, user: { lat, lng } });
       },
 
@@ -112,7 +112,7 @@ class myMap extends Component {
     return (
       <GoogleMap
         ref={this.props.onMapMounted}
-        defaultZoom={14}
+        defaultZoom={13}
         zoom={this.props.zoom}
         center={this.props.center}
         onBoundsChanged={this.props.onBoundsChanged}
@@ -160,7 +160,10 @@ class myMap extends Component {
                 </span>
                 <br />
                 <Button
-                  color="accent"
+                  variant="contained"
+                  size="small"
+                  color="primary"
+                  style={{ margin: `2px 0` }}
                   onClick={() => {
                     const locationData = {
                       name: document.getElementById("name").value,
