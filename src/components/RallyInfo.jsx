@@ -2,9 +2,10 @@ import React, { Component } from "react";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
-import style from "../styles/RallyInfo.css";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
 
-export class RallyInfoInput extends Component {
+class RallyInfoInput extends Component {
   submit(period) {
     const rally = period;
     rally["locations"] = this.state.locations;
@@ -15,7 +16,7 @@ export class RallyInfoInput extends Component {
 
   render() {
     return (
-      <div style={{ padding: "10px" }}>
+      <div style={{ padding: "10px", flexGrow: "1" }}>
         <TextField
           required
           label="title"
@@ -38,7 +39,6 @@ export class RallyInfoInput extends Component {
           multiLine={true}
           rows={4}
           rowsMax={4}
-          onChange={(e) => this.changeDesc(e.target.value)}
         />
         <br />
         <TextField
@@ -69,7 +69,6 @@ export class RallyInfoInput extends Component {
         />
         <br />
         <Button
-          color="primary"
           onClick={() => {
             const start_datetime = new Date(
               document.getElementById("start").value
@@ -93,19 +92,32 @@ export class RallyInfoInput extends Component {
   }
 }
 
-export const LocationList = (props) => (
-  <div style={{ float: "right", width: "70%" }}>
-    <ul className={style.ul}>
-      {props.locations.map((location, index) => {
-        return (
-          <li key={index} className={style.li}>
-            <p>Name: {location.name}</p>
-            <p>Description: {location.description}</p>
-            <p>Lat: {location.lat}</p>
-            <p>Lng: {location.lng}</p>
-          </li>
-        );
-      })}
-    </ul>
+const LocationList = (props) => (
+  <div style={{ flexGrow: "2" }}>
+    <List>
+      {props.locations.map((l) => (
+        <ListItem style={{ display: "grid", justifyContent: "normal" }}>
+          <h3 style={{ gridColumn: "1 / 2", gridRow: "1", margin: "0" }}>
+            Name: {l.name}
+          </h3>
+          <div style={{ gridColumn: "1 / 3", gridRow: "2" }}>
+            Description: {l.description}
+          </div>
+          <div style={{ gridColumn: "2", gridRow: "3" }}>
+            lat:{l.lat.toFixed(6)}{" "}
+          </div>
+          <div style={{ gridColumn: "3", gridRow: "3" }}>
+            lng:{l.lng.toFixed(6)}{" "}
+          </div>
+        </ListItem>
+      ))}
+    </List>
+  </div>
+);
+
+export default (props) => (
+  <div style={{ display: "flex" }}>
+    <RallyInfoInput />
+    <LocationList locations={props.locations} />
   </div>
 );

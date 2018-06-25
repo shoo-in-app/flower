@@ -27,7 +27,7 @@ const myLyfecycle = lifecycle({
   componentWillMount() {
     const refs = {};
     this.setState({
-      zoom: 13,
+      zoom: 14,
       bounds: null,
       center: { lat: 35.6895, lng: 139.6917 },
       user: { lat: null, lng: null },
@@ -60,7 +60,7 @@ const myLyfecycle = lifecycle({
         });
       },
 
-      setCenter: (lat, lng, zoom = 13) => {
+      setCenter: (lat, lng, zoom = 14) => {
         this.setState({ zoom, center: { lat, lng }, user: { lat, lng } });
       },
 
@@ -112,7 +112,7 @@ class myMap extends Component {
     return (
       <GoogleMap
         ref={this.props.onMapMounted}
-        defaultZoom={13}
+        defaultZoom={14}
         zoom={this.props.zoom}
         center={this.props.center}
         onBoundsChanged={this.props.onBoundsChanged}
@@ -141,21 +141,18 @@ class myMap extends Component {
                   id="name"
                   size="32"
                   defaultValue=""
-                  style={{
-                    width: 200,
-                  }}
+                  style={{ width: 200 }}
                 />
 
                 <TextField
                   required
                   label="description"
                   name="description"
-                  id="description"
+                  id="location-description"
                   hintText=""
                   multiLine={true}
                   rows={4}
                   rowsMax={4}
-                  onChange={(e) => this.changeDesc(e.target.value)}
                 />
                 <br />
                 <span>
@@ -163,25 +160,18 @@ class myMap extends Component {
                 </span>
                 <br />
                 <Button
-                  color="primary"
+                  color="accent"
                   onClick={() => {
                     const locationData = {
                       name: document.getElementById("name").value,
-                      description: document.getElementById("description").value,
+                      description: document.getElementById(
+                        "location-description"
+                      ).value,
                       lat: this.props.lat,
                       lng: this.props.lng,
                     };
-                    if (
-                      this.props.changeData(locationData.name) &&
-                      this.props.changeData(locationData.description) &&
-                      this.props.changeData(locationData.lat) &&
-                      this.props.changeData(locationData.lng)
-                    ) {
-                      alert("Show error");
-                    } else {
-                      this.props.changeData(locationData);
-                      this.props.AddMarkers(locationData.lat, locationData.lng);
-                    }
+                    this.props.addLocation(locationData);
+                    this.props.AddMarkers(locationData.lat, locationData.lng);
                   }}
                 >
                   Add
