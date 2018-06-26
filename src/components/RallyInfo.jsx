@@ -22,7 +22,7 @@ class RallyInfoInput extends Component {
     return (
       <div style={{ padding: "10px" }}>
         <Card>
-          <CardContent>
+          <CardContent style={{ paddingBottom: `16px` }}>
             <TextField
               required
               label="title"
@@ -41,7 +41,6 @@ class RallyInfoInput extends Component {
               label="description"
               name="description"
               id="description"
-              hintText=""
               multiLine={true}
               rows={4}
               rowsMax={4}
@@ -53,7 +52,6 @@ class RallyInfoInput extends Component {
               name="start"
               id="start"
               type="datetime-local"
-              hintText=""
               multiLine={true}
               size="32"
               defaultValue={new Date().toISOString().slice(0, -5)}
@@ -66,7 +64,6 @@ class RallyInfoInput extends Component {
               name="end"
               id="end"
               type="datetime-local"
-              hintText=""
               multiLine={true}
               size="32"
               defaultValue={new Date(
@@ -75,6 +72,7 @@ class RallyInfoInput extends Component {
                 .toISOString()
                 .slice(0, -5)}
             />
+            <br />
             <br />
             <Button
               variant="contained"
@@ -111,7 +109,7 @@ const LocationList = (props) => (
     <List subheader={<ListSubheader component="div">Locations</ListSubheader>}>
       {props.locations.map((l) => (
         <div>
-          <Divider />
+          <Divider style={{ padding: `0` }} />
           <ListItem style={{ display: "grid", justifyContent: "normal" }}>
             <h3 style={{ gridColumn: "1 / 4", gridRow: "1", margin: "0" }}>
               Name: {l.name}

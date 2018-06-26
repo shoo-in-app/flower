@@ -41,14 +41,8 @@ export default class App extends Component {
       <div>
         <AppBar position="static">
           <Tabs value={value} onChange={(e, value) => this.setState({ value })}>
-            <Tab
-              label="My Rallies"
-              style={{ fontFamily: "myFont", fontSize: "1.6em" }}
-            />
-            <Tab
-              label="Create New Rally"
-              style={{ fontFamily: "myFont", fontSize: "1.6em" }}
-            />
+            <Tab label="My Rallies" style={{ fontFamily: "myFont" }} />
+            <Tab label="Create New Rally" style={{ fontFamily: "myFont" }} />
             <Tab
               label="Log out"
               href="/logout"
