@@ -30,8 +30,8 @@ router.delete("/user/:userId", async (req, res) => {
 router.patch("/exp/:userId", async (req, res) => {
   try {
     const userId = await Users.getUserId(req.params.userId);
-    await Users.incrementExp(userId, exp);
-    res.send(`${user.username} has ${exp} exp now.`);
+    const exp = await Users.incrementExp(userId, req.body.exp);
+    res.send(`current exp is ${exp}.`);
   } catch (err) {
     console.error("Error adding user!", err);
     res.status(500).send(`Internal server error: ${err}`);

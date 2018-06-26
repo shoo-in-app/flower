@@ -28,10 +28,11 @@ module.exports = (db) => {
       .returning("*")
       .then((arr) => arr[0]);
 
-  const incrementExp = (idToken, exp) =>
+  const incrementExp = (id, exp) =>
     db("users")
-      .where("id_token", idToken)
-      .increment("exp", exp);
+      .where("id", id)
+      .increment("exp", exp)
+      .returning("exp");
 
   const findOrCreateUser = async (email) => {
     const hash = crypto
