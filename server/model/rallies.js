@@ -17,7 +17,8 @@ module.exports = (db) => {
         "creators.username"
       )
       .innerJoin("locations", "rallies.id", "locations.rally_id")
-      .innerJoin("creators", "rallies.creator_id", "creators.id");
+      .innerJoin("creators", "rallies.creator_id", "creators.id")
+      .whereRaw("rallies.end_datetime > now()");
 
   const getLocationsWithRallyInfoUserChoose = (userId) =>
     db("rallies")
