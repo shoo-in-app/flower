@@ -235,10 +235,7 @@ class myMap extends Component {
 }
 
 const Map = compose(
-  withStateHandlers(() => ({
-    isMarkerShown: false,
-    isOpen: false,
-  })),
+  withStateHandlers(() => ({ isMarkerShown: false, isOpen: false })),
   withProps({
     googleMapURL:
       "https://maps.googleapis.com/maps/api/js?key=AIzaSyDe-SSvqZrjeDeD3clObxGng67gPOB76aQ&v=3.exp&libraries=geometry,drawing,places",

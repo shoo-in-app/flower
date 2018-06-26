@@ -1,14 +1,13 @@
 import React, { Component } from "react";
 import axios from "axios";
+import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import MyRallies from "./MyRallies";
 import Login from "./Login";
 import CreateNewRally from "./CreateNewRally";
-import { withStyles } from "@material-ui/core/styles";
 
 const theme = createMuiTheme({
   palette: {
@@ -16,10 +15,6 @@ const theme = createMuiTheme({
     secondary: { main: "#ffffff" },
   },
 });
-
-// const appBarStyle = {
-//   typography: { fontFamily: "myFont" },
-// };
 
 export default class App extends Component {
   constructor(props) {
