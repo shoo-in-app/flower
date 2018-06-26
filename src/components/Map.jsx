@@ -55,11 +55,15 @@ const myLyfecycle = lifecycle({
       ),
 
       onMapClick: (e) => {
-        const myLatLng = e.latLng;
+        const lat = e.latLng.lat();
+        const lng = e.latLng.lng();
+        this.setState({ zoom: 16 });
         this.setState({
           isMarkerShown: true,
-          lat: myLatLng.lat(),
-          lng: myLatLng.lng(),
+          lat: lat,
+          lng: lng,
+          zoom: 15,
+          center: { lat, lng },
         });
       },
 
@@ -130,7 +134,6 @@ class myMap extends Component {
             onPlacesChanged={this.props.onPlacesChanged}
           >
             <Paper className={style.infoWindowBackground} elevation={4}>
-              {/* <div className={style.infoWindowBackground}> */}
               <input
                 type="text"
                 placeholder="Search locations"
@@ -153,7 +156,6 @@ class myMap extends Component {
                   label="description"
                   name="locationDescription"
                   id="location-description"
-                  hintText=""
                   multiLine={true}
                   rows={4}
                   rowsMax={4}
@@ -162,7 +164,6 @@ class myMap extends Component {
                 <Typography component="p">
                   Lat: {this.props.lat} <br /> Lng: {this.props.lng}
                 </Typography>
-                <br />
                 <Button
                   variant="contained"
                   size="small"
@@ -231,10 +232,7 @@ class myMap extends Component {
 }
 
 const Map = compose(
-  withStateHandlers(() => ({
-    isMarkerShown: false,
-    isOpen: false,
-  })),
+  withStateHandlers(() => ({ isMarkerShown: false, isOpen: false })),
   withProps({
     googleMapURL:
       "https://maps.googleapis.com/maps/api/js?key=AIzaSyDe-SSvqZrjeDeD3clObxGng67gPOB76aQ&v=3.exp&libraries=geometry,drawing,places",

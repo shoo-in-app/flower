@@ -1,6 +1,10 @@
-@import url("https://fonts.googleapis.com/css?family=Merriweather");
+/* @import url("https://fonts.googleapis.com/css?family=Merriweather"); */
+@font-face {
+  font-family: "MyFont";
+  src: url("./edo.ttf");
+}
 body {
   margin: 0;
-  /* font-family: "Roboto", "Helvetica", "Arial", sans-serif; */
-  font-family: "Merriweather", serif;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  /* font-family: "MyFont", "Merriweather", serif; */
 }

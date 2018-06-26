@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import axios from "axios";
+import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import MyRallies from "./MyRallies";
 import Login from "./Login";
@@ -19,10 +19,7 @@ const theme = createMuiTheme({
 export default class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      isAuthenticated: null,
-      value: 0,
-    };
+    this.state = { isAuthenticated: null, value: 0 };
   }
 
   componentDidMount() {
@@ -44,12 +41,12 @@ export default class App extends Component {
       <div>
         <AppBar position="static">
           <Tabs value={value} onChange={(e, value) => this.setState({ value })}>
-            <Tab label="My Rallies" />
-            <Tab label="Create New Rally" />
+            <Tab label="My Rallies" style={{ fontFamily: "myFont" }} />
+            <Tab label="Create New Rally" style={{ fontFamily: "myFont" }} />
             <Tab
               label="Log out"
               href="/logout"
-              style={{ marginLeft: "auto" }}
+              style={{ marginLeft: "auto", fontFamily: "myFont" }}
             />
           </Tabs>
         </AppBar>
