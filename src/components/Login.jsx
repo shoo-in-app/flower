@@ -12,7 +12,10 @@ const Login = () => {
       <p style={{ color: "white" }}>Welcome to the rally creation page</p>
 
       <a href="/auth/google" style={{ textDecoration: "none" }}>
-        <GoogleButton style={{ margin: "auto" }} type="dark" />
+        <GoogleButton
+          style={{ margin: "auto", border: `#00008b solid 1px` }}
+          type="dark"
+        />
       </a>
 
       <p style={{ color: "white" }}>Download mobile App</p>

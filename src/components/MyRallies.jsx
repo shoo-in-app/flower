@@ -80,7 +80,9 @@ export default class MyRallies extends Component {
     if (this.state.rallies.length > 0) {
       content = this.rallies;
     } else {
-      content = <p>You have not created any rallies yet.</p>;
+      content = (
+        <p className={style.content}>You have not created any rallies yet.</p>
+      );
     }
     return <div style={{ backgroundColor: "#fafafa" }}>{content}</div>;
   }
