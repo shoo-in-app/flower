@@ -41,12 +41,12 @@ export default class App extends Component {
       <div>
         <AppBar position="static">
           <Tabs value={value} onChange={(e, value) => this.setState({ value })}>
-            <Tab label="My Rallies" style={{ fontFamily: "myFont" }} />
-            <Tab label="Create New Rally" style={{ fontFamily: "myFont" }} />
+            <Tab label="My Rallies" style={{ fontFamily: "EDO" }} />
+            <Tab label="Create New Rally" style={{ fontFamily: "EDO" }} />
             <Tab
               label="Log out"
               href="/logout"
-              style={{ marginLeft: "auto", fontFamily: "myFont" }}
+              style={{ marginLeft: "auto", fontFamily: "EDO" }}
             />
           </Tabs>
         </AppBar>
