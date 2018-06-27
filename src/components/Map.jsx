@@ -71,10 +71,11 @@ const myLyfecycle = lifecycle({
         this.setState({ zoom, center: { lat, lng }, user: { lat, lng } });
       },
 
-      onSearchedMarkerClick: (location) => {
+      onSearchedMarkerClick: (marker) => {
         this.setState({
-          lat: location.position.lat(),
-          lng: location.position.lng(),
+          isMarkerShown: true,
+          lat: marker.position.lat(),
+          lng: marker.position.lng(),
         });
       },
 
@@ -170,7 +171,7 @@ class myMap extends Component {
                   variant="contained"
                   size="small"
                   color="primary"
-                  style={{ margin: `2px 0` }}
+                  style={{ margin: "2px 0" }}
                   onClick={() => {
                     if (!this.props.lat) return;
                     const name = document.getElementById("name");
@@ -199,7 +200,6 @@ class myMap extends Component {
         {/* Searched result locations */}
         {this.props.markers.map((marker, index) => (
           <Marker
-            icon={{ scale: 5 }}
             key={index}
             position={marker.position}
             onClick={() => this.props.onSearchedMarkerClick(marker)}
