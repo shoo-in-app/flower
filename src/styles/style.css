@@ -5,6 +5,7 @@
 }
 body {
   margin: 0;
+  background-color: #fafafa;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   /* font-family: "MyFont", "Merriweather", serif; */
 }
