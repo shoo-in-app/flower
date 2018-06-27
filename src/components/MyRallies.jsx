@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
-import style from "../styles/List.css";
+import moment from "moment";
+import style from "../styles/MyRallies.css";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListSubheader from "@material-ui/core/ListSubheader";
@@ -12,22 +13,27 @@ const RallyDetail = (props) => (
     <h2>{props.rally.title}</h2>
     <p>Description: {props.rally.description}</p>
     <p>
-      Start: {new Date(props.rally.start_datetime).toString()}
+      Start: {moment(props.rally.start_datetime).format("HH:mm MMMM Do YYYY.")}
       <br />
-      End: {new Date(props.rally.end_datetime).toString()}
+      End:{" "}
+      {"  " + moment(props.rally.end_datetime).format("HH:mm MMMM Do YYYY.")}
     </p>
     <List subheader={<ListSubheader component="div">Locations</ListSubheader>}>
       {props.rally.locations.map((l) => (
         <div>
-          <ListItem style={{ display: "grid" }}>
+          <ListItem style={{ display: "grid", justifyContent: "normal" }}>
             <h3 style={{ gridColumn: "1 / 2", gridRow: "1", margin: "0" }}>
               {l.name}
             </h3>
             <div style={{ gridColumn: "1 / 3", gridRow: "2" }}>
               {l.description}
             </div>
-            <div style={{ gridColumn: "2", gridRow: "3" }}>lat:{l.lat} </div>
-            <div style={{ gridColumn: "3", gridRow: "3" }}>lng:{l.lng} </div>
+            <div style={{ gridColumn: "2", gridRow: "3" }}>
+              Lat: {l.lat.toFixed(4)}
+            </div>
+            <div style={{ gridColumn: "3", gridRow: "3" }}>
+              Lng: {l.lng.toFixed(4)}
+            </div>
           </ListItem>
           <Divider />
         </div>
@@ -65,7 +71,6 @@ export default class MyRallies extends Component {
               }
             >
               <h3 style={{ fontSize: "1.5em", margin: "0" }}>{rally.title}</h3>
-              {/* <p style={{ margin: "0" }}>{rally.description}</p> */}
               <Divider />
             </ListItem>
           ))}
@@ -76,14 +81,12 @@ export default class MyRallies extends Component {
   }
 
   render() {
-    let content;
     if (this.state.rallies.length > 0) {
-      content = this.rallies;
+      return this.rallies;
     } else {
-      content = (
+      return (
         <p className={style.content}>You have not created any rallies yet.</p>
       );
     }
-    return <div style={{ backgroundColor: "#fafafa" }}>{content}</div>;
   }
 }

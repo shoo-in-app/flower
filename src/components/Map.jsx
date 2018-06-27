@@ -4,7 +4,7 @@ import style from "../styles/Map.css";
 import logstampCollectedSmall from "../images/stamp-collected-small.png";
 import logstampUncollectedSmall from "../images/stamp-uncollected-small.png";
 import Button from "@material-ui/core/Button";
-import Paper from "@material-ui/core/Paper";
+import Card from "@material-ui/core/Card";
 import Typography from "@material-ui/core/Typography";
 
 const _ = require("lodash");
@@ -133,7 +133,7 @@ class myMap extends Component {
             controlPosition={google.maps.ControlPosition.TOP_LEFT}
             onPlacesChanged={this.props.onPlacesChanged}
           >
-            <Paper className={style.infoWindowBackground} elevation={4}>
+            <Card className={style.infoWindowBackground} elevation={4}>
               <input
                 type="text"
                 placeholder="Search locations"
@@ -143,26 +143,28 @@ class myMap extends Component {
                 <TextField
                   required
                   label="name"
-                  margin="normal"
                   name="name"
                   id="name"
                   size="32"
                   defaultValue=""
-                  style={{ width: 200 }}
                 />
-
                 <TextField
                   required
+                  multiline
                   label="description"
                   name="locationDescription"
                   id="location-description"
-                  multiLine={true}
-                  rows={4}
-                  rowsMax={4}
+                  rows="3"
+                  rowsMax="3"
+                  style={{ width: "210px" }}
                 />
-                <br />
-                <Typography component="p">
-                  Lat: {this.props.lat} <br /> Lng: {this.props.lng}
+                <Typography
+                  variant="subheading"
+                  color="textSecondary"
+                  style={{ margin: "14px" }}
+                >
+                  Lat: {this.props.lat ? this.props.lat.toFixed(4) : ""} <br />
+                  Lng: {this.props.lng ? this.props.lng.toFixed(4) : ""}
                 </Typography>
                 <Button
                   variant="contained"
@@ -170,29 +172,34 @@ class myMap extends Component {
                   color="primary"
                   style={{ margin: `2px 0` }}
                   onClick={() => {
+                    if (!this.props.lat) return;
+                    const name = document.getElementById("name");
+                    const desc = document.getElementById(
+                      "location-description"
+                    );
                     const locationData = {
-                      name: document.getElementById("name").value,
-                      description: document.getElementById(
-                        "location-description"
-                      ).value,
+                      name: name.value,
+                      description: desc.value,
                       lat: this.props.lat,
                       lng: this.props.lng,
                     };
                     this.props.addLocation(locationData);
                     this.props.AddMarkers(locationData.lat, locationData.lng);
+                    name.value = "";
+                    desc.value = "";
                   }}
                 >
                   Add
                 </Button>
               </div>
-            </Paper>
+            </Card>
           </SearchBox>
         </div>
 
         {/* Searched result locations */}
         {this.props.markers.map((marker, index) => (
           <Marker
-            icon={{ strokeColor: "red", scale: 5 }}
+            icon={{ scale: 5 }}
             key={index}
             position={marker.position}
             onClick={() => this.props.onSearchedMarkerClick(marker)}
@@ -222,7 +229,7 @@ class myMap extends Component {
         <Marker
           icon={{
             url:
-              "http://mt.google.com/vt/icon?psize=27&font=fonts/Roboto-Bold.ttf&color=ff17135c&name=icons/spotlight/spotlight-waypoint-blue.png&ax=43&ay=50&text=%E2%80%A2&scale=1",
+              "http://mt.google.com/vt/icon/Roboto-Bold.ttf&name=icons/spotlight/spotlight-waypoint-blue.png",
           }}
           position={{ lat: this.props.user.lat, lng: this.props.user.lng }}
         />

@@ -4,11 +4,11 @@
   width: 50%;
   padding: 0 10px;
 }
+
 .content {
-  height: 100vh;
   vertical-align: middle;
-  margin: auto;
+  margin: 60px auto;
   text-align: center;
-  line-height: 25;
-  background-color: #fafafa;
+  color: #ccc;
+  font-size: 1.3em;
 }
