@@ -20,51 +20,42 @@ class RallyInfoInput extends Component {
 
   render() {
     return (
-      <div style={{ padding: "10px" }}>
+      <div style={{ padding: "10px", width: "300px" }}>
         <Card>
           <CardContent style={{ paddingBottom: `16px` }}>
             <TextField
               required
               label="title"
-              margin="normal"
               name="title"
               id="title"
               size="32"
               defaultValue=""
-              style={{
-                width: 200,
-              }}
             />
-            <br />
             <TextField
               required
+              multiline
               label="description"
               name="description"
               id="description"
-              multiLine={true}
-              rows={4}
-              rowsMax={4}
+              rows="3"
+              rowsMax="3"
+              style={{ width: "240px" }}
             />
-            <br />
             <TextField
               required
               label="start"
               name="start"
               id="start"
               type="datetime-local"
-              multiLine={true}
               size="32"
               defaultValue={new Date().toISOString().slice(0, -5)}
             />
-
-            <br />
             <TextField
               required
               label="end"
               name="end"
               id="end"
               type="datetime-local"
-              multiLine={true}
               size="32"
               defaultValue={new Date(
                 new Date().getTime() + 7 * 24 * 60 * 60 * 1000
@@ -72,13 +63,11 @@ class RallyInfoInput extends Component {
                 .toISOString()
                 .slice(0, -5)}
             />
-            <br />
-            <br />
             <Button
               variant="contained"
               size="small"
               color="primary"
-              style={{ margin: `3px 0` }}
+              style={{ marginTop: "12px" }}
               onClick={() => {
                 const start_datetime = new Date(
                   document.getElementById("start").value
