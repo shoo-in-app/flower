@@ -20,7 +20,7 @@ class RallyInfoInput extends Component {
 
   render() {
     return (
-      <div style={{ padding: "10px", width: "240px" }}>
+      <div style={{ padding: "10px", width: "300px" }}>
         <Card>
           <CardContent style={{ paddingBottom: `16px` }}>
             <TextField
@@ -37,9 +37,9 @@ class RallyInfoInput extends Component {
               label="description"
               name="description"
               id="description"
-              rows="2"
-              rowsMax="2"
-              style={{ width: "300px" }}
+              rows="3"
+              rowsMax="3"
+              style={{ width: "240px" }}
             />
             <TextField
               required

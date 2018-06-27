@@ -154,8 +154,8 @@ class myMap extends Component {
                   label="description"
                   name="locationDescription"
                   id="location-description"
-                  rows="2"
-                  rowsMax="2"
+                  rows="3"
+                  rowsMax="3"
                   style={{ width: "210px" }}
                 />
                 <Typography

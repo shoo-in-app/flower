@@ -6,11 +6,9 @@
 }
 
 .content {
-  height: 100vh;
   vertical-align: middle;
-  margin: auto;
+  margin: 60px auto;
   text-align: center;
-  line-height: 25;
-  color: "ddd";
-  font-size: 1.6em;
+  color: #ccc;
+  font-size: 1.3em;
 }
