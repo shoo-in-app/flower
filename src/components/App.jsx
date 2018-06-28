@@ -37,7 +37,6 @@ export default class App extends Component {
   }
 
   updateMyRallies() {
-    console.log(this.state.myRallies);
     return axios
       .get("/web-api/rallies/")
       .then((res) => this.setState({ myRallies: res.data }))
