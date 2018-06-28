@@ -51,21 +51,14 @@ const RallyDetail = (props) => (
 export default class MyRallies extends Component {
   constructor(props) {
     super(props);
-    this.state = { rallies: [], chosenRally: 0 };
-  }
-
-  componentDidMount() {
-    axios
-      .get("/web-api/rallies/")
-      .then((res) => this.setState({ rallies: res.data }))
-      .catch((err) => console.log("Something wrong: ", err));
+    this.state = { chosenRally: 0 };
   }
 
   get rallies() {
     return (
       <Paper style={{ display: "flex", margin: "0 20px" }} elevation={4}>
         <List style={{ minWidth: "400px", width: "50%" }}>
-          {this.state.rallies.map((rally, index) => (
+          {this.props.myRallies.map((rally, index) => (
             <ListItem
               button
               style={{ display: "flex", flexDirection: "column" }}
@@ -81,13 +74,13 @@ export default class MyRallies extends Component {
             </ListItem>
           ))}
         </List>
-        <RallyDetail rally={this.state.rallies[this.state.chosenRally]} />
+        <RallyDetail rally={this.props.myRallies[this.state.chosenRally]} />
       </Paper>
     );
   }
 
   render() {
-    if (this.state.rallies.length > 0) {
+    if (this.props.myRallies.length > 0) {
       return this.rallies;
     } else {
       return (
