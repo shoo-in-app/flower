@@ -24,6 +24,7 @@ export default class CreateNewRally extends Component {
         <RallyInfo
           locations={this.state.locations}
           chengeTab={(v) => this.props.chengeTab(v)}
+          updateMyRallies={() => this.props.updateMyRallies()}
         />
       </div>
     );

@@ -14,7 +14,7 @@ class RallyInfoInput extends Component {
   submit(period) {
     const rally = period;
     rally["locations"] = this.props.locations;
-    axios
+    return axios
       .post("/web-api/rally/", rally)
       .catch((err) => console.log("Something wrong: ", err));
   }
@@ -89,8 +89,9 @@ class RallyInfoInput extends Component {
                   start_datetime,
                   end_datetime,
                 };
-                this.submit(period);
-                this.props.chengeTab(0);
+                this.submit(period)
+                  .then(() => this.props.updateMyRallies())
+                  .then(() => this.props.chengeTab(0));
               }}
             >
               Submit
@@ -133,6 +134,7 @@ export default (props) => (
     <RallyInfoInput
       locations={props.locations}
       chengeTab={(v) => props.chengeTab(v)}
+      updateMyRallies={() => props.updateMyRallies()}
     />
     <LocationList locations={props.locations} />
   </div>

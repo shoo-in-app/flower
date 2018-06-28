@@ -19,7 +19,7 @@ const theme = createMuiTheme({
 export default class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { isAuthenticated: null, value: 0 };
+    this.state = { isAuthenticated: null, value: 0, myRallies: [] };
   }
 
   componentDidMount() {
@@ -33,6 +33,15 @@ export default class App extends Component {
         }
       })
       .catch((err) => console.log(err));
+    this.updateMyRallies();
+  }
+
+  updateMyRallies() {
+    console.log(this.state.myRallies);
+    return axios
+      .get("/web-api/rallies/")
+      .then((res) => this.setState({ myRallies: res.data }))
+      .catch((err) => console.log("Something wrong: ", err));
   }
 
   chengeTab(value) {
@@ -54,8 +63,13 @@ export default class App extends Component {
             />
           </Tabs>
         </AppBar>
-        {value === 0 && <MyRallies />}
-        {value === 1 && <CreateNewRally chengeTab={(v) => this.chengeTab(v)} />}
+        {value === 0 && <MyRallies myRallies={this.state.myRallies} />}
+        {value === 1 && (
+          <CreateNewRally
+            chengeTab={(v) => this.chengeTab(v)}
+            updateMyRallies={() => this.updateMyRallies()}
+          />
+        )}
       </div>
     );
   }
