@@ -28,6 +28,12 @@ const Login = () => {
         <div style={{ display: "block", opacity: ".5" }}>
           <img src={ios} alt={"ios"} style={{ width: "176px" }} />
         </div>
+        <a
+          href={"https://goo.gl/forms/IHfJLxmF35HJ3Uk33"}
+          style={{ color: "white" }}
+        >
+          Sign up for the iOS beta!
+        </a>
       </div>
     </Card>
   );
