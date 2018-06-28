@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import axios from "axios";
 import moment from "moment";
 import style from "../styles/MyRallies.css";
 import List from "@material-ui/core/List";
