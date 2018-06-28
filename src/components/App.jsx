@@ -19,7 +19,7 @@ const theme = createMuiTheme({
 export default class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { isAuthenticated: null, value: 0 };
+    this.state = { isAuthenticated: null, value: 0, myRallies: [] };
   }
 
   componentDidMount() {
@@ -33,6 +33,18 @@ export default class App extends Component {
         }
       })
       .catch((err) => console.log(err));
+    this.updateMyRallies();
+  }
+
+  updateMyRallies() {
+    return axios
+      .get("/web-api/rallies/")
+      .then((res) => this.setState({ myRallies: res.data }))
+      .catch((err) => console.log("Something wrong: ", err));
+  }
+
+  chengeTab(value) {
+    this.setState({ value });
   }
 
   get main() {
@@ -40,18 +52,23 @@ export default class App extends Component {
     return (
       <div>
         <AppBar position="static">
-          <Tabs value={value} onChange={(e, value) => this.setState({ value })}>
-            <Tab label="My Rallies" style={{ fontFamily: "myFont" }} />
-            <Tab label="Create New Rally" style={{ fontFamily: "myFont" }} />
+          <Tabs value={value} onChange={(e, value) => this.chengeTab(value)}>
+            <Tab label="My Rallies" style={{ fontFamily: "EDO" }} />
+            <Tab label="Create New Rally" style={{ fontFamily: "EDO" }} />
             <Tab
               label="Log out"
               href="/logout"
-              style={{ marginLeft: "auto", fontFamily: "myFont" }}
+              style={{ marginLeft: "auto", fontFamily: "EDO" }}
             />
           </Tabs>
         </AppBar>
-        {value === 0 && <MyRallies />}
-        {value === 1 && <CreateNewRally />}
+        {value === 0 && <MyRallies myRallies={this.state.myRallies} />}
+        {value === 1 && (
+          <CreateNewRally
+            chengeTab={(v) => this.chengeTab(v)}
+            updateMyRallies={() => this.updateMyRallies()}
+          />
+        )}
       </div>
     );
   }

@@ -151,12 +151,9 @@ class myMap extends Component {
                 />
                 <TextField
                   required
-                  multiline
                   label="description"
                   name="locationDescription"
                   id="location-description"
-                  rows="3"
-                  rowsMax="3"
                   style={{ width: "210px" }}
                 />
                 <Typography

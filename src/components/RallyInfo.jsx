@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
+import moment from "moment";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListSubheader from "@material-ui/core/ListSubheader";
@@ -13,7 +14,7 @@ class RallyInfoInput extends Component {
   submit(period) {
     const rally = period;
     rally["locations"] = this.props.locations;
-    axios
+    return axios
       .post("/web-api/rally/", rally)
       .catch((err) => console.log("Something wrong: ", err));
   }
@@ -48,7 +49,10 @@ class RallyInfoInput extends Component {
               id="start"
               type="datetime-local"
               size="32"
-              defaultValue={new Date().toISOString().slice(0, -5)}
+              defaultValue={moment()
+                .add("hours", 9)
+                .toISOString()
+                .slice(0, -5)}
             />
             <TextField
               required
@@ -57,9 +61,9 @@ class RallyInfoInput extends Component {
               id="end"
               type="datetime-local"
               size="32"
-              defaultValue={new Date(
-                new Date().getTime() + 7 * 24 * 60 * 60 * 1000
-              )
+              defaultValue={moment()
+                .add("days", 7)
+                .add("hours", 9)
                 .toISOString()
                 .slice(0, -5)}
             />
@@ -69,19 +73,25 @@ class RallyInfoInput extends Component {
               color="primary"
               style={{ marginTop: "12px" }}
               onClick={() => {
-                const start_datetime = new Date(
+                const start_datetime = moment(
                   document.getElementById("start").value
-                ).toISOString();
-                const end_datetime = new Date(
+                )
+                  .add("hours", -9)
+                  .toISOString();
+                const end_datetime = moment(
                   document.getElementById("end").value
-                ).toISOString();
+                )
+                  .add("hours", -9)
+                  .toISOString();
                 const period = {
                   title: document.getElementById("title").value,
                   description: document.getElementById("description").value,
                   start_datetime,
                   end_datetime,
                 };
-                return this.submit(period);
+                this.submit(period)
+                  .then(() => this.props.updateMyRallies())
+                  .then(() => this.props.chengeTab(0));
               }}
             >
               Submit
@@ -121,7 +131,11 @@ const LocationList = (props) => (
 
 export default (props) => (
   <div style={{ display: "flex" }}>
-    <RallyInfoInput locations={props.locations} />
+    <RallyInfoInput
+      locations={props.locations}
+      chengeTab={(v) => props.chengeTab(v)}
+      updateMyRallies={() => props.updateMyRallies()}
+    />
     <LocationList locations={props.locations} />
   </div>
 );
