@@ -21,7 +21,10 @@ export default class CreateNewRally extends Component {
           addLocation={(location) => this.addLocation(location)}
           isFilledIn={(info) => info.length > 0}
         />
-        <RallyInfo locations={this.state.locations} />
+        <RallyInfo
+          locations={this.state.locations}
+          chengeTab={(v) => this.props.chengeTab(v)}
+        />
       </div>
     );
   }
