@@ -35,12 +35,16 @@ export default class App extends Component {
       .catch((err) => console.log(err));
   }
 
+  chengeTab(value) {
+    this.setState({ value });
+  }
+
   get main() {
     const { value } = this.state;
     return (
       <div>
         <AppBar position="static">
-          <Tabs value={value} onChange={(e, value) => this.setState({ value })}>
+          <Tabs value={value} onChange={(e, value) => this.chengeTab(value)}>
             <Tab label="My Rallies" style={{ fontFamily: "EDO" }} />
             <Tab label="Create New Rally" style={{ fontFamily: "EDO" }} />
             <Tab
@@ -51,7 +55,7 @@ export default class App extends Component {
           </Tabs>
         </AppBar>
         {value === 0 && <MyRallies />}
-        {value === 1 && <CreateNewRally />}
+        {value === 1 && <CreateNewRally chengeTab={(v) => this.chengeTab(v)} />}
       </div>
     );
   }

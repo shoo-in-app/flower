@@ -13,10 +13,16 @@ const RallyDetail = (props) => (
     <h2>{props.rally.title}</h2>
     <p>Description: {props.rally.description}</p>
     <p>
-      Start: {moment(props.rally.start_datetime).format("HH:mm MMMM Do YYYY.")}
+      Start:{" "}
+      {moment(props.rally.start_datetime)
+        .add("hours", 9)
+        .format("HH:mm MMMM Do YYYY.")}
       <br />
       End:{" "}
-      {"  " + moment(props.rally.end_datetime).format("HH:mm MMMM Do YYYY.")}
+      {"  " +
+        moment(props.rally.end_datetime)
+          .add("hours", 9)
+          .format("HH:mm MMMM Do YYYY.")}
     </p>
     <List subheader={<ListSubheader component="div">Locations</ListSubheader>}>
       {props.rally.locations.map((l) => (
