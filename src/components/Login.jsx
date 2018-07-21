@@ -10,13 +10,13 @@ const Login = () => {
   return (
     <Card className={style.login}>
       <img src={logo} alt={"logo"} style={{ margin: "auto", width: "50%" }} />
-      <p style={{ color: "white" }}>Welcome to the rally creation page</p>
+      <p style={{ color: "white" }}>Welcome to the Rally Creation Page!</p>
 
       <a href="/auth/google" style={{ textDecoration: "none" }}>
         <GoogleButton style={{ margin: "auto" }} type="dark" />
       </a>
 
-      <p style={{ color: "white" }}>Download mobile App</p>
+      <p style={{ color: "white" }}>Download Mobile App</p>
       <div>
         <a
           href={
@@ -25,15 +25,14 @@ const Login = () => {
         >
           <img src={android} alt={"android"} style={{ width: "200px" }} />
         </a>
-        <div style={{ display: "block", opacity: ".5" }}>
-          <img src={ios} alt={"ios"} style={{ width: "176px" }} />
-        </div>
-        <a
-          href={"https://goo.gl/forms/IHfJLxmF35HJ3Uk33"}
-          style={{ color: "white" }}
+        <div style={{ display: "block" }}>
+        <a href={
+            "https://itunes.apple.com/app/shoo-in/id1401800769"
+          }
         >
-          Sign up for the iOS beta!
+          <img src={ios} alt={"ios"} style={{ width: "176px" }} />
         </a>
+        </div>
       </div>
     </Card>
   );
