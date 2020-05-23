@@ -51,6 +51,7 @@
     "babel-preset-stage-2": "^6.24.1",
     "css-loader": "^3.5.3",
     "cssnano": "^4.1.10",
+    "dotenv": "^8.2.0",
     "eslint": "^4.19.1",
     "eslint-config-prettier": "^2.9.0",
     "eslint-config-problems": "^0.1.1",
