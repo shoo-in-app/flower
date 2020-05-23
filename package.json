@@ -41,6 +41,9 @@
     "react-tap-event-plugin": "^3.0.3"
   },
   "devDependencies": {
+    "@types/googlemaps": "^3.0.0",
+    "@types/markerclustererplus": "^2.1.29",
+    "@types/react": "^16.9.35",
     "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.3",
     "babel-jest": "^22.4.3",
