@@ -24,7 +24,7 @@
     "express": "^4.16.3",
     "express-session": "^1.15.6",
     "knex": "^0.21.1",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "material-ui": "^0.20.1",
     "material-ui-datetimepicker": "^1.0.7",
     "moment": "^2.22.2",
